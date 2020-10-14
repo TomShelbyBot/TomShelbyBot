@@ -1,6 +1,9 @@
 package me.theseems.tomshel.command;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class SimpleCommandContainer implements CommandContainer {
   private final Map<String, Command> commandMap;
@@ -16,7 +19,7 @@ public class SimpleCommandContainer implements CommandContainer {
    */
   @Override
   public CommandContainer attach(Command command) {
-    commandMap.put(command.getLabel(), command);
+    commandMap.put(command.getMeta().getLabel(), command);
     for (String alias : command.getMeta().getAliases()) {
       commandMap.put(alias, command);
     }
@@ -62,5 +65,22 @@ public class SimpleCommandContainer implements CommandContainer {
       return ((Restricted) command).canUse(chatId, userId);
     }
     return true;
+  }
+
+  /**
+   * Get all commands there are
+   *
+   * @return commands
+   */
+  @Override
+  public Collection<Command> getCommands() {
+    Map<String, Command> commandMap = this.commandMap;
+    commandMap.forEach(
+        (s, command) -> {
+          for (String alias : command.getMeta().getAliases()) {
+            commandMap.remove(alias);
+          }
+        });
+    return commandMap.values();
   }
 }

@@ -9,7 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TestCommand extends SimpleCommand {
 
   public TestCommand() {
-    super(new SimpleCommandMeta().addAlias("tst").addAlias("tetti"));
+    super(SimpleCommandMeta.onLabel("test")
+        .description("Тестовая комманда."));
   }
 
   /**
@@ -24,13 +25,4 @@ public class TestCommand extends SimpleCommand {
         new SendMessage().setText("There you go boiii. You have executed the test command!"));
   }
 
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "test";
-  }
 }

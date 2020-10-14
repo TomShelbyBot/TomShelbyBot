@@ -8,4 +8,16 @@ public interface CommandMeta {
    * @return aliases
    */
   Collection<String> getAliases();
+
+  /**
+   * Get command's label
+   * @return label
+   */
+  String getLabel();
+
+  /**
+   * Get description
+   * @return description
+   */
+  String getDescription();
 }

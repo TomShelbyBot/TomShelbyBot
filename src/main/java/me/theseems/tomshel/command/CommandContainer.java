@@ -1,5 +1,6 @@
 package me.theseems.tomshel.command;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface CommandContainer {
@@ -29,4 +30,10 @@ public interface CommandContainer {
    * @return accessible
    */
   boolean isAccessible(String label, Long chatId, Integer userId);
+
+  /**
+   * Get all commands there are
+   * @return commands
+   */
+  Collection<Command> getCommands();
 }

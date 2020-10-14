@@ -3,7 +3,7 @@ package me.theseems.tomshel.pack;
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.Main;
 import me.theseems.tomshel.TomasBot;
-import me.theseems.tomshel.command.OnlyAdminRestricted;
+import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.MutePunishment;
@@ -14,9 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
-public class MuteCommand extends SimpleCommand implements OnlyAdminRestricted {
+public class MuteCommand extends SimpleCommand implements AdminRestricted {
   public MuteCommand() {
-    super(new SimpleCommandMeta().addAlias("мут"));
+    super(
+        SimpleCommandMeta.onLabel("mute")
+            .aliases("мут", "молчи", "shutup", "заткнись")
+            .description("Под угрозой расстрела сообещния запретить человеку писать."));
   }
 
   /**
@@ -81,15 +84,5 @@ public class MuteCommand extends SimpleCommand implements OnlyAdminRestricted {
                       + period
                       + "с."));
     }
-  }
-
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "mute";
   }
 }

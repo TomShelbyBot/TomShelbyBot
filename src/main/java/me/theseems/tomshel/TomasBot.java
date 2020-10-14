@@ -55,6 +55,7 @@ public class TomasBot extends TelegramLongPollingBot {
 
   public void onUpdateReceived(Update update) {
     Message message = update.getMessage();
+
     if (!chatStorage.lookup(message.getChatId(), message.getFrom().getUserName()).isPresent()) {
       chatStorage.put(
           message.getChatId(), message.getFrom().getUserName(), message.getFrom().getId());
@@ -67,8 +68,9 @@ public class TomasBot extends TelegramLongPollingBot {
     }
 
     if (punishmentStorage
-        .getActivePunishment(update.getMessage().getFrom().getId(), PunishmentType.MUTED)
-        .isPresent() || (chatStorage.isNoStickerMode() && update.getMessage().hasSticker())) {
+            .getActivePunishment(update.getMessage().getFrom().getId(), PunishmentType.MUTED)
+            .isPresent()
+        || (chatStorage.isNoStickerMode() && update.getMessage().hasSticker())) {
       try {
         execute(
             new DeleteMessage()
@@ -85,7 +87,7 @@ public class TomasBot extends TelegramLongPollingBot {
 
     String text = message.getText();
 
-    String[] args = text.split("\\ ");
+    String[] args = text.split(" ");
     String label = args[0].substring(1);
     if (label.endsWith("@tomshel_bot")) {
       label = label.substring(0, Math.max(1, label.length() - 12));

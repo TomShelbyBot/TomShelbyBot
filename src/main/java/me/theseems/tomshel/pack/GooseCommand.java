@@ -8,7 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class GooseCommand extends SimpleCommand {
   public GooseCommand() {
-    super(new SimpleCommandMeta().addAlias("гусь").addAlias("guse"));
+    super(
+        SimpleCommandMeta.onLabel("goose")
+            .aliases("гусь", "кря", "quack")
+            .description("Закинуть гуся."));
   }
 
   /**
@@ -37,15 +40,5 @@ public class GooseCommand extends SimpleCommand {
                     + "░░░░░░░░░░░▌▌░▌▌░░░░░\n"
                     + "░░░░░░░░░░░▌▌░▌▌░░░░░\n"
                     + "░░░░░░░░░▄▄▌▌▄▌▌░░░░░"));
-  }
-
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "goose";
   }
 }

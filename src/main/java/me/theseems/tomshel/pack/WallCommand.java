@@ -8,13 +8,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class WallCommand extends SimpleCommand {
   public WallCommand() {
-    super(new SimpleCommandMeta().addAlias("стена"));
+    super(
+        SimpleCommandMeta.onLabel("wall")
+            .aliases("стенка", "стена", "stalemate")
+            .description("Стена!!!!!!!!!!"));
   }
 
   /**
    * Handle update for that command
    *
-   * @param bot    to handle with
+   * @param bot to handle with
    * @param update to handle
    */
   @Override
@@ -34,15 +37,5 @@ public class WallCommand extends SimpleCommand {
                     + "█═╩═╦═╩═╦═╩═╦═╩═╦═╩═╦═╩═╦═╩═█\n"
                     + "█═╦═╩═╦═╩═╦═╩═╦═╩═╦═╩═╦═╩═╦═█\n"
                     + "█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█"));
-  }
-
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "wall";
   }
 }

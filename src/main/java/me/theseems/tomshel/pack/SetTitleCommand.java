@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.TomasBot;
-import me.theseems.tomshel.command.OnlyAdminRestricted;
+import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
@@ -14,18 +14,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.Optional;
 
-public class SetTitleCommand extends SimpleCommand implements OnlyAdminRestricted {
+public class SetTitleCommand extends SimpleCommand implements AdminRestricted {
   public SetTitleCommand() {
-    super(new SimpleCommandMeta().addAlias("звание").addAlias("титул"));
+    super(SimpleCommandMeta.onLabel("title")
+        .aliases("settitle", "кличка", "погоняло", "титул")
+        .description("Выдать кличку."));
   }
 
-  /**
-   * Handle update for that command
-   *
-   * @param bot to handle with
-   * @param args
-   * @param update to handle
-   */
   @Override
   public void handle(TomasBot bot, String[] args, Update update) {
     if (args.length < 2) {
@@ -33,10 +28,12 @@ public class SetTitleCommand extends SimpleCommand implements OnlyAdminRestricte
           update, new SendMessage().setText("Укажите юзера кому нужно выдать титул и сам титул!"));
     } else {
       if (args[0].startsWith("@")) args[0] = args[0].substring(1);
+
       Optional<Integer> userIdOptional =
           bot.getChatStorage().lookup(update.getMessage().getChatId(), args[0]);
+
       if (!userIdOptional.isPresent()) {
-        bot.sendBack(update, new SendMessage().setText("Не нашел этого юзера, сорри."));
+        bot.sendBack(update, new SendMessage().setText("Не нашел этого гражданина, сорри."));
         return;
       }
 
@@ -61,12 +58,13 @@ public class SetTitleCommand extends SimpleCommand implements OnlyAdminRestricte
                         + " титул '"
                         + args[1]
                         + "'"));
+
       } catch (TelegramApiRequestException e) {
         bot.sendBack(
             update,
             new SendMessage()
                 .setText(
-                    "Не удалось поставить тайтл: "
+                    "Не удалось выдать позвыной: "
                         + e.getApiResponse()
                         + " ("
                         + e.getLocalizedMessage()
@@ -77,13 +75,4 @@ public class SetTitleCommand extends SimpleCommand implements OnlyAdminRestricte
     }
   }
 
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "title";
-  }
 }

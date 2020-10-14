@@ -13,8 +13,11 @@ import java.io.*;
 public class Main {
   private static TomasBot bot;
   private static final File baseDir =
-      new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+      new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+          .getParentFile();
   private static final File chatsFile = new File(baseDir, "chats.json");
+
+  public static final String TOM_BOT_VERSION = "0.1D";
 
   public static void save() {
     System.out.println("Saving to disk");
@@ -30,7 +33,10 @@ public class Main {
   private static void initBot() {
     if (!chatsFile.exists()) {
       try {
-        chatsFile.createNewFile();
+        boolean isCreated = chatsFile.createNewFile();
+        if (!isCreated) {
+          System.err.println("Cannot init chats.json, using getting through without it.");
+        }
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -38,6 +44,11 @@ public class Main {
 
     try {
       ChatStorage storage = new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
+      if (storage == null) {
+        System.err.println("Error loading storage! There's no one there.");
+        storage = new SimpleChatStorage();
+      }
+
       bot = new TomasBot(storage);
     } catch (FileNotFoundException e) {
       System.err.println("Booting without loading chats from disk");
@@ -54,18 +65,19 @@ public class Main {
         .attach(new TestCommand())
         .attach(new GooseCommand())
         .attach(new WallCommand())
-        .attach(new StraponCommand())
+        .attach(new BeatCommand())
         .attach(new LookupCommand())
         .attach(new MuteCommand())
         .attach(new UnmuteCommand())
-        .attach(new AtAllCommand())
+        .attach(new AllCommand())
         .attach(new SetTitleCommand())
         .attach(new NoStickerCommand())
-        .attach(new GoWatchCommand());
+        .attach(new GoCommand())
+        .attach(new HelpCommand())
+        .attach(new InfoCommand());
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {
-      System.out.println("Let's go!");
       telegramBotsApi.registerBot(bot);
     } catch (TelegramApiException e) {
       e.printStackTrace();

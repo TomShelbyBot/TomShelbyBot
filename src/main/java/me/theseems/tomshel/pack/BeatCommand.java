@@ -10,9 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class StraponCommand extends SimpleCommand {
-  public StraponCommand() {
-    super(new SimpleCommandMeta().addAlias("страпон").addAlias("straponik"));
+public class BeatCommand extends SimpleCommand {
+  public BeatCommand() {
+    super(SimpleCommandMeta.onLabel("beat")
+        .aliases("побить", "knock", "fuck", "tear")
+        .description("Изрезать... КОЗЫРЬКОМ"));
   }
 
   /**
@@ -27,7 +29,7 @@ public class StraponCommand extends SimpleCommand {
       bot.sendBack(
           update,
           new SendMessage()
-              .setText("Укажи кого нужно отстрапонить")
+              .setText("Покажи кого изрезать.")
               .setReplyToMessageId(update.getMessage().getMessageId()));
     } else {
       bot.sendBack(
@@ -37,9 +39,9 @@ public class StraponCommand extends SimpleCommand {
                   "__ "
                       + "@"
                       + update.getMessage().getFrom().getUserName()
-                      + " отстрапонил "
+                      + " всячески изуродовал козырьком "
                       + args[0]
-                      + " "
+                      + ". "
                       + Joiner.on(' ')
                           .join(Arrays.stream(args).skip(1).collect(Collectors.toList()))
                       + " __")
@@ -47,13 +49,4 @@ public class StraponCommand extends SimpleCommand {
     }
   }
 
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "strap";
-  }
 }

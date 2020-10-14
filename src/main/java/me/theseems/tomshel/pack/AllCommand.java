@@ -2,15 +2,18 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.TomasBot;
-import me.theseems.tomshel.command.OnlyAdminRestricted;
+import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class AtAllCommand extends SimpleCommand implements OnlyAdminRestricted {
-  public AtAllCommand() {
-    super(new SimpleCommandMeta().addAlias("все"));
+public class AllCommand extends SimpleCommand implements AdminRestricted {
+  public AllCommand() {
+    super(
+        SimpleCommandMeta.onLabel("all")
+            .aliases("atall", "все", "сылште")
+            .description("Упомянуть всех, кого бот знает."));
   }
 
   @Override
@@ -19,7 +22,9 @@ public class AtAllCommand extends SimpleCommand implements OnlyAdminRestricted {
         update,
         new SendMessage()
             .setText(
-                "**" + Joiner.on(' ').join(args) + "**"
+                "**"
+                    + Joiner.on(' ').join(args)
+                    + "**"
                     + "\n\n"
                     + "@"
                     + Joiner.on(", @")
@@ -27,16 +32,6 @@ public class AtAllCommand extends SimpleCommand implements OnlyAdminRestricted {
                             bot.getChatStorage()
                                 .getResolvableUsernames(update.getMessage().getChatId())))
             .enableMarkdown(true));
-  }
-
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "all";
   }
 
   @Override

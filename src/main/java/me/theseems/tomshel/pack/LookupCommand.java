@@ -14,7 +14,10 @@ import java.util.Optional;
 
 public class LookupCommand extends SimpleCommand {
   public LookupCommand() {
-    super(new SimpleCommandMeta().addAlias("чек"));
+    super(
+        SimpleCommandMeta.onLabel("check")
+            .aliases("lookup", "who", "чек", "кто")
+            .description("Основная информация из сведений семьи Шелби."));
   }
 
   @Override
@@ -23,7 +26,7 @@ public class LookupCommand extends SimpleCommand {
       bot.sendBack(
           update,
           new SendMessage()
-              .setText("Укажи ник пжж (можно без собачки)")
+              .setText("Так.. ник-то укажи!")
               .setReplyToMessageId(update.getMessage().getMessageId()));
       return;
     }
@@ -31,50 +34,54 @@ public class LookupCommand extends SimpleCommand {
     if (args[0].startsWith("@")) args[0] = args[0].substring(1);
 
     Long chatId = update.getMessage().getChatId();
-    Optional<Integer> integer = bot.getChatStorage().lookup(chatId, args[0]);
+    Optional<Integer> userId = bot.getChatStorage().lookup(chatId, args[0]);
 
-    if (integer.isPresent()) {
-      try {
-        ChatMember member =
-            bot.execute(new GetChatMember().setUserId(integer.get()).setChatId(chatId));
-        bot.sendBack(
-            update,
-            new SendMessage()
-                .setText(
-                    "Челик "
-                        + Optional.ofNullable(member.getUser().getFirstName()).orElse("<Имя не указано>")
-                        + " "
-                        + Optional.ofNullable(member.getUser().getLastName()).orElse("<Фамилия не указана>")
-                        + " "
-                        + member.getUser().getUserName()
-                        + " с припиской "
-                        + Optional.ofNullable(member.getCustomTitle()).orElse("<Приписки нет>")));
-      } catch (TelegramApiException e) {
-        bot.sendBack(update, new SendMessage().setText("Произошла ошибочка. Кажется, я не смогу прочекать этого пользователя."));
-        e.printStackTrace();
-      }
-    } else {
-      bot.sendBack(update, new SendMessage().setText("Я не нашел такого..("));
+    if (!userId.isPresent()) {
+      bot.sendBack(update, new SendMessage().setText("А вот этого гражданина Англии я не знаю."));
+      String knownNicknames =
+          Joiner.on(' ')
+              .join(bot.getChatStorage().getResolvableUsernames(chatId))
+              .replace('@', ' ');
+
       bot.sendBack(
           update,
           new SendMessage()
               .setText(
-                  "Из вашего чата я знаю челов ("
+                  "Мне известны сведения ("
                       + bot.getChatStorage().getResolvableUsernames(chatId).size()
                       + "): \n"
-                      + Joiner.on(' ')
-                          .join(bot.getChatStorage().getResolvableUsernames(chatId))
-                          .replace('@', ' ')));
+                      + knownNicknames));
+      return;
     }
-  }
 
-  /**
-   * Get label of the command
-   *
-   * @return label
-   */
-  @Override
-  public String getLabel() {
-    return "lookup";
+    try {
+      ChatMember member =
+          bot.execute(new GetChatMember().setUserId(userId.get()).setChatId(chatId));
+
+      String firstName =
+          Optional.ofNullable(member.getUser().getFirstName()).orElse("<Имя не указано>");
+      String lastName =
+          Optional.ofNullable(member.getUser().getLastName()).orElse("<Фамилия не указана>");
+      String title = Optional.ofNullable(member.getCustomTitle()).orElse("<Приписки нет>");
+
+      bot.sendBack(
+          update,
+          new SendMessage()
+              .setText(
+                  "Гражданин "
+                      + firstName
+                      + " "
+                      + lastName
+                      + " "
+                      + member.getUser().getUserName()
+                      + " с припиской "
+                      + title));
+
+    } catch (TelegramApiException e) {
+      bot.sendBack(
+          update,
+          new SendMessage().setText("Произошла ошибочка. Кажется, я не узнаю этого пользователя."));
+      e.printStackTrace();
+    }
   }
 }
