@@ -13,7 +13,7 @@ import java.io.*;
 public class Main {
   private static TomasBot bot;
   private static final File baseDir =
-      new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+      new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
   private static final File chatsFile = new File(baseDir, "chats.json");
 
   public static void save() {
@@ -65,6 +65,7 @@ public class Main {
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {
+      System.out.println("Let's go!");
       telegramBotsApi.registerBot(bot);
     } catch (TelegramApiException e) {
       e.printStackTrace();
