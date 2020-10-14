@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="HseHunter" />
+      <option name="name" value="GitHub HSE Minecraft HseHunter Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/HSE-Minecraft/HseHunter" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="manticora" />
+      <option name="name" value="GitHub TheSeems Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TheSeems/Manticora" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="tclans" />
+      <option name="name" value="GitHub TheSeems Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TheSeems/TClans" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="tbank" />
+      <option name="name" value="GitHub TheSeems Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TheSeems/TBank" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="tcrates" />
+      <option name="name" value="GitHub TheSeems Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TheSeems/TCrates" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="TGrant" />
+      <option name="name" value="GitHub TheSeems Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TheSeems/TGrant" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+  </component>
+</project>
