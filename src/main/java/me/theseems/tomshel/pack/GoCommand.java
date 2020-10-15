@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
@@ -21,7 +21,7 @@ public class GoCommand extends SimpleCommand implements AdminRestricted {
   }
 
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     try {
       SendPoll sendPoll =
           new SendPoll()

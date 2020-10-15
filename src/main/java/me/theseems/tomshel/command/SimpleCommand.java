@@ -1,6 +1,6 @@
 package me.theseems.tomshel.command;
 
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class SimpleCommand implements Command {
@@ -17,7 +17,7 @@ public abstract class SimpleCommand implements Command {
    * @param update to handle
    */
   @Override
-  abstract public void handle(TomasBot bot, String[] args, Update update);
+  abstract public void handle(ThomasBot bot, String[] args, Update update);
 
   /**
    * Get meta of the command

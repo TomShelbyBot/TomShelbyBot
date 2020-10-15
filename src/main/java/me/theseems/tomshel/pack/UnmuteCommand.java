@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.Main;
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
@@ -28,7 +28,7 @@ public class UnmuteCommand extends SimpleCommand implements AdminRestricted {
    * @param update to handle
    */
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     if (args.length == 0) {
       bot.sendBack(update, new SendMessage().setText("Укажите юзера кому нужно снять глушилку!"));
     } else {
@@ -45,7 +45,7 @@ public class UnmuteCommand extends SimpleCommand implements AdminRestricted {
       ChatMember actual = member.get();
       Optional<Punishment> punishmentOptional =
           bot.getPunishmentStorage()
-              .getActivePunishment(actual.getUser().getId(), PunishmentType.MUTED);
+              .getActivePunishment(actual.getUser().getId(), PunishmentType.MUTE);
 
       if (!punishmentOptional.isPresent()) {
         bot.sendBack(

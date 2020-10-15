@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,7 +13,7 @@ public class HelpCommand extends SimpleCommand {
   }
 
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     CommandContainer container = bot.getCommandContainer();
     StringBuilder response =
         new StringBuilder(

@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.Main;
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,7 +15,7 @@ public class InfoCommand extends SimpleCommand {
   }
 
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     bot.sendBack(
         update,
         new SendMessage()

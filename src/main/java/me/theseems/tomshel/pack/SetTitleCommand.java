@@ -1,6 +1,6 @@
 package me.theseems.tomshel.pack;
 
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
@@ -22,7 +22,7 @@ public class SetTitleCommand extends SimpleCommand implements AdminRestricted {
   }
 
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     if (args.length < 2) {
       bot.sendBack(
           update, new SendMessage().setText("Укажите юзера кому нужно выдать титул и сам титул!"));

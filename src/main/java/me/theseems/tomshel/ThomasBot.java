@@ -2,7 +2,9 @@ package me.theseems.tomshel;
 
 import me.theseems.tomshel.command.CommandContainer;
 import me.theseems.tomshel.command.SimpleCommandContainer;
+import me.theseems.tomshel.punishment.PunishmentHandler;
 import me.theseems.tomshel.punishment.PunishmentType;
+import me.theseems.tomshel.punishment.*;
 import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.PunishmentStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
@@ -15,21 +17,25 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class TomasBot extends TelegramLongPollingBot {
+public class ThomasBot extends TelegramLongPollingBot {
   private final CommandContainer commandContainer;
   private final PunishmentStorage punishmentStorage;
   private final ChatStorage chatStorage;
+  private final PunishmentHandler punishmentHandler;
 
-  public TomasBot() {
-    commandContainer = new SimpleCommandContainer();
-    punishmentStorage = new SimplePunishmentStorage();
-    chatStorage = new SimpleChatStorage();
+  public ThomasBot() {
+    this(new SimpleChatStorage());
   }
 
-  public TomasBot(ChatStorage storage) {
-    commandContainer = new SimpleCommandContainer();
-    punishmentStorage = new SimplePunishmentStorage();
+  public ThomasBot(ChatStorage storage) {
+    this.commandContainer = new SimpleCommandContainer();
+    this.punishmentStorage = new SimplePunishmentStorage();
     this.chatStorage = storage;
+    this.punishmentHandler = new SimplePunishmentHandler();
+  }
+
+  public PunishmentHandler getPunishmentHandler() {
+    return punishmentHandler;
   }
 
   public CommandContainer getCommandContainer() {
@@ -55,6 +61,7 @@ public class TomasBot extends TelegramLongPollingBot {
 
   public void onUpdateReceived(Update update) {
     Message message = update.getMessage();
+    System.out.println(this);
 
     if (!chatStorage.lookup(message.getChatId(), message.getFrom().getUserName()).isPresent()) {
       chatStorage.put(
@@ -67,8 +74,10 @@ public class TomasBot extends TelegramLongPollingBot {
       Main.save();
     }
 
+    punishmentHandler.handle(update);
+
     if (punishmentStorage
-            .getActivePunishment(update.getMessage().getFrom().getId(), PunishmentType.MUTED)
+            .getActivePunishment(update.getMessage().getFrom().getId(), PunishmentType.MUTE)
             .isPresent()
         || (chatStorage.isNoStickerMode() && update.getMessage().hasSticker())) {
       try {
@@ -117,10 +126,22 @@ public class TomasBot extends TelegramLongPollingBot {
   }
 
   public String getBotUsername() {
-    return "tomshel_bot";
+    // return "tomshel_bot";
+    return "tom_night_bot";
   }
 
   public String getBotToken() {
-    return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
+    // return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
+    return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
+  }
+
+  @Override
+  public String toString() {
+    return "ThomasBot{" +
+            "commandContainer=" + commandContainer +
+            ", punishmentStorage=" + punishmentStorage +
+            ", chatStorage=" + chatStorage +
+            ", punishmentHandler=" + punishmentHandler +
+            '}';
   }
 }

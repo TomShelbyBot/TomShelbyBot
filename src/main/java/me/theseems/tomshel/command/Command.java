@@ -1,6 +1,6 @@
 package me.theseems.tomshel.command;
 
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface Command {
@@ -8,7 +8,7 @@ public interface Command {
    * Handle update for that command
    * @param update to handle
    */
-  void handle(TomasBot bot, String[] args, Update update);
+  void handle(ThomasBot bot, String[] args, Update update);
 
   /**
    * Get meta of the command

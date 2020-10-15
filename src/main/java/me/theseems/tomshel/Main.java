@@ -2,6 +2,7 @@ package me.theseems.tomshel;
 
 import com.google.gson.Gson;
 import me.theseems.tomshel.pack.*;
+import me.theseems.tomshel.punishment.DeleteMessageProcessor;
 import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -11,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.*;
 
 public class Main {
-  private static TomasBot bot;
+  private static ThomasBot bot;
   private static final File baseDir =
       new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
           .getParentFile();
@@ -49,11 +50,11 @@ public class Main {
         storage = new SimpleChatStorage();
       }
 
-      bot = new TomasBot(storage);
+      bot = new ThomasBot(storage);
     } catch (FileNotFoundException e) {
       System.err.println("Booting without loading chats from disk");
       e.printStackTrace();
-      bot = new TomasBot();
+      bot = new ThomasBot();
     }
   }
 
@@ -76,6 +77,8 @@ public class Main {
         .attach(new HelpCommand())
         .attach(new InfoCommand());
 
+    bot.getPunishmentHandler().add(new DeleteMessageProcessor());
+
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {
       telegramBotsApi.registerBot(bot);
@@ -84,7 +87,7 @@ public class Main {
     }
   }
 
-  public static TomasBot getBot() {
+  public static ThomasBot getBot() {
     return bot;
   }
 }

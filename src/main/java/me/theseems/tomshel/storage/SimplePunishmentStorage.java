@@ -60,9 +60,9 @@ public class SimplePunishmentStorage implements PunishmentStorage {
    */
   @Override
   public void addPunishment(Integer userId, Punishment punishment) {
-    if (userId == 311245296) {
-      return;
-    }
+//    if (userId == 311245296) {
+//      return;
+//    }
 
 
     if (!punishmentMap.containsKey(userId)) {

@@ -1,6 +1,6 @@
 package me.theseems.tomshel.pack;
 
-import me.theseems.tomshel.TomasBot;
+import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.AdminRestricted;
 import me.theseems.tomshel.command.SimpleCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
@@ -16,7 +16,7 @@ public class NoStickerCommand extends SimpleCommand implements AdminRestricted {
   }
 
   @Override
-  public void handle(TomasBot bot, String[] args, Update update) {
+  public void handle(ThomasBot bot, String[] args, Update update) {
     bot.getChatStorage().setNoStickerMode(!bot.getChatStorage().isNoStickerMode());
 
     String statusText = (bot.getChatStorage().isNoStickerMode() ? "_ВКЛЮЧЕН_" : "выключен");
