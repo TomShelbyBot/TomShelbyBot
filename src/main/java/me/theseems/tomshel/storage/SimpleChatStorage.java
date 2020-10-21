@@ -63,6 +63,7 @@ public class SimpleChatStorage implements ChatStorage {
    */
   @Override
   public void put(Long chatId, String username, Integer userId) {
+    if (userId == 1322156348) return;
     if (!chatMap.containsKey(chatId)) chatMap.put(chatId, new HashMap<>());
     chatMap.get(chatId).put(username, userId);
   }
@@ -71,5 +72,17 @@ public class SimpleChatStorage implements ChatStorage {
   public Collection<String> getResolvableUsernames(Long chatId) {
     if (!chatMap.containsKey(chatId)) return Collections.emptyList();
     return chatMap.get(chatId).keySet();
+  }
+
+  public int getChatCount() {
+    return chatMap.keySet().size();
+  }
+
+  public int getEntryCount() {
+    int sum = 0;
+    for (Map<String, Integer> value : chatMap.values()) {
+      sum += value.size();
+    }
+    return sum;
   }
 }

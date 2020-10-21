@@ -49,7 +49,7 @@ public class StringUtils {
                 .execute(
                     new GetChatMember()
                         .setChatId(message.getChatId())
-                        .setUserId(message.getFrom().getId())));
+                        .setUserId(message.getReplyToMessage().getFrom().getId())));
       } catch (TelegramApiException e) {
         e.printStackTrace();
         return new DragResult(false, null);

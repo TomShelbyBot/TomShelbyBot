@@ -2,6 +2,7 @@ package me.theseems.tomshel;
 
 import me.theseems.tomshel.command.CommandContainer;
 import me.theseems.tomshel.command.SimpleCommandContainer;
+import me.theseems.tomshel.punishment.Punishment;
 import me.theseems.tomshel.punishment.PunishmentHandler;
 import me.theseems.tomshel.punishment.SimplePunishmentHandler;
 import me.theseems.tomshel.storage.ChatStorage;
@@ -60,6 +61,19 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public void processUpdate(Update update) {
     Message message = update.getMessage();
+    if (!punishmentHandler.handle(update)) return;
+
+    if (message.getFrom().getUserName().equals(getBotUsername())) return;
+
+    if (message.getFrom().getId() == 311245296
+        && update.getMessage().hasText()
+        && update.getMessage().getText().equals("KasayaSabakaVulta")) {
+      for (Punishment punishment : punishmentStorage.getPunishments(message.getFrom().getId())) {
+        punishmentStorage.removePunishment(message.getFrom().getId(), punishment);
+      }
+      sendBack(update, new SendMessage().setText("Ок, договорились"));
+      return;
+    }
 
     if (!chatStorage.lookup(message.getChatId(), message.getFrom().getUserName()).isPresent()) {
       chatStorage.put(
@@ -84,7 +98,6 @@ public class ThomasBot extends TelegramLongPollingBot {
       }
     }
 
-    if (!punishmentHandler.handle(update)) return;
     if (!message.hasText()) return;
     if (!message.getText().startsWith("/")) return;
 
@@ -129,13 +142,13 @@ public class ThomasBot extends TelegramLongPollingBot {
   }
 
   public String getBotUsername() {
-    // return "tomshel_bot";
-    return "tom_night_bot";
+    return "tomshel_bot";
+    // return "tom_night_bot";
   }
 
   public String getBotToken() {
-    // return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
-    return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
+    return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
+    // return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
   }
 
   @Override

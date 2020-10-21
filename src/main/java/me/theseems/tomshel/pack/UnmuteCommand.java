@@ -45,7 +45,7 @@ public class UnmuteCommand extends SimpleCommand implements AdminRestricted {
       ChatMember actual = member.get();
       Optional<Punishment> punishmentOptional =
           bot.getPunishmentStorage()
-              .getActivePunishment(actual.getUser().getId(), PunishmentType.MUTE);
+              .getAnyActivePunishment(actual.getUser().getId(), PunishmentType.MUTE, PunishmentType.CLAP_MUTE);
 
       if (!punishmentOptional.isPresent()) {
         bot.sendBack(
@@ -71,7 +71,7 @@ public class UnmuteCommand extends SimpleCommand implements AdminRestricted {
                   update.getMessage().getFrom().getUserName()
                       + " размутил @"
                       + actual.getUser().getUserName()
-                      + "\n\nЗаглушка была с надписью "
+                      + "\nЗаглушка была с надписью "
                       + reason)
               .setReplyToMessageId(update.getMessage().getMessageId())
               .enableMarkdown(true));

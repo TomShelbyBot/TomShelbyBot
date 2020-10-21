@@ -68,11 +68,10 @@ public class MuteCommand extends SimpleCommand implements AdminRestricted {
         return;
       }
 
-      ChatMember actual = member.get();
       Main.getBot()
           .getPunishmentStorage()
           .addPunishment(
-              actual.getUser().getId(), new MutePunishment(period, ChronoUnit.SECONDS, reason));
+              member.get().getUser().getId(), new MutePunishment(period, ChronoUnit.SECONDS, reason));
 
       bot.sendBack(
           update,
@@ -80,7 +79,7 @@ public class MuteCommand extends SimpleCommand implements AdminRestricted {
               .setText(
                   update.getMessage().getFrom().getUserName()
                       + " замутил @"
-                      + actual.getUser().getUserName()
+                      + member.get().getUser().getUserName()
                       + (reason != null ? " по причине '" + reason + "'" : "")
                       + " на "
                       + period

@@ -17,6 +17,15 @@ public interface PunishmentStorage {
   Optional<Punishment> getActivePunishment(Integer userId, PunishmentType type);
 
   /**
+   * Get active punishment by type
+   *
+   * @param userId to get for
+   * @param types to get by
+   * @return active punishment
+   */
+  Optional<Punishment> getAnyActivePunishment(Integer userId, PunishmentType... types);
+
+  /**
    * Get active punishment for user
    *
    * @param userId to get for

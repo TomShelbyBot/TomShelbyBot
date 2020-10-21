@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import me.theseems.tomshel.pack.*;
 import me.theseems.tomshel.punishment.DeleteMessageProcessor;
 import me.theseems.tomshel.punishment.MumbleMessageProcessor;
-import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -45,13 +44,15 @@ public class Main {
     }
 
     try {
-      ChatStorage storage = new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
+      SimpleChatStorage storage =
+          new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
       if (storage == null) {
         System.err.println("Error loading storage! There's no one there.");
         storage = new SimpleChatStorage();
       }
 
       bot = new ThomasBot(storage);
+      System.out.println("Loaded storage with entries: " + storage.getEntryCount());
     } catch (FileNotFoundException e) {
       System.err.println("Booting without loading chats from disk");
       e.printStackTrace();
@@ -77,7 +78,8 @@ public class Main {
         .attach(new GoCommand())
         .attach(new HelpCommand())
         .attach(new InfoCommand())
-        .attach(new ClapMuteCommand());
+        .attach(new ClapMuteCommand())
+        .attach(new CheckPunishmentsCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());
