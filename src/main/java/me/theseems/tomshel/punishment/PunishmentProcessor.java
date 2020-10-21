@@ -8,8 +8,9 @@ public interface PunishmentProcessor {
      *
      * @param update     to handle
      * @param punishment of user to handle
+     * @return should proceed
      */
-    void handle(Update update, Punishment punishment);
+    boolean handle(Update update, Punishment punishment);
 
     /**
      * Get type of punishment to handle

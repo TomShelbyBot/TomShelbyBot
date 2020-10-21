@@ -3,8 +3,7 @@ package me.theseems.tomshel;
 import me.theseems.tomshel.command.CommandContainer;
 import me.theseems.tomshel.command.SimpleCommandContainer;
 import me.theseems.tomshel.punishment.PunishmentHandler;
-import me.theseems.tomshel.punishment.PunishmentType;
-import me.theseems.tomshel.punishment.*;
+import me.theseems.tomshel.punishment.SimplePunishmentHandler;
 import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.PunishmentStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
@@ -59,9 +58,8 @@ public class ThomasBot extends TelegramLongPollingBot {
     }
   }
 
-  public void onUpdateReceived(Update update) {
+  public void processUpdate(Update update) {
     Message message = update.getMessage();
-    System.out.println(this);
 
     if (!chatStorage.lookup(message.getChatId(), message.getFrom().getUserName()).isPresent()) {
       chatStorage.put(
@@ -74,12 +72,7 @@ public class ThomasBot extends TelegramLongPollingBot {
       Main.save();
     }
 
-    punishmentHandler.handle(update);
-
-    if (punishmentStorage
-            .getActivePunishment(update.getMessage().getFrom().getId(), PunishmentType.MUTE)
-            .isPresent()
-        || (chatStorage.isNoStickerMode() && update.getMessage().hasSticker())) {
+    if (chatStorage.isNoStickerMode() && update.getMessage().hasSticker()) {
       try {
         execute(
             new DeleteMessage()
@@ -91,6 +84,7 @@ public class ThomasBot extends TelegramLongPollingBot {
       }
     }
 
+    if (!punishmentHandler.handle(update)) return;
     if (!message.hasText()) return;
     if (!message.getText().startsWith("/")) return;
 
@@ -120,6 +114,15 @@ public class ThomasBot extends TelegramLongPollingBot {
             });
   }
 
+  public void onUpdateReceived(Update update) {
+    try {
+      processUpdate(update);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println(e.getMessage());
+    }
+  }
+
   @Override
   public void onClosing() {
     Main.save();
@@ -137,11 +140,15 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   @Override
   public String toString() {
-    return "ThomasBot{" +
-            "commandContainer=" + commandContainer +
-            ", punishmentStorage=" + punishmentStorage +
-            ", chatStorage=" + chatStorage +
-            ", punishmentHandler=" + punishmentHandler +
-            '}';
+    return "ThomasBot{"
+        + "commandContainer="
+        + commandContainer
+        + ", punishmentStorage="
+        + punishmentStorage
+        + ", chatStorage="
+        + chatStorage
+        + ", punishmentHandler="
+        + punishmentHandler
+        + '}';
   }
 }

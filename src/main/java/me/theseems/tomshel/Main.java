@@ -3,6 +3,7 @@ package me.theseems.tomshel;
 import com.google.gson.Gson;
 import me.theseems.tomshel.pack.*;
 import me.theseems.tomshel.punishment.DeleteMessageProcessor;
+import me.theseems.tomshel.punishment.MumbleMessageProcessor;
 import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -75,9 +76,11 @@ public class Main {
         .attach(new NoStickerCommand())
         .attach(new GoCommand())
         .attach(new HelpCommand())
-        .attach(new InfoCommand());
+        .attach(new InfoCommand())
+        .attach(new ClapMuteCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
+    bot.getPunishmentHandler().add(new MumbleMessageProcessor());
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {

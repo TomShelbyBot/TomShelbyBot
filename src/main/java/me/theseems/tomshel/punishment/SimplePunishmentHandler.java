@@ -1,7 +1,6 @@
 package me.theseems.tomshel.punishment;
 
 import me.theseems.tomshel.Main;
-import me.theseems.tomshel.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collection;
@@ -24,7 +23,7 @@ public class SimplePunishmentHandler implements PunishmentHandler {
       processors.put(
           type,
           new PriorityBlockingQueue<>(
-              2, Comparator.comparingInt(PunishmentProcessor::getPriority)));
+              1, Comparator.comparingInt(PunishmentProcessor::getPriority)));
     }
 
     processors.get(type).add(processor);
@@ -37,25 +36,21 @@ public class SimplePunishmentHandler implements PunishmentHandler {
   }
 
   @Override
-  public void handle(Update update) {
-    System.out.println("Handling: ");
-    System.out.println(
-        Main.getBot()
-            .getPunishmentStorage()
-            .getPunishments(update.getMessage().getFrom().getId())
-            .toString());
+  public boolean handle(Update update) {
     for (Punishment punishment :
         Main.getBot()
             .getPunishmentStorage()
             .getPunishments(update.getMessage().getFrom().getId())) {
-      System.out.println("Here we go! " + update);
+
       PunishmentType type = punishment.getType();
       if (!processors.containsKey(type)) continue;
 
       for (PunishmentProcessor punishmentProcessor : processors.get(type)) {
-        System.out.println("Go for " + punishmentProcessor.toString());
-        punishmentProcessor.handle(update, punishment);
+        boolean verdict = punishmentProcessor.handle(update, punishment);
+        if (!verdict) return false;
       }
     }
+
+    return true;
   }
 }

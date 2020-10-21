@@ -8,18 +8,18 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class DeleteMessageProcessor implements PunishmentProcessor {
   @Override
-  public void handle(Update update, Punishment punishment) {
+  public boolean handle(Update update, Punishment punishment) {
     ThomasBot bot = Main.getBot();
-    System.out.println("[" + getName() + "]: Received for handling " + update);
     try {
-      bot.executeAsync(
+      bot.execute(
           new DeleteMessage()
               .setChatId(update.getMessage().getChatId())
-              .setMessageId(update.getMessage().getMessageId()),
-          null);
+              .setMessageId(update.getMessage().getMessageId()));
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+
+    return false;
   }
 
   @Override
