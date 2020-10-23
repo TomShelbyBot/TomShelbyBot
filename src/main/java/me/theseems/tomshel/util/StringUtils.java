@@ -57,10 +57,12 @@ public class StringUtils {
     }
 
     if (args.length == 0) return new DragResult(false, null);
+
     String username = args[0];
     if (username.startsWith("@")) username = username.substring(1);
 
     Optional<ChatMember> chatMember = Main.getBot().getChatStorage().lookupMember(message.getChatId(), username);
     return new DragResult(true, chatMember.orElse(null));
   }
+
 }

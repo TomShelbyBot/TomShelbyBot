@@ -73,13 +73,14 @@ public class Main {
         .attach(new MuteCommand())
         .attach(new UnmuteCommand())
         .attach(new AllCommand())
-        .attach(new SetTitleCommand())
         .attach(new NoStickerCommand())
         .attach(new GoCommand())
         .attach(new HelpCommand())
         .attach(new InfoCommand())
         .attach(new ClapMuteCommand())
-        .attach(new CheckPunishmentsCommand());
+        .attach(new CheckPunishmentsCommand())
+        .attach(new ThrowCoinCommand())
+        .attach(new RandomNumberCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());

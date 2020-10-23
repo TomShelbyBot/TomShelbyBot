@@ -9,6 +9,7 @@ import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.PunishmentStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
 import me.theseems.tomshel.storage.SimplePunishmentStorage;
+import me.theseems.tomshel.util.CommandUtils;
 import me.theseems.tomshel.util.StringUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -71,7 +72,15 @@ public class ThomasBot extends TelegramLongPollingBot {
       for (Punishment punishment : punishmentStorage.getPunishments(message.getFrom().getId())) {
         punishmentStorage.removePunishment(message.getFrom().getId(), punishment);
       }
-      sendBack(update, new SendMessage().setText("Ок, договорились"));
+      try {
+        execute(
+            new DeleteMessage()
+                .setMessageId(update.getMessage().getMessageId())
+                .setChatId(update.getMessage().getChatId()));
+        sendBack(update, new SendMessage().setText("Ок, договорились"));
+      } catch (TelegramApiException e) {
+        e.printStackTrace();
+      }
       return;
     }
 
@@ -105,7 +114,7 @@ public class ThomasBot extends TelegramLongPollingBot {
 
     String[] args = text.split(" ");
     String label = args[0].substring(1);
-    if (label.endsWith("@tomshel_bot")) {
+    if (label.endsWith(getBotUsername())) {
       label = label.substring(0, Math.max(1, label.length() - 12));
     }
 
@@ -117,7 +126,18 @@ public class ThomasBot extends TelegramLongPollingBot {
               if (commandContainer.isAccessible(
                   finalLabel, message.getChatId(), message.getFrom().getId())) {
 
-                command.handle(this, StringUtils.skipOne(args), update);
+                try {
+                  command.handle(this, StringUtils.skipOne(args), update);
+                } catch (CommandUtils.BotCommandException e) {
+                  sendBack(update, new SendMessage().setText(e.getMessage()));
+                } catch (Exception e) {
+                  sendBack(
+                      update,
+                      new SendMessage()
+                          .setText("Мозг сломался. Я не смог обработать эту комманду."));
+                  e.printStackTrace();
+                }
+
               } else {
                 sendBack(
                     update,
@@ -132,7 +152,6 @@ public class ThomasBot extends TelegramLongPollingBot {
       processUpdate(update);
     } catch (Exception e) {
       e.printStackTrace();
-      System.err.println(e.getMessage());
     }
   }
 
@@ -142,13 +161,13 @@ public class ThomasBot extends TelegramLongPollingBot {
   }
 
   public String getBotUsername() {
-    return "tomshel_bot";
-    // return "tom_night_bot";
+     return "tomshel_bot";
+    //return "tom_night_bot";
   }
 
   public String getBotToken() {
-    return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
-    // return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
+     return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
+    //return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
   }
 
   @Override
