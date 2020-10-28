@@ -29,6 +29,14 @@ public class CommandUtils {
     }
   }
 
+  public static long requireLong(String str) {
+    try {
+      return Long.parseLong(str);
+    } catch (NumberFormatException e) {
+      throw new NumberCommandException();
+    }
+  }
+
   public static int requireInt(String str, String errorMessage) {
     try {
       return Integer.parseInt(str);

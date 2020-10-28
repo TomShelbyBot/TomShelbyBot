@@ -37,6 +37,8 @@ public class SimplePunishmentHandler implements PunishmentHandler {
 
   @Override
   public boolean handle(Update update) {
+    if (!update.hasMessage()) return true;
+
     for (Punishment punishment :
         Main.getBot()
             .getPunishmentStorage()
