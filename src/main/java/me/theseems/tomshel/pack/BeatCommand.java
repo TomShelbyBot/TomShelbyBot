@@ -12,9 +12,10 @@ import java.util.stream.Collectors;
 
 public class BeatCommand extends SimpleCommand {
   public BeatCommand() {
-    super(SimpleCommandMeta.onLabel("beat")
-        .aliases("побить", "knock", "fuck", "tear")
-        .description("Изрезать... КОЗЫРЬКОМ"));
+    super(
+        SimpleCommandMeta.onLabel("beat")
+            .aliases("побить", "knock", "fuck", "tear")
+            .description("Изрезать... КОЗЫРЬКОМ"));
   }
 
   /**
@@ -38,7 +39,9 @@ public class BeatCommand extends SimpleCommand {
               .setText(
                   "__ "
                       + "@"
-                      + update.getMessage().getFrom().getUserName()
+                      + (update.hasMessage()
+                          ? update.getMessage().getFrom().getUserName()
+                          : update.getCallbackQuery().getFrom().getUserName())
                       + " всячески изуродовал козырьком "
                       + args[0]
                       + ". "
@@ -48,5 +51,4 @@ public class BeatCommand extends SimpleCommand {
               .enableMarkdown(true));
     }
   }
-
 }

@@ -108,13 +108,13 @@ public class ThomasBot extends TelegramLongPollingBot {
   }
 
   public String getBotUsername() {
-    // return "tomshel_bot";
-    return "tom_night_bot";
+     return "tomshel_bot";
+    //return "tom_night_bot";
   }
 
   public String getBotToken() {
-    // return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
-    return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
+     return "1322156348:AAFnwWsUneZWmlu-W_oP2MikvntcP56hGmc";
+    //return "1118855263:AAHy7xNR67KWYfLEjTzBQ5GgFIXl0GCUavs";
   }
 
   @Override

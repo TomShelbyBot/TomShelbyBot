@@ -32,11 +32,6 @@ public class StringUtils {
     }
   }
 
-  public static String[] skipOne(String[] original) {
-    List<String> stringList = new ArrayList<>(Arrays.asList(original).subList(1, original.length));
-    return stringList.toArray(new String[] {});
-  }
-
   public static DragResult dragFrom(Update update, String[] args) {
     if (!update.hasMessage()) return new DragResult(false, null);
 
@@ -64,5 +59,13 @@ public class StringUtils {
     Optional<ChatMember> chatMember = Main.getBot().getChatStorage().lookupMember(message.getChatId(), username);
     return new DragResult(true, chatMember.orElse(null));
   }
+
+  public static String[] skipOne(String[] original) {
+    List<String> stringList = new ArrayList<>(Arrays.asList(original).subList(1, original.length));
+    return stringList.toArray(new String[] {});
+  }
+
+
+
 
 }

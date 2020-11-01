@@ -76,8 +76,9 @@ public class ClapMuteCommand extends SimpleCommand implements AdminRestricted {
                     + chatMember.getUser().getUserName()
                     + " на "
                     + period
-                    + " со словами '"
-                    + Joiner.on(' ').join(StringUtils.skipOne(args))
-                    + "'"));
+                    + "c."
+                    + (args.length > 1
+                        ? " со словами '" + Joiner.on(' ').join(StringUtils.skipOne(args)) + "'"
+                        : " При этом ничего не сказал...")));
   }
 }

@@ -31,7 +31,7 @@ public class Main {
     }
   }
 
-  private static void initBot() {
+  private static void loadBot() {
     if (!chatsFile.exists()) {
       try {
         boolean isCreated = chatsFile.createNewFile();
@@ -60,10 +60,10 @@ public class Main {
     }
   }
 
-  public static void main(String[] args) {
+  public static void initialize() {
     ApiContextInitializer.init();
 
-    initBot();
+    loadBot();
     bot.getCommandContainer()
         .attach(new TestCommand())
         .attach(new GooseCommand())
@@ -80,7 +80,9 @@ public class Main {
         .attach(new ClapMuteCommand())
         .attach(new CheckPunishmentsCommand())
         .attach(new ThrowCoinCommand())
-        .attach(new RandomNumberCommand());
+        .attach(new RandomNumberCommand())
+        .attach(new SummonCommand())
+        .attach(new UnsummonCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());
@@ -91,6 +93,10 @@ public class Main {
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+  }
+
+  public static void main(String[] args) {
+    initialize();
   }
 
   public static ThomasBot getBot() {
