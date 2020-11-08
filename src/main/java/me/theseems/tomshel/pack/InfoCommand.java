@@ -22,6 +22,6 @@ public class InfoCommand extends SimpleCommand {
             .setText(
                 "Да я как Томас Шелби.\nВерсия: "
                     + Main.TOM_BOT_VERSION
-                    + "\nАвтор: @theseems и группа Пики Блайндерс"));
+                    + "\nАвторы: бать и мать Томаса Шелби"));
   }
 }

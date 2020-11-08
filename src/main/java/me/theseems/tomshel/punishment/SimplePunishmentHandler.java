@@ -37,12 +37,22 @@ public class SimplePunishmentHandler implements PunishmentHandler {
 
   @Override
   public boolean handle(Update update) {
-    if (!update.hasMessage()) return true;
+    Integer fromId = null;
+
+    if (!update.hasMessage()) {
+      if (update.hasPollAnswer() && update.getPollAnswer().getUser() != null) {
+        fromId = update.getPollAnswer().getUser().getId();
+      }
+    } else {
+      fromId = update.getMessage().getFrom().getId();
+    }
+
+    if (fromId == null) return false;
 
     for (Punishment punishment :
         Main.getBot()
             .getPunishmentStorage()
-            .getPunishments(update.getMessage().getFrom().getId())) {
+            .getPunishments(fromId)) {
 
       PunishmentType type = punishment.getType();
       if (!processors.containsKey(type)) continue;

@@ -82,7 +82,10 @@ public class Main {
         .attach(new ThrowCoinCommand())
         .attach(new RandomNumberCommand())
         .attach(new SummonCommand())
-        .attach(new UnsummonCommand());
+        .attach(new UnsummonCommand())
+        .attach(new SayCommand())
+        .attach(new FCommand())
+        .attach(new ToxicCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());

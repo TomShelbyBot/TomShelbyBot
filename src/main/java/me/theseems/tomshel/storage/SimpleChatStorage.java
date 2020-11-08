@@ -85,4 +85,9 @@ public class SimpleChatStorage implements ChatStorage {
     }
     return sum;
   }
+
+  @Override
+  public Collection<Long> getChatIds() {
+    return chatMap.keySet();
+  }
 }

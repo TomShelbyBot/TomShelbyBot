@@ -35,4 +35,6 @@ public interface ChatStorage {
   void put(Long chatId, String username, Integer userId);
 
   Collection<String> getResolvableUsernames(Long chatId);
+
+  Collection<Long> getChatIds();
 }
