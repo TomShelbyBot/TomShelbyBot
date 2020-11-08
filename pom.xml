@@ -24,7 +24,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <finalName>Thomas</finalName>
+                    <finalName>TomShelBot-${version}</finalName>
                 </configuration>
                 <executions>
                     <!-- Run shade goal on package phase -->
