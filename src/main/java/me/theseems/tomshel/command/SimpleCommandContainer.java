@@ -1,15 +1,14 @@
 package me.theseems.tomshel.command;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SimpleCommandContainer implements CommandContainer {
   private final Map<String, Command> commandMap;
+  private final Set<Command> commandSet;
 
   public SimpleCommandContainer() {
     commandMap = new HashMap<>();
+    commandSet = new HashSet<>();
   }
 
   /**
@@ -20,6 +19,7 @@ public class SimpleCommandContainer implements CommandContainer {
   @Override
   public CommandContainer attach(Command command) {
     commandMap.put(command.getMeta().getLabel(), command);
+    commandSet.add(command);
     for (String alias : command.getMeta().getAliases()) {
       commandMap.put(alias, command);
     }
@@ -34,6 +34,7 @@ public class SimpleCommandContainer implements CommandContainer {
   @Override
   public void detach(String mainLabel) {
     Command command = commandMap.get(mainLabel);
+    commandSet.remove(command);
     for (String alias : command.getMeta().getAliases()) {
       commandMap.remove(alias);
     }
@@ -74,13 +75,6 @@ public class SimpleCommandContainer implements CommandContainer {
    */
   @Override
   public Collection<Command> getCommands() {
-    Map<String, Command> commandMap = this.commandMap;
-    commandMap.forEach(
-        (s, command) -> {
-          for (String alias : command.getMeta().getAliases()) {
-            commandMap.remove(alias);
-          }
-        });
-    return commandMap.values();
+    return commandSet;
   }
 }
