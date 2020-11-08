@@ -1,10 +1,19 @@
 package me.theseems.tomshel;
 
 import com.google.gson.Gson;
+import me.theseems.tomshel.callback.SimpleCallbackManager;
+import me.theseems.tomshel.command.SimpleCommandContainer;
+import me.theseems.tomshel.config.BotConfig;
 import me.theseems.tomshel.pack.*;
 import me.theseems.tomshel.punishment.DeleteMessageProcessor;
 import me.theseems.tomshel.punishment.MumbleMessageProcessor;
+import me.theseems.tomshel.punishment.SimplePunishmentHandler;
+import me.theseems.tomshel.storage.ChatStorage;
 import me.theseems.tomshel.storage.SimpleChatStorage;
+import me.theseems.tomshel.storage.SimplePunishmentStorage;
+import me.theseems.tomshel.update.SimpleUpdateHandler;
+import me.theseems.tomshel.update.SimpleUpdateHandlerManager;
+import me.theseems.tomshel.update.handlers.*;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -16,9 +25,11 @@ public class Main {
   private static final File baseDir =
       new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
           .getParentFile();
-  private static final File chatsFile = new File(baseDir, "chats.json");
 
-  public static final String TOM_BOT_VERSION = "0.1D";
+  private static final File chatsFile = new File(baseDir, "chats.json");
+  private static final File configFile = new File(baseDir, "config.json");
+
+  public static final String TOM_BOT_VERSION = "0.2D";
 
   public static void save() {
     System.out.println("Saving to disk");
@@ -31,7 +42,22 @@ public class Main {
     }
   }
 
+  private static BotConfig loadConfig() {
+    try {
+      return new Gson().fromJson(new FileReader(configFile), BotConfig.class);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
   private static void loadBot() {
+    BotConfig config = loadConfig();
+    if (config == null) {
+      throw new IllegalStateException("Cannot boot without config.json with bot credentials!");
+    }
+
     if (!chatsFile.exists()) {
       try {
         boolean isCreated = chatsFile.createNewFile();
@@ -43,21 +69,30 @@ public class Main {
       }
     }
 
+    ChatStorage chatStorage = new SimpleChatStorage();
     try {
-      SimpleChatStorage storage =
-          new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
-      if (storage == null) {
-        System.err.println("Error loading storage! There's no one there.");
-        storage = new SimpleChatStorage();
-      }
+      chatStorage = new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
 
-      bot = new ThomasBot(storage);
-      System.out.println("Loaded storage with entries: " + storage.getEntryCount());
+      if (chatStorage == null) {
+        System.err.println("Error loading storage! There's no one there.");
+        chatStorage = new SimpleChatStorage();
+      } else {
+        System.out.println("Loaded storage with chat count: " + chatStorage.getChatIds().size());
+      }
     } catch (FileNotFoundException e) {
       System.err.println("Booting without loading chats from disk");
       e.printStackTrace();
-      bot = new ThomasBot();
     }
+
+    bot =
+        new ThomasBot(
+            new SimpleCommandContainer(),
+            new SimplePunishmentStorage(),
+            chatStorage,
+            new SimplePunishmentHandler(),
+            new SimpleCallbackManager(),
+            new SimpleUpdateHandlerManager(),
+            config);
   }
 
   public static void initialize() {
@@ -89,6 +124,17 @@ public class Main {
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());
+
+    SimpleUpdateHandler.putConsecutively(
+        bot,
+        new InlineQueryHandler(),
+        new CallbackQueryHandler(),
+        new SpecialWordHandler(),
+        new PunishmentHandler(),
+        new PollAnswerHandler(),
+        new WelcomeHandler(),
+        new NonStickerModeHandler(),
+        new CommandHandler());
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {

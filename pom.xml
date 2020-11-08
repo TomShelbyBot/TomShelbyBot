@@ -6,7 +6,7 @@
 
     <groupId>me.theseems</groupId>
     <artifactId>tomshel</artifactId>
-    <version>0.1D</version>
+    <version>0.2D</version>
 
     <build>
         <plugins>
