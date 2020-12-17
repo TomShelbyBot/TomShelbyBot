@@ -5,12 +5,14 @@ import me.theseems.tomshel.callback.SimpleCallbackManager;
 import me.theseems.tomshel.command.SimpleCommandContainer;
 import me.theseems.tomshel.config.BotConfig;
 import me.theseems.tomshel.pack.*;
+import me.theseems.tomshel.pack.dev.MetaGetBotCommand;
+import me.theseems.tomshel.pack.dev.MetaPutBotCommand;
 import me.theseems.tomshel.punishment.DeleteMessageProcessor;
 import me.theseems.tomshel.punishment.MumbleMessageProcessor;
 import me.theseems.tomshel.punishment.SimplePunishmentHandler;
 import me.theseems.tomshel.storage.ChatStorage;
-import me.theseems.tomshel.storage.SimpleChatStorage;
 import me.theseems.tomshel.storage.SimplePunishmentStorage;
+import me.theseems.tomshel.storage.simple.SimpleChatStorage;
 import me.theseems.tomshel.update.SimpleUpdateHandler;
 import me.theseems.tomshel.update.SimpleUpdateHandlerManager;
 import me.theseems.tomshel.update.handlers.*;
@@ -28,14 +30,15 @@ public class Main {
 
   private static final File chatsFile = new File(baseDir, "chats.json");
   private static final File configFile = new File(baseDir, "config.json");
+  private static final File pollsFile = new File(baseDir, "polls.json");
 
   public static final String TOM_BOT_VERSION = "0.2D";
 
   public static void save() {
-    System.out.println("Saving to disk");
+    System.out.println("Saving to disk...");
     try {
       FileWriter writer = new FileWriter(chatsFile);
-      new Gson().toJson(bot.getChatStorage(), writer);
+      new Gson().newBuilder().setPrettyPrinting().create().toJson(bot.getChatStorage(), writer);
       writer.flush();
     } catch (IOException e) {
       e.printStackTrace();
@@ -95,32 +98,37 @@ public class Main {
             config);
   }
 
+
   public static void initialize() {
     ApiContextInitializer.init();
-
     loadBot();
+
+    // Main pack
     bot.getCommandContainer()
-        .attach(new TestCommand())
-        .attach(new GooseCommand())
-        .attach(new WallCommand())
-        .attach(new BeatCommand())
-        .attach(new LookupCommand())
-        .attach(new MuteCommand())
-        .attach(new UnmuteCommand())
-        .attach(new AllCommand())
-        .attach(new NoStickerCommand())
-        .attach(new GoCommand())
-        .attach(new HelpCommand())
-        .attach(new InfoCommand())
-        .attach(new ClapMuteCommand())
-        .attach(new CheckPunishmentsCommand())
-        .attach(new ThrowCoinCommand())
-        .attach(new RandomNumberCommand())
-        .attach(new SummonCommand())
-        .attach(new UnsummonCommand())
-        .attach(new SayCommand())
-        .attach(new FCommand())
-        .attach(new ToxicCommand());
+        .attach(new TestBotCommand())
+        .attach(new GooseBotCommand())
+        .attach(new WallBotCommand())
+        .attach(new BeatBotCommand())
+        .attach(new LookupBotCommand())
+        .attach(new MuteBotCommand())
+        .attach(new UnmuteBotCommand())
+        .attach(new AllBotCommand())
+        .attach(new NoStickerBotCommand())
+        .attach(new GoBotCommand())
+        .attach(new HelpBotCommand())
+        .attach(new InfoBotCommand())
+        .attach(new ClapMuteBotCommand())
+        .attach(new CheckPunishmentsBotCommand())
+        .attach(new ThrowCoinBotCommand())
+        .attach(new RandomNumberBotCommand())
+        .attach(new SummonBotCommand())
+        .attach(new UnsummonBotCommand())
+        .attach(new SayBotCommand())
+        .attach(new FBotCommand())
+        .attach(new ToxicBotCommand());
+
+    // Development pack
+    bot.getCommandContainer().attach(new MetaGetBotCommand()).attach(new MetaPutBotCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());
@@ -131,7 +139,7 @@ public class Main {
         new CallbackQueryHandler(),
         new SpecialWordHandler(),
         new PunishmentHandler(),
-        new PollAnswerHandler(),
+        PollAnswerHandler.loadFrom(pollsFile),
         new WelcomeHandler(),
         new NonStickerModeHandler(),
         new CommandHandler());

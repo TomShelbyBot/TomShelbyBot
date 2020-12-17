@@ -1,0 +1,42 @@
+package me.theseems.tomshel.storage.simple;
+
+import me.theseems.tomshel.storage.SimpleChatMeta;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+public class SimpleChatEntry {
+  private final Map<String, Integer> users;
+  private final SimpleChatMeta meta;
+
+  public SimpleChatEntry() {
+    users = new HashMap<>();
+    meta = new SimpleChatMeta();
+  }
+
+  public boolean containsUser(String username) {
+    return users.containsKey(username);
+  }
+
+  public Optional<Integer> getUserId(String username) {
+    return Optional.ofNullable(users.get(username));
+  }
+
+  public Collection<String> getUserNicknames() {
+    return users.keySet();
+  }
+
+  public Collection<Integer> getUserIds() {
+    return users.values();
+  }
+
+  public void putUser(String username, Integer userId) {
+    users.put(username, userId);
+  }
+
+  public SimpleChatMeta getMeta() {
+    return meta;
+  }
+}

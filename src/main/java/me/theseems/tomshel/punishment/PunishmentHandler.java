@@ -20,7 +20,7 @@ public interface PunishmentHandler {
     /**
      * Handle update
      * @param update to handle
-     * @return should procees anyway
+     * @return should process anyway
      */
     boolean handle(Update update);
 }

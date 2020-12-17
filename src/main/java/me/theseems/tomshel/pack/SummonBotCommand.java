@@ -2,7 +2,7 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.util.CommandUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.Collections;
 
-public class SummonCommand extends SimpleCommand {
+public class SummonBotCommand extends SimpleBotCommand {
 
-  public SummonCommand() {
+  public SummonBotCommand() {
     super(
         new SimpleCommandMeta().label("summon").description("Отправить призыв прописать комманду"));
   }

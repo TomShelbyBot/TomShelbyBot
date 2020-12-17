@@ -1,7 +1,7 @@
 package me.theseems.tomshel.update.handlers;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.Command;
+import me.theseems.tomshel.command.BotCommand;
 import me.theseems.tomshel.update.SimpleUpdateHandler;
 import me.theseems.tomshel.util.CommandUtils;
 import me.theseems.tomshel.util.StringUtils;
@@ -23,15 +23,15 @@ public class CommandHandler extends SimpleUpdateHandler {
       label = label.substring(0, Math.max(1, label.length() - 12));
     }
 
-    Optional<Command> commandOptional = bot.getCommandContainer().get(label);
+    Optional<BotCommand> commandOptional = bot.getCommandContainer().get(label);
     if (!commandOptional.isPresent()) return true;
 
-    Command command = commandOptional.get();
+    BotCommand botCommand = commandOptional.get();
     if (bot.getCommandContainer()
         .isAccessible(label, message.getChatId(), message.getFrom().getId())) {
 
       try {
-        command.handle(bot, StringUtils.skipOne(args), update);
+        botCommand.handle(bot, StringUtils.skipOne(args), update);
       } catch (CommandUtils.BotCommandException e) {
         bot.sendBack(update, new SendMessage().setText(e.getMessage()));
       } catch (Exception e) {

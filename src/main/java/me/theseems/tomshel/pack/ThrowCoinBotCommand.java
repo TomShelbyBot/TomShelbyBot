@@ -1,15 +1,15 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.security.SecureRandom;
 
-public class ThrowCoinCommand extends SimpleCommand {
-  public ThrowCoinCommand() {
+public class ThrowCoinBotCommand extends SimpleBotCommand {
+  public ThrowCoinBotCommand() {
     super(
         new SimpleCommandMeta()
             .label("coin")

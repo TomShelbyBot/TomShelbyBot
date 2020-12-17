@@ -1,14 +1,14 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class ToxicCommand extends SimpleCommand {
-  public ToxicCommand() {
+public class ToxicBotCommand extends SimpleBotCommand {
+  public ToxicBotCommand() {
     super(new SimpleCommandMeta().label("toxic").description("Поставить алерт на токсика"));
   }
 

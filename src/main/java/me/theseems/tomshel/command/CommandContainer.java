@@ -6,9 +6,9 @@ import java.util.Optional;
 public interface CommandContainer {
   /**
    * Attach command to bot container
-   * @param command to attach
+   * @param botCommand to attach
    */
-  CommandContainer attach(Command command);
+  CommandContainer attach(BotCommand botCommand);
 
   /**
    * Detach command from container
@@ -21,7 +21,7 @@ public interface CommandContainer {
    * @param label to get
    * @return command if is found
    */
-  Optional<Command> get(String label);
+  Optional<BotCommand> get(String label);
 
   /**
    * Is command accessible
@@ -35,5 +35,5 @@ public interface CommandContainer {
    * Get all commands there are
    * @return commands
    */
-  Collection<Command> getCommands();
+  Collection<BotCommand> getCommands();
 }

@@ -1,14 +1,17 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminRestricted;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
+import me.theseems.tomshel.storage.ChatMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class NoStickerCommand extends SimpleCommand implements AdminRestricted {
-  public NoStickerCommand() {
+public class NoStickerBotCommand extends SimpleBotCommand implements AdminPermissible {
+  public static final String STICKER_MODE_META_KEY = "stickerMode";
+
+  public NoStickerBotCommand() {
     super(
         SimpleCommandMeta.onLabel("sticksoff")
             .aliases("offstickers", "banstickers", "банстик", "banstick")
@@ -17,9 +20,11 @@ public class NoStickerCommand extends SimpleCommand implements AdminRestricted {
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    bot.getChatStorage().setNoStickerMode(!bot.getChatStorage().isNoStickerMode());
+    ChatMeta meta = bot.getChatStorage().getChatMeta(update.getMessage().getChatId());
+    boolean mode = !meta.getBoolean(STICKER_MODE_META_KEY).orElse(false);
+    meta.set("stickerMode", mode);
 
-    String statusText = (bot.getChatStorage().isNoStickerMode() ? "_ВКЛЮЧЕН_" : "выключен");
+    String statusText = (mode ? "_ВКЛЮЧЕН_" : "выключен");
     bot.sendBack(
         update,
         new SendMessage()

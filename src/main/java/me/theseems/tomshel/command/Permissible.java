@@ -1,6 +1,6 @@
 package me.theseems.tomshel.command;
 
-public interface Restricted {
+public interface Permissible {
   /**
    * Can a user use that command
    * @param userId to check

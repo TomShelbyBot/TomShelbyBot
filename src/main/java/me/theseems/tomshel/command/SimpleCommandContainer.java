@@ -3,25 +3,25 @@ package me.theseems.tomshel.command;
 import java.util.*;
 
 public class SimpleCommandContainer implements CommandContainer {
-  private final Map<String, Command> commandMap;
-  private final Set<Command> commandSet;
+  private final Map<String, BotCommand> commandMap;
+  private final Set<BotCommand> botCommandSet;
 
   public SimpleCommandContainer() {
     commandMap = new HashMap<>();
-    commandSet = new HashSet<>();
+    botCommandSet = new HashSet<>();
   }
 
   /**
    * Attach command to bot container
    *
-   * @param command to attach
+   * @param botCommand to attach
    */
   @Override
-  public CommandContainer attach(Command command) {
-    commandMap.put(command.getMeta().getLabel(), command);
-    commandSet.add(command);
-    for (String alias : command.getMeta().getAliases()) {
-      commandMap.put(alias, command);
+  public CommandContainer attach(BotCommand botCommand) {
+    commandMap.put(botCommand.getMeta().getLabel(), botCommand);
+    botCommandSet.add(botCommand);
+    for (String alias : botCommand.getMeta().getAliases()) {
+      commandMap.put(alias, botCommand);
     }
     return this;
   }
@@ -33,9 +33,9 @@ public class SimpleCommandContainer implements CommandContainer {
    */
   @Override
   public void detach(String mainLabel) {
-    Command command = commandMap.get(mainLabel);
-    commandSet.remove(command);
-    for (String alias : command.getMeta().getAliases()) {
+    BotCommand botCommand = commandMap.get(mainLabel);
+    botCommandSet.remove(botCommand);
+    for (String alias : botCommand.getMeta().getAliases()) {
       commandMap.remove(alias);
     }
   }
@@ -47,7 +47,7 @@ public class SimpleCommandContainer implements CommandContainer {
    * @return command if is found
    */
   @Override
-  public Optional<Command> get(String label) {
+  public Optional<BotCommand> get(String label) {
     return Optional.ofNullable(commandMap.get(label));
   }
 
@@ -61,9 +61,9 @@ public class SimpleCommandContainer implements CommandContainer {
   @Override
   public boolean isAccessible(String label, Long chatId, Integer userId) {
     if (!commandMap.containsKey(label)) return true;
-    Command command = commandMap.get(label);
-    if (command instanceof Restricted) {
-      return ((Restricted) command).canUse(chatId, userId);
+    BotCommand botCommand = commandMap.get(label);
+    if (botCommand instanceof Permissible) {
+      return ((Permissible) botCommand).canUse(chatId, userId);
     }
     return true;
   }
@@ -74,7 +74,7 @@ public class SimpleCommandContainer implements CommandContainer {
    * @return commands
    */
   @Override
-  public Collection<Command> getCommands() {
-    return commandSet;
+  public Collection<BotCommand> getCommands() {
+    return botCommandSet;
   }
 }

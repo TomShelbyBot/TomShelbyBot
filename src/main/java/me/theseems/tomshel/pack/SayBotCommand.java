@@ -2,15 +2,15 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class SayCommand extends SimpleCommand {
-  public SayCommand() {
+public class SayBotCommand extends SimpleBotCommand {
+  public SayBotCommand() {
     super(SimpleCommandMeta.onLabel("say").description("Сказать что-то от имени бота"));
   }
 

@@ -2,18 +2,20 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminRestricted;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
+import me.theseems.tomshel.update.handlers.PollAnswerHandler;
 import org.telegram.telegrambots.meta.api.methods.pinnedmessages.PinChatMessage;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Arrays;
 
-public class GoCommand extends SimpleCommand implements AdminRestricted {
-  public GoCommand() {
+public class GoBotCommand extends SimpleBotCommand implements AdminPermissible {
+  public GoBotCommand() {
     super(
         SimpleCommandMeta.onLabel("go")
             .aliases("lets", "погнали")
@@ -30,12 +32,17 @@ public class GoCommand extends SimpleCommand implements AdminRestricted {
               .setAnonymous(false)
               .setOptions(Arrays.asList("Да", "Нет", "Идите нахуй"));
 
-      int pollMessageId = bot.execute(sendPoll).getMessageId();
+      Message message = bot.execute(sendPoll);
+      int pollMessageId = message.getMessageId();
+
       bot.execute(
           new PinChatMessage()
               .setChatId(update.getMessage().getChatId())
               .setMessageId(pollMessageId));
 
+      // Add poll to the container so that we'll be able
+      // to send a reaction to the corresponding chat
+      PollAnswerHandler.getInstance().addPoll(message.getPoll().getId(), message.getChatId());
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }

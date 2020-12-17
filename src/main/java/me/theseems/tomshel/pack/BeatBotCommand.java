@@ -2,7 +2,7 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class BeatCommand extends SimpleCommand {
-  public BeatCommand() {
+public class BeatBotCommand extends SimpleBotCommand {
+  public BeatBotCommand() {
     super(
         SimpleCommandMeta.onLabel("beat")
             .aliases("побить", "knock", "fuck", "tear")

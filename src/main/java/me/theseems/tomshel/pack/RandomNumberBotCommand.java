@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.util.CommandUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,8 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Random;
 
-public class RandomNumberCommand extends SimpleCommand {
-  public RandomNumberCommand() {
+public class RandomNumberBotCommand extends SimpleBotCommand {
+  public RandomNumberBotCommand() {
     super(
         new SimpleCommandMeta()
             .label("random")

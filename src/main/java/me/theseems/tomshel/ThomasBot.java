@@ -80,8 +80,8 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public void onUpdateReceived(Update update) {
     try {
-      if (update.hasMessage() && update.getMessage().getFrom().getUserName().equals(getBotUsername()))
-        return;
+      if (update.hasMessage()
+          && update.getMessage().getFrom().getUserName().equals(getBotUsername())) return;
 
       getUpdateHandlerManager().handleUpdate(this, update);
     } catch (Exception e) {

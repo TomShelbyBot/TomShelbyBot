@@ -2,8 +2,8 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminRestricted;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.ClapMutePunishment;
 import me.theseems.tomshel.util.StringUtils;
@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.temporal.ChronoUnit;
 
-public class ClapMuteCommand extends SimpleCommand implements AdminRestricted {
+public class ClapMuteBotCommand extends SimpleBotCommand implements AdminPermissible {
 
-  public ClapMuteCommand() {
+  public ClapMuteBotCommand() {
     super(
         new SimpleCommandMeta()
             .label("clapmute")

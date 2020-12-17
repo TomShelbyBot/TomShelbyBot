@@ -3,8 +3,8 @@ package me.theseems.tomshel.pack;
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.Main;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminRestricted;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.MutePunishment;
 import me.theseems.tomshel.util.StringUtils;
@@ -15,8 +15,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
-public class MuteCommand extends SimpleCommand implements AdminRestricted {
-  public MuteCommand() {
+public class MuteBotCommand extends SimpleBotCommand implements AdminPermissible {
+  public MuteBotCommand() {
     super(
         SimpleCommandMeta.onLabel("mute")
             .aliases("мут", "молчи", "shutup", "заткнись")

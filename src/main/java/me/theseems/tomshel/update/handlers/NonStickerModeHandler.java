@@ -10,13 +10,17 @@ public class NonStickerModeHandler extends SimpleUpdateHandler {
   /**
    * Handle update
    *
-   * @param bot    to handle for
+   * @param bot to handle for
    * @param update to handle
    * @return whether we should process update next or not
    */
   @Override
   public boolean handleUpdate(ThomasBot bot, Update update) {
-    if (bot.getChatStorage().isNoStickerMode() && update.getMessage().hasSticker()) {
+    if (bot.getChatStorage()
+            .getChatMeta(update.getMessage().getChatId())
+            .getBoolean("stickerMode")
+            .orElse(false)
+        && update.getMessage().hasSticker()) {
       try {
         bot.execute(
             new DeleteMessage()

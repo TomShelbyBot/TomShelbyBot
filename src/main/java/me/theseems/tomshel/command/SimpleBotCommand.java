@@ -3,10 +3,10 @@ package me.theseems.tomshel.command;
 import me.theseems.tomshel.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public abstract class SimpleCommand implements Command {
+public abstract class SimpleBotCommand implements BotCommand {
   private final CommandMeta meta;
 
-  public SimpleCommand(CommandMeta meta) {
+  public SimpleBotCommand(CommandMeta meta) {
     this.meta = meta;
   }
 

@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,8 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FCommand extends SimpleCommand {
-  public FCommand() {
+public class FBotCommand extends SimpleBotCommand {
+  public FBotCommand() {
     super(new SimpleCommandMeta().label("f").description("F in chat"));
   }
 

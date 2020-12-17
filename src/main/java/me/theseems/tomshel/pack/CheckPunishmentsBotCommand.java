@@ -1,7 +1,7 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.Punishment;
 import me.theseems.tomshel.util.StringUtils;
@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collection;
 
-public class CheckPunishmentsCommand extends SimpleCommand {
-  public CheckPunishmentsCommand() {
+public class CheckPunishmentsBotCommand extends SimpleBotCommand {
+  public CheckPunishmentsBotCommand() {
     super(new SimpleCommandMeta().label("pcheck").description("Проверить наказания у гражданина"));
   }
 

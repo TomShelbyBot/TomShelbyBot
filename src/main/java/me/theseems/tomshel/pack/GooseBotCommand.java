@@ -1,13 +1,13 @@
 package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class GooseCommand extends SimpleCommand {
-  public GooseCommand() {
+public class GooseBotCommand extends SimpleBotCommand {
+  public GooseBotCommand() {
     super(
         SimpleCommandMeta.onLabel("goose")
             .aliases("гусь", "кря", "quack")

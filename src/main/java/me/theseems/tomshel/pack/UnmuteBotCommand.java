@@ -2,8 +2,8 @@ package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.Main;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminRestricted;
-import me.theseems.tomshel.command.SimpleCommand;
+import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.Punishment;
 import me.theseems.tomshel.punishment.PunishmentType;
@@ -13,8 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
-public class UnmuteCommand extends SimpleCommand implements AdminRestricted {
-  public UnmuteCommand() {
+public class UnmuteBotCommand extends SimpleBotCommand implements AdminPermissible {
+  public UnmuteBotCommand() {
     super(
         SimpleCommandMeta.onLabel("unmute")
             .aliases("muteoff", "offmute", "pardon")

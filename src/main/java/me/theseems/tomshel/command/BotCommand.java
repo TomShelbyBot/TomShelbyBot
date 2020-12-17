@@ -3,7 +3,7 @@ package me.theseems.tomshel.command;
 import me.theseems.tomshel.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface Command {
+public interface BotCommand {
   /**
    * Handle update for that command
    * @param update to handle

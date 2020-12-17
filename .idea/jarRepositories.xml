@@ -37,6 +37,11 @@
       <option name="url" value="https://maven.pkg.github.com/TheSeems/TGrant" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="ViewAPI" />
+      <option name="name" value="GitHub ViewAPI Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/HSE-Minecraft/ViewAPI" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
@@ -50,6 +55,11 @@
       <option name="id" value="central" />
       <option name="name" value="central" />
       <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="CommandAPI" />
+      <option name="name" value="GitHub CommandAPI Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/HSE-Minecraft/CommandAPI" />
     </remote-repository>
   </component>
 </project>

@@ -6,8 +6,12 @@ import me.theseems.tomshel.command.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class HelpCommand extends SimpleCommand {
-  public HelpCommand() {
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+public class HelpBotCommand extends SimpleBotCommand {
+  public HelpBotCommand() {
     super(
         SimpleCommandMeta.onLabel("thelp").alias("помощь").description("Помощь по коммандам бота"));
   }
@@ -19,8 +23,18 @@ public class HelpCommand extends SimpleCommand {
         new StringBuilder(
             "Итак.. вот список того, что я умею.. (" + container.getCommands().size() + "): \n\n");
 
-    for (Command command : container.getCommands()) {
-      CommandMeta meta = command.getMeta();
+    Collection<BotCommand> commands =
+        container.getCommands().stream()
+            .filter(
+                botCommand ->
+                    botCommand != null
+                        && botCommand.getMeta().getLabel() != null
+                        && botCommand.getMeta().getDescription() != null)
+            .sorted(Comparator.comparing(o -> o.getMeta().getLabel()))
+            .collect(Collectors.toList());
+
+    for (BotCommand botCommand : commands) {
+      CommandMeta meta = botCommand.getMeta();
       response.append("/").append(meta.getLabel());
       if (!meta.getAliases().isEmpty())
         response
