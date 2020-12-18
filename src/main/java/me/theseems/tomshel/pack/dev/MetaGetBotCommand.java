@@ -11,7 +11,7 @@ public class MetaGetBotCommand extends DevPermissible implements BotCommand {
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    if (args.length == 0) bot.sendBack(update, new SendMessage().setText("Укажите ключ"));
+    if (args.length < 1) bot.sendBack(update, new SendMessage().setText("Укажите ключ"));
 
     Object value =
         bot.getChatStorage()

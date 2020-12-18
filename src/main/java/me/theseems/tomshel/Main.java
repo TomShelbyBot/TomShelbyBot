@@ -32,7 +32,7 @@ public class Main {
   private static final File configFile = new File(baseDir, "config.json");
   private static final File pollsFile = new File(baseDir, "polls.json");
 
-  public static final String TOM_BOT_VERSION = "0.2D";
+  public static final String TOM_BOT_VERSION = "0.3D";
 
   public static void save() {
     System.out.println("Saving to disk...");

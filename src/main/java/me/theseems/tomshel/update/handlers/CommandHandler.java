@@ -18,6 +18,8 @@ public class CommandHandler extends SimpleUpdateHandler {
     Message message = update.getMessage();
 
     String[] args = update.getMessage().getText().split(" ");
+    if (!args[0].startsWith("/")) return true;
+
     String label = args[0].substring(1);
     if (label.endsWith(bot.getBotUsername())) {
       label = label.substring(0, Math.max(1, label.length() - 12));
