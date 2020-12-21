@@ -104,9 +104,9 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
     } else if (update.getPollAnswer().getOptionIds().contains(2)) {
       text += rudeReaction;
     }
-    text += ", @" + userName;
 
-    bot.execute(new SendMessage().setText(text).setChatId(chatId));
+    if (!text.isEmpty())
+      bot.execute(new SendMessage().setText(text + ", @" + userName).setChatId(chatId));
     return false;
   }
 
