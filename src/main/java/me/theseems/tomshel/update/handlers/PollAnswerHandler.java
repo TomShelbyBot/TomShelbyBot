@@ -3,7 +3,7 @@ package me.theseems.tomshel.update.handlers;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.storage.ChatMeta;
+import me.theseems.tomshel.storage.TomMeta;
 import me.theseems.tomshel.update.SimpleUpdateHandler;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -91,7 +91,7 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
       userName = "?<" + user.getId() + ">";
     }
 
-    ChatMeta meta = bot.getChatStorage().getChatMeta(chatId);
+    TomMeta meta = bot.getChatStorage().getChatMeta(chatId);
     String positiveReaction = meta.getString("pollPositive").orElse("\uD83D\uDE18");
     String negativeReaction = meta.getString("pollNegative").orElse("\uD83D\uDE1E");
     String rudeReaction = meta.getString("pollRude").orElse("\uD83E\uDD2C");

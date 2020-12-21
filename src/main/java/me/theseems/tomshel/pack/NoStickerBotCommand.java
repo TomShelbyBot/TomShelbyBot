@@ -4,7 +4,7 @@ import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.AdminPermissible;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
-import me.theseems.tomshel.storage.ChatMeta;
+import me.theseems.tomshel.storage.TomMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -20,7 +20,7 @@ public class NoStickerBotCommand extends SimpleBotCommand implements AdminPermis
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    ChatMeta meta = bot.getChatStorage().getChatMeta(update.getMessage().getChatId());
+    TomMeta meta = bot.getChatStorage().getChatMeta(update.getMessage().getChatId());
     boolean mode = !meta.getBoolean(STICKER_MODE_META_KEY).orElse(false);
     meta.set("stickerMode", mode);
 

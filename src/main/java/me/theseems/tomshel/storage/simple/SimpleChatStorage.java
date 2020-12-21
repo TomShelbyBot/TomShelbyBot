@@ -1,7 +1,7 @@
 package me.theseems.tomshel.storage.simple;
 
 import me.theseems.tomshel.Main;
-import me.theseems.tomshel.storage.ChatMeta;
+import me.theseems.tomshel.storage.TomMeta;
 import me.theseems.tomshel.storage.ChatStorage;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.ChatMember;
@@ -11,7 +11,6 @@ import java.util.*;
 
 public class SimpleChatStorage implements ChatStorage {
   private final Map<Long, SimpleChatEntry> chatMap;
-  private boolean stickerMode;
 
   public SimpleChatStorage() {
     chatMap = new HashMap<>();
@@ -48,7 +47,7 @@ public class SimpleChatStorage implements ChatStorage {
   }
 
   @Override
-  public ChatMeta getChatMeta(Long chatId) {
+  public TomMeta getChatMeta(Long chatId) {
     if (!chatMap.containsKey(chatId)) {
       chatMap.put(chatId, new SimpleChatEntry());
     }

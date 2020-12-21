@@ -35,7 +35,7 @@ public interface ChatStorage {
    * @param chatId to get for
    * @return meta
    */
-  ChatMeta getChatMeta(Long chatId);
+  TomMeta getChatMeta(Long chatId);
 
   /**
    * Get resolvable nicknames for chat

@@ -5,8 +5,7 @@ import me.theseems.tomshel.callback.SimpleCallbackManager;
 import me.theseems.tomshel.command.SimpleCommandContainer;
 import me.theseems.tomshel.config.BotConfig;
 import me.theseems.tomshel.pack.*;
-import me.theseems.tomshel.pack.dev.MetaGetBotCommand;
-import me.theseems.tomshel.pack.dev.MetaPutBotCommand;
+import me.theseems.tomshel.pack.dev.*;
 import me.theseems.tomshel.punishment.DeleteMessageProcessor;
 import me.theseems.tomshel.punishment.MumbleMessageProcessor;
 import me.theseems.tomshel.punishment.SimplePunishmentHandler;
@@ -98,7 +97,6 @@ public class Main {
             config);
   }
 
-
   public static void initialize() {
     ApiContextInitializer.init();
     loadBot();
@@ -125,10 +123,16 @@ public class Main {
         .attach(new UnsummonBotCommand())
         .attach(new SayBotCommand())
         .attach(new FBotCommand())
-        .attach(new ToxicBotCommand());
+        .attach(new ToxicBotCommand())
+        .attach(new IdBotCommand());
 
     // Development pack
-    bot.getCommandContainer().attach(new MetaGetBotCommand()).attach(new MetaPutBotCommand());
+    bot.getCommandContainer()
+        .attach(new MetaGetBotCommand())
+        .attach(new MetaPutBotCommand())
+        .attach(new MetaDelBotCommand())
+        .attach(new MetaMapBotCommand())
+        .attach(new SaveAllBotCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());

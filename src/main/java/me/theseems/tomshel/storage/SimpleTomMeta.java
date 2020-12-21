@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SimpleChatMeta implements ChatMeta {
+public class SimpleTomMeta implements TomMeta {
   private final Map<String, Object> map;
 
-  public SimpleChatMeta() {
+  public SimpleTomMeta() {
     map = new ConcurrentHashMap<>();
   }
 
-  public SimpleChatMeta(ChatMeta other) {
+  public SimpleTomMeta(TomMeta other) {
     this();
     for (String key : other.getKeys()) {
       other.get(key).ifPresent(value -> map.put(key, value));
@@ -49,16 +49,16 @@ public class SimpleChatMeta implements ChatMeta {
     }
   }
 
-  public static String jsonify(ChatMeta meta) {
+  public static String jsonify(TomMeta meta) {
     return jsonify(meta, true);
   }
 
-  public static String jsonify(ChatMeta meta, boolean pretty) {
-    SimpleChatMeta simpleChatMeta;
-    if (meta instanceof SimpleChatMeta) {
-      simpleChatMeta = (SimpleChatMeta) meta;
+  public static String jsonify(TomMeta meta, boolean pretty) {
+    SimpleTomMeta simpleChatMeta;
+    if (meta instanceof SimpleTomMeta) {
+      simpleChatMeta = (SimpleTomMeta) meta;
     } else {
-      simpleChatMeta = new SimpleChatMeta(meta);
+      simpleChatMeta = new SimpleTomMeta(meta);
     }
 
     GsonBuilder builder = new GsonBuilder();
@@ -100,14 +100,14 @@ public class SimpleChatMeta implements ChatMeta {
   }
 
   @Override
-  public ChatMeta merge(ChatMeta other) {
-    ChatMeta meta = new SimpleChatMeta(this);
+  public TomMeta merge(TomMeta other) {
+    TomMeta meta = new SimpleTomMeta(this);
     meta.mergeInto(other);
     return meta;
   }
 
   @Override
-  public void mergeInto(ChatMeta other) {
+  public void mergeInto(TomMeta other) {
     for (String key : other.getKeys()) {
       if (!map.containsKey(key)) {
         other.get(key).ifPresent(value -> set(key, value));
@@ -126,7 +126,7 @@ public class SimpleChatMeta implements ChatMeta {
   }
 
   @Override
-  public void replaceWith(ChatMeta other) {
+  public void replaceWith(TomMeta other) {
     map.clear();
     for (String key : other.getKeys()) {
       other.get(key).ifPresent(value -> map.put(key, value));

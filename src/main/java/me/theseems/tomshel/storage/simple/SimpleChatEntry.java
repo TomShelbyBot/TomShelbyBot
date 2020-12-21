@@ -1,6 +1,6 @@
 package me.theseems.tomshel.storage.simple;
 
-import me.theseems.tomshel.storage.SimpleChatMeta;
+import me.theseems.tomshel.storage.SimpleTomMeta;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public class SimpleChatEntry {
   private final Map<String, Integer> users;
-  private final SimpleChatMeta meta;
+  private final SimpleTomMeta meta;
 
   public SimpleChatEntry() {
     users = new HashMap<>();
-    meta = new SimpleChatMeta();
+    meta = new SimpleTomMeta();
   }
 
   public boolean containsUser(String username) {
@@ -36,7 +36,7 @@ public class SimpleChatEntry {
     users.put(username, userId);
   }
 
-  public SimpleChatMeta getMeta() {
+  public SimpleTomMeta getMeta() {
     return meta;
   }
 }

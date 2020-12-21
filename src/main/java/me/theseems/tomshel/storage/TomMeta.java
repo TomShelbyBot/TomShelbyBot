@@ -3,7 +3,7 @@ package me.theseems.tomshel.storage;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface ChatMeta {
+public interface TomMeta {
   void set(String key, Object value);
 
   Optional<Object> get(String key);
@@ -20,9 +20,9 @@ public interface ChatMeta {
 
   Collection<String> getKeys();
 
-  ChatMeta merge(ChatMeta other);
+  TomMeta merge(TomMeta other);
 
-  void mergeInto(ChatMeta other);
+  void mergeInto(TomMeta other);
 
-  void replaceWith(ChatMeta other);
+  void replaceWith(TomMeta other);
 }
