@@ -88,28 +88,25 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
     } else if (user.getFirstName() != null) {
       userName = user.getFirstName() + (user.getLastName() != null ? " " + user.getLastName() : "");
     } else {
-      userName = "Импостер<" + user.getId() + ">";
+      userName = "?<" + user.getId() + ">";
     }
 
     ChatMeta meta = bot.getChatStorage().getChatMeta(chatId);
-    String positiveReaction =
-        String.format(meta.getString("pollFuckYou").orElse("\uD83D\uDE18 @%s"), userName);
-    String negativeReaction =
-        String.format(meta.getString("pollFuckYou").orElse("\uD83D\uDE1E @" + userName), userName);
-    String superNegativeReaction =
-        String.format(
-            meta.getString("pollFuckYou")
-                .orElse("ПАШЕЛ НАХУЙ КТО ПРОГОЛОСОВАЛ ЗА ПАШЕЛ НАХУЙ!! СУКА, @%s"),
-            userName);
+    String positiveReaction = meta.getString("pollPositive").orElse("\uD83D\uDE18");
+    String negativeReaction = meta.getString("pollNegative").orElse("\uD83D\uDE1E");
+    String rudeReaction = meta.getString("pollRude").orElse("\uD83E\uDD2C");
 
+    String text = "";
     if (update.getPollAnswer().getOptionIds().contains(0)) {
-      bot.execute(new SendMessage().setText(positiveReaction).setChatId(chatId));
+      text += positiveReaction;
     } else if (update.getPollAnswer().getOptionIds().contains(1)) {
-      bot.execute(new SendMessage().setText(negativeReaction).setChatId(chatId));
+      text += negativeReaction;
     } else if (update.getPollAnswer().getOptionIds().contains(2)) {
-      bot.execute(new SendMessage().setText(superNegativeReaction).setChatId(chatId));
+      text += rudeReaction;
     }
+    text += ", @" + userName;
 
+    bot.execute(new SendMessage().setText(text).setChatId(chatId));
     return false;
   }
 
