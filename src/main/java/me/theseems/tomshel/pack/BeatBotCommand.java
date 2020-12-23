@@ -12,10 +12,7 @@ import java.util.stream.Collectors;
 
 public class BeatBotCommand extends SimpleBotCommand {
   public BeatBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("beat")
-            .aliases("побить", "knock", "fuck", "tear")
-            .description("Изрезать... КОЗЫРЬКОМ"));
+    super(SimpleCommandMeta.onLabel("beat").description("Изрезать..."));
   }
 
   /**

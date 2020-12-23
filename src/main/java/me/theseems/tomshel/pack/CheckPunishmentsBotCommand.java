@@ -13,16 +13,9 @@ import java.util.Collection;
 
 public class CheckPunishmentsBotCommand extends SimpleBotCommand {
   public CheckPunishmentsBotCommand() {
-    super(new SimpleCommandMeta().label("pcheck").description("Проверить наказания у гражданина"));
+    super(new SimpleCommandMeta().label("pcheck").description("Проверить наказания"));
   }
 
-  /**
-   * Handle update for that command
-   *
-   * @param bot to handle with
-   * @param args
-   * @param update to handle
-   */
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
     StringUtils.DragResult dragResult = StringUtils.dragFrom(update, args);

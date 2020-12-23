@@ -15,7 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PollAnswerHandler extends SimpleUpdateHandler {
-  private Map<String, Long> pollToChatMap;
+  public static class PollMessage {
+    private final long chatId;
+    private final int messageId;
+
+    public PollMessage(long chatId, int messageId) {
+      this.chatId = chatId;
+      this.messageId = messageId;
+    }
+  }
+
+  private Map<String, PollMessage> pollToChatMap;
   private File file;
   private static PollAnswerHandler instance;
 
@@ -49,7 +59,7 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
         handler.pollToChatMap =
             new GsonBuilder()
                 .create()
-                .fromJson(new FileReader(file), new TypeToken<Map<String, Long>>() {}.getType());
+                .fromJson(new FileReader(file), new TypeToken<Map<String, PollMessage>>() {}.getType());
       } catch (FileNotFoundException e) {
         e.printStackTrace();
       }
@@ -63,7 +73,7 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
     return handler;
   }
 
-  public void addPoll(String pollId, Long chatId) {
+  public void addPoll(String pollId, PollMessage chatId) {
     pollToChatMap.put(pollId, chatId);
     save();
   }
@@ -79,7 +89,7 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
     String pollId = update.getPollAnswer().getPollId();
     if (!pollToChatMap.containsKey(pollId)) return false;
 
-    Long chatId = pollToChatMap.get(pollId);
+    PollMessage pollMessage = pollToChatMap.get(pollId);
     User user = update.getPollAnswer().getUser();
     String userName;
 
@@ -91,7 +101,7 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
       userName = "?<" + user.getId() + ">";
     }
 
-    TomMeta meta = bot.getChatStorage().getChatMeta(chatId);
+    TomMeta meta = bot.getChatStorage().getChatMeta(pollMessage.chatId);
     String positiveReaction = meta.getString("pollPositive").orElse("\uD83D\uDE18");
     String negativeReaction = meta.getString("pollNegative").orElse("\uD83D\uDE1E");
     String rudeReaction = meta.getString("pollRude").orElse("\uD83E\uDD2C");
@@ -106,7 +116,11 @@ public class PollAnswerHandler extends SimpleUpdateHandler {
     }
 
     if (!text.isEmpty())
-      bot.execute(new SendMessage().setText(text + ", @" + userName).setChatId(chatId));
+      bot.execute(
+          new SendMessage()
+              .setText(text + " @" + userName)
+              .setChatId(pollMessage.chatId)
+              .setReplyToMessageId(pollMessage.messageId));
     return false;
   }
 

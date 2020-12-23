@@ -35,6 +35,7 @@ public interface PunishmentStorage {
 
   /**
    * Add punishment to user
+   *
    * @param userId id of user
    * @param punishment to add
    */
@@ -42,6 +43,7 @@ public interface PunishmentStorage {
 
   /**
    * Get all punishments there are for user
+   *
    * @param userId to get for
    * @return punishments
    */
@@ -49,6 +51,7 @@ public interface PunishmentStorage {
 
   /**
    * Remove punishment from user
+   *
    * @param userId to remove from
    * @param punishment to remove
    */

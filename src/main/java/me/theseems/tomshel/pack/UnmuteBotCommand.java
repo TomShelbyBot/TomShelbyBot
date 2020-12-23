@@ -2,7 +2,7 @@ package me.theseems.tomshel.pack;
 
 import me.theseems.tomshel.Main;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.AdminPermissibleBotCommand;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.Punishment;
@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Optional;
 
-public class UnmuteBotCommand extends SimpleBotCommand implements AdminPermissible {
+public class UnmuteBotCommand extends SimpleBotCommand implements AdminPermissibleBotCommand {
   public UnmuteBotCommand() {
     super(
         SimpleCommandMeta.onLabel("unmute")
-            .aliases("muteoff", "offmute", "pardon")
+            .aliases("pardon")
             .description("Размутить. Выдать.. Право.. Голоса"));
   }
 
@@ -45,7 +45,8 @@ public class UnmuteBotCommand extends SimpleBotCommand implements AdminPermissib
       ChatMember actual = member.get();
       Optional<Punishment> punishmentOptional =
           bot.getPunishmentStorage()
-              .getAnyActivePunishment(actual.getUser().getId(), PunishmentType.MUTE, PunishmentType.CLAP_MUTE);
+              .getAnyActivePunishment(
+                  actual.getUser().getId(), PunishmentType.MUTE, PunishmentType.CLAP_MUTE);
 
       if (!punishmentOptional.isPresent()) {
         bot.sendBack(

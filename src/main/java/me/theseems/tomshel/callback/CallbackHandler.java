@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public interface CallbackHandler {
   /**
    * Handle callback
+   *
    * @param bot to handle for
    * @param update to handle
    * @param args a string to handle
@@ -14,12 +15,14 @@ public interface CallbackHandler {
 
   /**
    * Get name of callback handler
+   *
    * @return name
    */
   String getName();
 
   /**
    * Get prefix of callback to handle
+   *
    * @return prefix
    */
   String getPrefix();

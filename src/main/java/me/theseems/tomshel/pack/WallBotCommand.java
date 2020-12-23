@@ -8,10 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class WallBotCommand extends SimpleBotCommand {
   public WallBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("wall")
-            .aliases("стенка", "стена", "stalemate")
-            .description("Построить непробиваемую стенку."));
+    super(SimpleCommandMeta.onLabel("wall").description("Построить непробиваемую стенку."));
   }
 
   /**

@@ -1,13 +1,12 @@
 package me.theseems.tomshel.pack.dev;
 
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.BotCommand;
 import me.theseems.tomshel.command.CommandMeta;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class MetaDelBotCommand extends DevPermissible implements BotCommand {
+public class MetaDelBotCommand implements DevPermissibleBotCommand {
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {

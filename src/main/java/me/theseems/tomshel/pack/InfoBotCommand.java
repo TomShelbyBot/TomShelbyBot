@@ -4,24 +4,20 @@ import me.theseems.tomshel.Main;
 import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class InfoBotCommand extends SimpleBotCommand {
 
   public InfoBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("info").alias("start").description("Основаня информация о боте"));
+    super(SimpleCommandMeta.onLabel("info").description("Основаня информация о боте"));
   }
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    bot.sendBack(
+    bot.replyBackText(
         update,
-        new SendMessage()
-            .setText(
-                "Да я как Томас Шелби.\nВерсия: "
-                    + Main.TOM_BOT_VERSION
-                    + "\nАвторы: бать и мать Томаса Шелби\n\nРепозиторий: https://github.com/TheSeems/TomShelBot"));
+        "Бот Томас.\nВерсия: "
+            + Main.TOM_BOT_VERSION
+            + "\n\nАвтор: @theseems\nРепозиторий: https://github.com/TheSeems/TomShelBot");
   }
 }

@@ -3,7 +3,7 @@ package me.theseems.tomshel.pack;
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.Main;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.AdminPermissibleBotCommand;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.MutePunishment;
@@ -15,11 +15,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
-public class MuteBotCommand extends SimpleBotCommand implements AdminPermissible {
+public class MuteBotCommand extends SimpleBotCommand implements AdminPermissibleBotCommand {
   public MuteBotCommand() {
     super(
         SimpleCommandMeta.onLabel("mute")
-            .aliases("мут", "молчи", "shutup", "заткнись")
             .description("Под угрозой расстрела сообещния запретить человеку писать."));
   }
 
@@ -71,7 +70,8 @@ public class MuteBotCommand extends SimpleBotCommand implements AdminPermissible
       Main.getBot()
           .getPunishmentStorage()
           .addPunishment(
-              member.get().getUser().getId(), new MutePunishment(period, ChronoUnit.SECONDS, reason));
+              member.get().getUser().getId(),
+              new MutePunishment(period, ChronoUnit.SECONDS, reason));
 
       bot.sendBack(
           update,

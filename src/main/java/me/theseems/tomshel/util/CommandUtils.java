@@ -1,14 +1,14 @@
 package me.theseems.tomshel.util;
 
-import com.google.common.base.Splitter;
 import me.theseems.tomshel.Main;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class CommandUtils {
 
   public static class BotCommandException extends IllegalStateException {
-    private String message;
+    private final String message;
 
     public BotCommandException(String message) {
       this.message = message;
@@ -74,46 +74,52 @@ public class CommandUtils {
     public String label;
     public String[] args;
     public boolean success;
-    public boolean isSpecificToBot;
+    public boolean accessExplicit;
 
     @Override
     public String toString() {
-      return "CommandSkeleton{" +
-          "label='" + label + '\'' +
-          ", args=" + Arrays.toString(args) +
-          ", success=" + success +
-          ", isSpecificToBot=" + isSpecificToBot +
-          '}';
+      return "CommandSkeleton{"
+          + "label='"
+          + label
+          + '\''
+          + ", args="
+          + Arrays.toString(args)
+          + ", success="
+          + success
+          + ", accessExplicit="
+          + accessExplicit
+          + '}';
     }
   }
 
-  public static CommandSkeleton extractCommand(String text) {
+  public static CommandSkeleton extractCommand(String text, String botUsername) {
     CommandSkeleton skeleton = new CommandSkeleton();
-    skeleton.success = false;
 
-    if (text == null || text.isEmpty()) return skeleton;
+    String[] args = Stream.of(text.split(" ")).filter(w -> !w.isEmpty()).toArray(String[]::new);
+    String potentialLabel = args[0];
 
-    String[] args = Splitter.on(' ').omitEmptyStrings().trimResults().splitToList(text).toArray(new String[]{});
-    String label = args[0];
+    // Command must start with '/' symbol
+    if (!potentialLabel.startsWith("/")) return skeleton;
 
-    if (!label.startsWith("/")) return skeleton;
+    String label = args[0].substring(1);
+    boolean explicit = label.endsWith(botUsername);
 
-    label = label.substring(1);
-    if (label.isEmpty()) return skeleton;
+    // Skip the label
+    args = StringUtils.skipOne(args);
+
+    // If we have such: /command@bot_username
+    if (explicit) {
+      label = label.substring(0, Math.max(1, label.length() - botUsername.length() - 1));
+    }
 
     skeleton.success = true;
-    if (label.endsWith("@" + Main.getBot().getBotUsername())) {
-      label = label.substring(0, Math.max(1, label.length() - Main.getBot().getBotUsername().length() - 1));
-      skeleton.isSpecificToBot = true;
-    }
-
     skeleton.label = label;
-    if (args.length == 1) {
-      skeleton.args = new String[]{};
-    } else {
-      skeleton.args = StringUtils.skipOne(args);
-    }
-
+    skeleton.accessExplicit = explicit;
+    skeleton.args = args;
     return skeleton;
+  }
+
+  public static CommandSkeleton extractCommand(String text) {
+    return extractCommand(text, Main.getBot().getBotUsername());
   }
 }

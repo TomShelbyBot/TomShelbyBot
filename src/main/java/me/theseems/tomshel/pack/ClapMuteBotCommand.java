@@ -2,7 +2,7 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.AdminPermissibleBotCommand;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.punishment.ClapMutePunishment;
@@ -13,13 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.temporal.ChronoUnit;
 
-public class ClapMuteBotCommand extends SimpleBotCommand implements AdminPermissible {
+public class ClapMuteBotCommand extends SimpleBotCommand implements AdminPermissibleBotCommand {
 
   public ClapMuteBotCommand() {
     super(
-        new SimpleCommandMeta()
-            .label("clapmute")
-            .aliases("кляп", "muteclap")
+        SimpleCommandMeta.onLabel("gag")
+            .aliases("кляп", "clapmute", "muteclap")
             .description("Вставить кляп. Именно кляп! Особый вид мута"));
   }
 

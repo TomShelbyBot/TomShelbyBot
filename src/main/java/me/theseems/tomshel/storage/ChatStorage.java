@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface ChatStorage {
   /**
    * Lookup for user id
+   *
    * @param chatId to lookup in
    * @param username to lookup for
    * @return user id
@@ -16,6 +17,7 @@ public interface ChatStorage {
 
   /**
    * Lookup for user id
+   *
    * @param chatId to lookup in
    * @param username to lookup for
    * @return user id
@@ -24,6 +26,7 @@ public interface ChatStorage {
 
   /**
    * Save nickname for user in specific chat
+   *
    * @param chatId to put in
    * @param username to put for
    * @param userId to put
@@ -32,6 +35,7 @@ public interface ChatStorage {
 
   /**
    * Get chat meta
+   *
    * @param chatId to get for
    * @return meta
    */
@@ -39,6 +43,7 @@ public interface ChatStorage {
 
   /**
    * Get resolvable nicknames for chat
+   *
    * @param chatId to get nicknames for
    * @return nicknames
    */
@@ -46,6 +51,7 @@ public interface ChatStorage {
 
   /**
    * Get chat ids there are
+   *
    * @return chat ids
    */
   Collection<Long> getChatIds();

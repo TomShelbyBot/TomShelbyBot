@@ -9,13 +9,15 @@ public class SimpleCommandMeta implements CommandMeta {
   private final List<String> aliases;
   private String label;
   private String description;
+  private boolean accessExplicit;
 
   public SimpleCommandMeta(String... aliases) {
     this.aliases = new ArrayList<>(Arrays.asList(aliases));
+    this.accessExplicit = false;
   }
 
   public SimpleCommandMeta() {
-    aliases = new ArrayList<>();
+    this(new String[0]);
   }
 
   public static SimpleCommandMeta onLabel(String label) {
@@ -39,6 +41,11 @@ public class SimpleCommandMeta implements CommandMeta {
 
   public SimpleCommandMeta aliases(String... aliases) {
     this.aliases.addAll(Arrays.asList(aliases));
+    return this;
+  }
+
+  public SimpleCommandMeta explicitAccess() {
+    this.accessExplicit = true;
     return this;
   }
 
@@ -70,5 +77,14 @@ public class SimpleCommandMeta implements CommandMeta {
   @Override
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Should we react only to /label@bot_username
+   *
+   * @return explicit access requirement
+   */
+  public boolean isAccessExplicit() {
+    return accessExplicit;
   }
 }

@@ -2,18 +2,15 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.AdminPermissibleBotCommand;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class AllBotCommand extends SimpleBotCommand implements AdminPermissible {
+public class AllBotCommand extends SimpleBotCommand implements AdminPermissibleBotCommand {
   public AllBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("all")
-            .aliases("atall", "все", "сылште")
-            .description("Упомянуть всех, кого бот знает."));
+    super(SimpleCommandMeta.onLabel("all").description("Упомянуть всех, кого бот знает."));
   }
 
   @Override
@@ -32,10 +29,5 @@ public class AllBotCommand extends SimpleBotCommand implements AdminPermissible 
                             bot.getChatStorage()
                                 .getResolvableUsernames(update.getMessage().getChatId())))
             .enableMarkdown(true));
-  }
-
-  @Override
-  public boolean canUse(Long chatId, Integer userId) {
-    return userId == 311245296;
   }
 }

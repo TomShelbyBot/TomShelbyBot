@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MumbleMessageProcessor implements PunishmentProcessor {
-  private Map<Integer, Instant> latest;
+  private final Map<Integer, Instant> latest;
 
   public MumbleMessageProcessor() {
     latest = new ConcurrentHashMap<>();

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public interface UpdateHandler {
   /**
    * Handle update
+   *
    * @param bot to handle for
    * @param update to handle
    * @return whether we should process update next or not
@@ -14,6 +15,7 @@ public interface UpdateHandler {
 
   /**
    * Get priority
+   *
    * @return priority
    */
   int getPriority();

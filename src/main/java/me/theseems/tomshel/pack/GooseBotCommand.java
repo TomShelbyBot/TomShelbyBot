@@ -8,18 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class GooseBotCommand extends SimpleBotCommand {
   public GooseBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("goose")
-            .aliases("гусь", "кря", "quack")
-            .description("Закинуть гуся."));
+    super(SimpleCommandMeta.onLabel("goose").description("Закинуть гуся."));
   }
 
-  /**
-   * Handle update for that command
-   *
-   * @param bot to handle with
-   * @param update to handle
-   */
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
     bot.sendBack(

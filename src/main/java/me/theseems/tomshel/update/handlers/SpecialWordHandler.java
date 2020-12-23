@@ -13,7 +13,7 @@ public class SpecialWordHandler extends SimpleUpdateHandler {
   /**
    * Handle update
    *
-   * @param bot    to handle for
+   * @param bot to handle for
    * @param update to handle
    * @return whether we should process update next or not
    */
@@ -26,7 +26,8 @@ public class SpecialWordHandler extends SimpleUpdateHandler {
         && update.getMessage().hasText()
         && update.getMessage().getText().equals("KasayaSabakaVulta")) {
 
-      for (Punishment punishment : bot.getPunishmentStorage().getPunishments(message.getFrom().getId())) {
+      for (Punishment punishment :
+          bot.getPunishmentStorage().getPunishments(message.getFrom().getId())) {
         bot.getPunishmentStorage().removePunishment(message.getFrom().getId(), punishment);
       }
 

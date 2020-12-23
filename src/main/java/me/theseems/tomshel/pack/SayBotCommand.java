@@ -26,7 +26,10 @@ public class SayBotCommand extends SimpleBotCommand {
     }
 
     try {
-      bot.execute(new DeleteMessage().setChatId(update.getMessage().getChatId()).setMessageId(update.getMessage().getMessageId()));
+      bot.execute(
+          new DeleteMessage()
+              .setChatId(update.getMessage().getChatId())
+              .setMessageId(update.getMessage().getMessageId()));
       bot.sendBack(update, new SendMessage().setText(Joiner.on(' ').join(args)));
     } catch (TelegramApiException e) {
       e.printStackTrace();

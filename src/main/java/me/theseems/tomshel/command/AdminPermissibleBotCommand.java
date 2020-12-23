@@ -4,7 +4,7 @@ import me.theseems.tomshel.Main;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatAdministrators;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public interface AdminPermissible extends Permissible {
+public interface AdminPermissibleBotCommand extends PermissibleBotCommand {
   /**
    * Can a user use that command
    * @param userId to check

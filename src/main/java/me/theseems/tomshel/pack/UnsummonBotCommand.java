@@ -11,11 +11,14 @@ public class UnsummonBotCommand extends SimpleBotCommand {
 
   public UnsummonBotCommand() {
     super(
-        new SimpleCommandMeta().label("unsummon").description("Сбросить призыв прописать комманду"));
+        new SimpleCommandMeta()
+            .label("unsummon")
+            .description("Сбросить призыв прописать комманду"));
   }
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    bot.sendBack(update, new SendMessage().setText("Сброшено").setReplyMarkup(new ReplyKeyboardRemove()));
+    bot.sendBack(
+        update, new SendMessage().setText("Сброшено").setReplyMarkup(new ReplyKeyboardRemove()));
   }
 }

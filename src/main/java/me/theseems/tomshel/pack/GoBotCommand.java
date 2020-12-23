@@ -2,7 +2,7 @@ package me.theseems.tomshel.pack;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.AdminPermissible;
+import me.theseems.tomshel.command.AdminPermissibleBotCommand;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.update.handlers.PollAnswerHandler;
@@ -14,12 +14,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Arrays;
 
-public class GoBotCommand extends SimpleBotCommand implements AdminPermissible {
+public class GoBotCommand extends SimpleBotCommand implements AdminPermissibleBotCommand {
   public GoBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("go")
-            .aliases("lets", "погнали")
-            .description("Отправит вопрос со слов 'Погнали ...'."));
+    super(SimpleCommandMeta.onLabel("go").description("Отправит опрос со слов 'Погнали ...'."));
   }
 
   @Override
@@ -42,7 +39,10 @@ public class GoBotCommand extends SimpleBotCommand implements AdminPermissible {
 
       // Add poll to the container so that we'll be able
       // to send a reaction to the corresponding chat
-      PollAnswerHandler.getInstance().addPoll(message.getPoll().getId(), message.getChatId());
+      PollAnswerHandler.getInstance()
+          .addPoll(
+              message.getPoll().getId(),
+              new PollAnswerHandler.PollMessage(message.getChatId(), message.getMessageId()));
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }

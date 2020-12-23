@@ -2,7 +2,6 @@ package me.theseems.tomshel.pack.dev;
 
 import com.google.common.base.Joiner;
 import me.theseems.tomshel.ThomasBot;
-import me.theseems.tomshel.command.BotCommand;
 import me.theseems.tomshel.command.CommandMeta;
 import me.theseems.tomshel.command.SimpleCommandMeta;
 import me.theseems.tomshel.storage.TomMeta;
@@ -12,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class MetaPutBotCommand extends DevPermissible implements BotCommand {
+public class MetaPutBotCommand implements DevPermissibleBotCommand {
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {

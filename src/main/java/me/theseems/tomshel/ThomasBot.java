@@ -67,15 +67,36 @@ public class ThomasBot extends TelegramLongPollingBot {
   }
 
   public void sendBack(Update update, SendMessage message) {
+    message.setChatId(
+        update.hasMessage()
+            ? update.getMessage().getChatId()
+            : update.getCallbackQuery().getMessage().getChatId());
     try {
-      message.setChatId(
-          update.hasMessage()
-              ? update.getMessage().getChatId()
-              : update.getCallbackQuery().getMessage().getChatId());
       execute(message);
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+  }
+
+  public void replyBack(Update update, SendMessage message) {
+    if (update.hasMessage()) {
+      message.setChatId(update.getMessage().getChatId());
+      if (update.getMessage().hasText()) {
+        message.setReplyToMessageId(update.getMessage().getMessageId());
+      }
+    } else {
+      message.setChatId(update.getCallbackQuery().getMessage().getChatId());
+    }
+
+    try {
+      execute(message);
+    } catch (TelegramApiException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void replyBackText(Update update, String message) {
+    replyBack(update, new SendMessage().setText(message));
   }
 
   public void onUpdateReceived(Update update) {

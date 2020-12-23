@@ -37,7 +37,7 @@ public class LookupBotCommand extends SimpleBotCommand {
     Optional<Integer> userId = bot.getChatStorage().lookup(chatId, args[0]);
 
     if (!userId.isPresent()) {
-      bot.sendBack(update, new SendMessage().setText("А вот этого гражданина я не знаю."));
+      bot.replyBack(update, new SendMessage().setText("А вот этого гражданина я не знаю."));
       String knownNicknames =
           Joiner.on(' ')
               .join(bot.getChatStorage().getResolvableUsernames(chatId))
@@ -47,7 +47,7 @@ public class LookupBotCommand extends SimpleBotCommand {
           update,
           new SendMessage()
               .setText(
-                  "Мне известны сведения ("
+                  "Мне известны ("
                       + bot.getChatStorage().getResolvableUsernames(chatId).size()
                       + "): \n"
                       + knownNicknames));

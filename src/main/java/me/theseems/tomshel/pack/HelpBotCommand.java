@@ -6,14 +6,19 @@ import me.theseems.tomshel.command.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class HelpBotCommand extends SimpleBotCommand {
   public HelpBotCommand() {
     super(
-        SimpleCommandMeta.onLabel("thelp").alias("помощь").description("Помощь по коммандам бота"));
+        SimpleCommandMeta.onLabel("help")
+            .alias("start")
+            .explicitAccess()
+            .description("Помощь по коммандам бота"));
   }
 
   @Override
@@ -35,14 +40,29 @@ public class HelpBotCommand extends SimpleBotCommand {
 
     for (BotCommand botCommand : commands) {
       CommandMeta meta = botCommand.getMeta();
-      response.append("/").append(meta.getLabel());
-      if (!meta.getAliases().isEmpty())
-        response
-            .append(" (алиасы: ")
-            .append("/")
-            .append(Joiner.on(", /").join(meta.getAliases()))
-            .append(")");
 
+      // Label part
+      response.append("/").append(meta.getLabel());
+      if (meta.isAccessExplicit()) {
+        response.append("@").append(bot.getBotUsername());
+      }
+
+      // Aliases part
+      if (!meta.getAliases().isEmpty()) {
+        response.append(" (алиасы: ").append("/");
+
+        List<String> parts = new ArrayList<>(meta.getAliases());
+        if (meta.isAccessExplicit()) {
+          // Add bot username at the end
+          parts =
+              parts.stream().map(s -> s + "@" + bot.getBotUsername()).collect(Collectors.toList());
+        }
+
+        response.append(Joiner.on(", /").join(parts));
+        response.append(")");
+      }
+
+      // Description part
       response.append("\n");
       response.append("- ").append(meta.getDescription()).append("\n\n");
     }

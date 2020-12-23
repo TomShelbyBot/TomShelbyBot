@@ -49,11 +49,7 @@ public class SimplePunishmentHandler implements PunishmentHandler {
 
     if (fromId == null) return false;
 
-    for (Punishment punishment :
-        Main.getBot()
-            .getPunishmentStorage()
-            .getPunishments(fromId)) {
-
+    for (Punishment punishment : Main.getBot().getPunishmentStorage().getPunishments(fromId)) {
       PunishmentType type = punishment.getType();
       if (!processors.containsKey(type)) continue;
 

@@ -56,7 +56,8 @@ public class StringUtils {
     String username = args[0];
     if (username.startsWith("@")) username = username.substring(1);
 
-    Optional<ChatMember> chatMember = Main.getBot().getChatStorage().lookupMember(message.getChatId(), username);
+    Optional<ChatMember> chatMember =
+        Main.getBot().getChatStorage().lookupMember(message.getChatId(), username);
     return new DragResult(true, chatMember.orElse(null));
   }
 
@@ -64,8 +65,4 @@ public class StringUtils {
     List<String> stringList = new ArrayList<>(Arrays.asList(original).subList(1, original.length));
     return stringList.toArray(new String[] {});
   }
-
-
-
-
 }

@@ -14,7 +14,7 @@ public class RandomNumberBotCommand extends SimpleBotCommand {
     super(
         new SimpleCommandMeta()
             .label("random")
-            .aliases("number", "randomit")
+            .aliases("number")
             .description("Получить рандомное число (диапазон тоже можно указать)."));
   }
 

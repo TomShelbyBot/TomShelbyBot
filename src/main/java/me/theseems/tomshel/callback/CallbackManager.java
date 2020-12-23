@@ -9,18 +9,21 @@ import java.util.Optional;
 public interface CallbackManager {
   /**
    * Add callback handler
+   *
    * @param handler to add
    */
   void addCallbackHandler(CallbackHandler handler);
 
   /**
    * Remove callback handler
+   *
    * @param handler to remove
    */
   void removeCallbackHandler(CallbackHandler handler);
 
   /**
    * Call the callback propagation
+   *
    * @param bot to handle for
    * @param update to handle
    */
@@ -28,6 +31,7 @@ public interface CallbackManager {
 
   /**
    * Get handlers by prefix
+   *
    * @param prefix to get by
    * @return handlers
    */
@@ -35,12 +39,14 @@ public interface CallbackManager {
 
   /**
    * Get all handlers there are in the manager
+   *
    * @return handlers
    */
   Collection<CallbackHandler> getHandlers();
 
   /**
    * Get handler by name
+   *
    * @param name to get by
    * @return handler if there is
    */
