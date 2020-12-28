@@ -132,7 +132,8 @@ public class Main {
         .attach(new MetaPutBotCommand())
         .attach(new MetaDelBotCommand())
         .attach(new MetaMapBotCommand())
-        .attach(new SaveAllBotCommand());
+        .attach(new SaveAllBotCommand())
+        .attach(new FatherExportBotCommand());
 
     bot.getPunishmentHandler().add(new DeleteMessageProcessor());
     bot.getPunishmentHandler().add(new MumbleMessageProcessor());
@@ -141,7 +142,6 @@ public class Main {
         bot,
         new InlineQueryHandler(),
         new CallbackQueryHandler(),
-        new SpecialWordHandler(),
         new PunishmentHandler(),
         PollAnswerHandler.loadFrom(pollsFile),
         new WelcomeHandler(),

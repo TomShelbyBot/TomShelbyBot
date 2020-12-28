@@ -101,7 +101,9 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public void onUpdateReceived(Update update) {
     try {
+      // Prevent handling own messages
       if (update.hasMessage()
+          && update.getMessage().getFrom().getUserName() != null
           && update.getMessage().getFrom().getUserName().equals(getBotUsername())) return;
 
       getUpdateHandlerManager().handleUpdate(this, update);
