@@ -3,7 +3,6 @@ package me.theseems.tomshel.pack;
 import me.theseems.tomshel.ThomasBot;
 import me.theseems.tomshel.command.SimpleBotCommand;
 import me.theseems.tomshel.command.SimpleCommandMeta;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.security.SecureRandom;
@@ -26,8 +25,6 @@ public class ThrowCoinBotCommand extends SimpleBotCommand {
       text = "🟤 Решка!";
     }
 
-    bot.sendBack(
-        update,
-        new SendMessage().setText(text).setReplyToMessageId(update.getMessage().getMessageId()));
+    bot.replyBackText(update, text);
   }
 }

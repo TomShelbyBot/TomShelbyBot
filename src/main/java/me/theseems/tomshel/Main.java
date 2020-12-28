@@ -123,7 +123,8 @@ public class Main {
         .attach(new SayBotCommand())
         .attach(new RespectBotCommand())
         .attach(new ToxicBotCommand())
-        .attach(new IdBotCommand());
+        .attach(new IdBotCommand())
+        .attach(new BombBotCommand());
 
     // Development pack
     bot.getCommandContainer()

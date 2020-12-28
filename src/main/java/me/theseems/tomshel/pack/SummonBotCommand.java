@@ -11,12 +11,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class SummonBotCommand extends SimpleBotCommand {
   public static final String SUMMON_ACTIVE_MILS_KEY = "summonActiveMils";
+  public static final List<String> SUMMON_BLACKLIST = Arrays.asList("bomb", "summon");
 
   public SummonBotCommand() {
     super(
@@ -34,6 +33,19 @@ public class SummonBotCommand extends SimpleBotCommand {
     CommandUtils.CommandSkeleton skeleton = CommandUtils.extractCommand(action);
     if (!skeleton.success) {
       bot.sendBack(update, new SendMessage().setText("Не удалось распознать команду."));
+      return;
+    }
+
+    String mainLabel =
+        bot.getCommandContainer()
+            .get(skeleton.label)
+            .flatMap(botCommand -> Optional.ofNullable(botCommand.getMeta().getLabel()))
+            .orElse("");
+    if (SUMMON_BLACKLIST.contains(mainLabel)) {
+      bot.sendBack(
+          update,
+          new SendMessage()
+              .setText("Эту команду запрещено призывать в связи с техническими ограничениями"));
       return;
     }
 

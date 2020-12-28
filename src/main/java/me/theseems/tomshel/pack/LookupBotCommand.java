@@ -23,15 +23,14 @@ public class LookupBotCommand extends SimpleBotCommand {
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
     if (args.length == 0) {
-      bot.sendBack(
-          update,
-          new SendMessage()
-              .setText("Так.. ник-то укажи!")
-              .setReplyToMessageId(update.getMessage().getMessageId()));
+      bot.replyBackText(update, "Так.. ник-то укажи!");
       return;
     }
 
-    if (args[0].startsWith("@")) args[0] = args[0].substring(1);
+    // Remove leading @ so not to disturb users
+    if (args[0].startsWith("@")) {
+      args[0] = args[0].substring(1);
+    }
 
     Long chatId = update.getMessage().getChatId();
     Optional<Integer> userId = bot.getChatStorage().lookup(chatId, args[0]);
@@ -41,7 +40,7 @@ public class LookupBotCommand extends SimpleBotCommand {
       String knownNicknames =
           Joiner.on(' ')
               .join(bot.getChatStorage().getResolvableUsernames(chatId))
-              .replace('@', ' ');
+              .replaceFirst("@", " ");
 
       bot.sendBack(
           update,
