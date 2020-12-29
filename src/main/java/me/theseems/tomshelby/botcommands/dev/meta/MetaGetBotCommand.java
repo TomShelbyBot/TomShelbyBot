@@ -18,7 +18,7 @@ public class MetaGetBotCommand implements DevPermissibleBotCommand {
             .getChatMeta(update.getMessage().getChatId())
             .get(args[0])
             .orElse("_<отсутствует>_");
-    bot.sendBack(update, new SendMessage().setText(value.toString()));
+    bot.sendBack(update, new SendMessage().setText(value.toString()).enableMarkdown(true));
   }
 
   @Override

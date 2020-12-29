@@ -26,7 +26,7 @@ public abstract class SimpleUpdateHandler implements UpdateHandler {
             .orElse(0);
 
     for (int i = 0; i < handlers.length; i++) {
-      handlers[i].priority = maxPriority + i + 1;
+      handlers[i].setPriority(maxPriority + i + 1);
       bot.getUpdateHandlerManager().addUpdateHandler(handlers[i]);
     }
   }

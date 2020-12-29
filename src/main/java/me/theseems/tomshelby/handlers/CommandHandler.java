@@ -4,8 +4,6 @@ import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.command.BotCommand;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.util.CommandUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Optional;
 
 public class CommandHandler extends SimpleUpdateHandler {
-  private static final Logger logger = LogManager.getLogger("CommandHandler");
 
   @Override
   public boolean handleUpdate(ThomasBot bot, Update update) {
@@ -47,15 +44,10 @@ public class CommandHandler extends SimpleUpdateHandler {
     } catch (CommandUtils.BotCommandException e) {
       bot.sendBack(update, new SendMessage().setText(e.getMessage()));
     } catch (Exception e) {
-      logger.error(
-          "Error occurred while handling command '" + label + "' from update " + update.toString(),
-          e);
+      System.err.println("Error occurred while handling command '" + label + "' from update " + update.toString());
+      e.printStackTrace();
     }
 
     return true;
-  }
-
-  public static Logger getLogger() {
-    return logger;
   }
 }

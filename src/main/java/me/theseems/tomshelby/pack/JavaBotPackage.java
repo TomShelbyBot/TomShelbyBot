@@ -42,10 +42,10 @@ public abstract class JavaBotPackage implements BotPackage {
   }
 
   public File getPackageFolder() {
-    return new File(
-        new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-            .getParentFile(),
-        getInfo().getName());
+    File baseDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+        .getParentFile();
+    File packsDir = new File(baseDir, "packs");
+    return new File(packsDir, getInfo().getName());
   }
 
   /** On plugin load */

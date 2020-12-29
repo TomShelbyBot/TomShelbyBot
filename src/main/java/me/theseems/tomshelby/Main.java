@@ -143,14 +143,15 @@ public class Main {
         .attach(new ListPackBotCommand());
 
     SimpleUpdateHandler.putConsecutively(bot, new InlineQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
-    CommandHandler handler = new CommandHandler();
-    handler.setPriority(1000);
-    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
 
     for (BotPackage pack : bot.getPackageManager().getPackages()) {
       System.out.println("Enabling pack '" + pack.getInfo().getName() + "'");
       packageManager.enablePackage(bot, pack.getInfo().getName());
     }
+
+    CommandHandler handler = new CommandHandler();
+    handler.setPriority(1000);
+    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {
