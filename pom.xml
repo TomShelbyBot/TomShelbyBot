@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.theseems</groupId>
-    <artifactId>tomshel</artifactId>
+    <artifactId>tomshelby</artifactId>
     <version>0.4D</version>
 
     <build>
@@ -24,7 +24,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <finalName>TomShelBot-${version}</finalName>
+                    <finalName>TomShelbyBot-${version}</finalName>
                 </configuration>
                 <executions>
                     <!-- Run shade goal on package phase -->
@@ -38,7 +38,7 @@
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>me.theseems.tomshel.Main</mainClass>
+                                    <mainClass>me.theseems.tomshelby.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
