@@ -1,6 +1,7 @@
-package me.theseems.tomshelby.botcommands.dev;
+package me.theseems.tomshelby.botcommands.dev.misc;
 
 import me.theseems.tomshelby.ThomasBot;
+import me.theseems.tomshelby.botcommands.dev.DevPermissibleBotCommand;
 import me.theseems.tomshelby.command.BotCommand;
 import me.theseems.tomshelby.command.SimpleBotCommand;
 import me.theseems.tomshelby.command.SimpleCommandMeta;

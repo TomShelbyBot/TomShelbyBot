@@ -1,22 +1,26 @@
 package me.theseems.tomshelby;
 
 import com.google.gson.Gson;
-import me.theseems.tomshelby.botcommands.*;
-import me.theseems.tomshelby.botcommands.dev.*;
+import me.theseems.tomshelby.botcommands.dev.meta.*;
+import me.theseems.tomshelby.botcommands.dev.misc.FatherExportBotCommand;
+import me.theseems.tomshelby.botcommands.dev.pack.DisablePackBotCommand;
+import me.theseems.tomshelby.botcommands.dev.pack.EnablePackBotCommand;
+import me.theseems.tomshelby.botcommands.dev.pack.ListPackBotCommand;
 import me.theseems.tomshelby.callback.SimpleCallbackManager;
 import me.theseems.tomshelby.command.SimpleCommandContainer;
 import me.theseems.tomshelby.config.BotConfig;
+import me.theseems.tomshelby.handlers.CallbackQueryHandler;
+import me.theseems.tomshelby.handlers.CommandHandler;
+import me.theseems.tomshelby.handlers.InlineQueryHandler;
+import me.theseems.tomshelby.handlers.PunishmentHandler;
+import me.theseems.tomshelby.pack.BotPackage;
 import me.theseems.tomshelby.pack.JarBotPackageManager;
-import me.theseems.tomshelby.pack.JavaBotPackage;
-import me.theseems.tomshelby.punishment.DeleteMessageProcessor;
-import me.theseems.tomshelby.punishment.MumbleMessageProcessor;
 import me.theseems.tomshelby.punishment.SimplePunishmentHandler;
 import me.theseems.tomshelby.storage.ChatStorage;
 import me.theseems.tomshelby.storage.SimplePunishmentStorage;
 import me.theseems.tomshelby.storage.simple.SimpleChatStorage;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
-import me.theseems.tomshelby.update.handlers.*;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -126,31 +130,6 @@ public class Main {
     ApiContextInitializer.init();
     loadBot();
 
-    // Main pack
-    bot.getCommandContainer()
-        .attach(new GooseBotCommand())
-        .attach(new WallBotCommand())
-        .attach(new BeatBotCommand())
-        .attach(new LookupBotCommand())
-        .attach(new MuteBotCommand())
-        .attach(new UnmuteBotCommand())
-        .attach(new AllBotCommand())
-        .attach(new NoStickerBotCommand())
-        .attach(new GoBotCommand())
-        .attach(new HelpBotCommand())
-        .attach(new InfoBotCommand())
-        .attach(new ClapMuteBotCommand())
-        .attach(new CheckPunishmentsBotCommand())
-        .attach(new ThrowCoinBotCommand())
-        .attach(new RandomNumberBotCommand())
-        .attach(new SummonBotCommand())
-        .attach(new UnsummonBotCommand())
-        .attach(new SayBotCommand())
-        .attach(new RespectBotCommand())
-        .attach(new ToxicBotCommand())
-        .attach(new IdBotCommand())
-        .attach(new BombBotCommand());
-
     // Development pack
     bot.getCommandContainer()
         .attach(new MetaGetBotCommand())
@@ -159,24 +138,18 @@ public class Main {
         .attach(new MetaMapBotCommand())
         .attach(new SaveAllBotCommand())
         .attach(new FatherExportBotCommand())
-        .attach(new ListPackagesBotCommand());
+        .attach(new EnablePackBotCommand())
+        .attach(new DisablePackBotCommand())
+        .attach(new ListPackBotCommand());
 
-    bot.getPunishmentHandler().add(new DeleteMessageProcessor());
-    bot.getPunishmentHandler().add(new MumbleMessageProcessor());
+    SimpleUpdateHandler.putConsecutively(bot, new InlineQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
+    CommandHandler handler = new CommandHandler();
+    handler.setPriority(1000);
+    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
 
-    SimpleUpdateHandler.putConsecutively(
-        bot,
-        new InlineQueryHandler(),
-        new CallbackQueryHandler(),
-        new PunishmentHandler(),
-        PollAnswerHandler.loadFrom(pollsFile),
-        new WelcomeHandler(),
-        new NonStickerModeHandler(),
-        new CommandHandler());
-
-    for (JavaBotPackage aPackage : bot.getPackageManager().getPackages()) {
-      System.out.println("Enabling botpackage '" + aPackage.getInfo().getName() + "'");
-      packageManager.enablePackage(bot, aPackage.getInfo().getName());
+    for (BotPackage pack : bot.getPackageManager().getPackages()) {
+      System.out.println("Enabling pack '" + pack.getInfo().getName() + "'");
+      packageManager.enablePackage(bot, pack.getInfo().getName());
     }
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
@@ -185,6 +158,10 @@ public class Main {
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
+  }
+
+  public static JarBotPackageManager getPackageManager() {
+    return packageManager;
   }
 
   public static void main(String[] args) {

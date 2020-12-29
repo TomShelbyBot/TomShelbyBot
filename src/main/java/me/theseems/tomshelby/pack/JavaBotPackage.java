@@ -1,6 +1,9 @@
 package me.theseems.tomshelby.pack;
 
+import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
+
+import java.io.File;
 
 public abstract class JavaBotPackage implements BotPackage {
   private BotPackageConfig config;
@@ -38,18 +41,19 @@ public abstract class JavaBotPackage implements BotPackage {
     };
   }
 
-  /**
-   * On plugin load
-   */
-  public abstract void onLoad();
+  public File getPackageFolder() {
+    return new File(
+        new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+            .getParentFile(),
+        getInfo().getName());
+  }
 
-  /**
-   * On plugin enable
-   */
+  /** On plugin load */
+  public void onLoad() {}
+
+  /** On plugin enable */
   public abstract void onEnable();
 
-  /**
-   * On plugin disable
-   */
+  /** On plugin disable */
   public abstract void onDisable();
 }

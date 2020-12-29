@@ -1,9 +1,6 @@
 package me.theseems.tomshelby.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SimpleCommandMeta implements CommandMeta {
   private final List<String> aliases;
@@ -86,5 +83,18 @@ public class SimpleCommandMeta implements CommandMeta {
    */
   public boolean isAccessExplicit() {
     return accessExplicit;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    SimpleCommandMeta that = (SimpleCommandMeta) o;
+    return accessExplicit == that.accessExplicit && Objects.equals(aliases, that.aliases) && label.equals(that.label) && Objects.equals(description, that.description);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(aliases, label, description, accessExplicit);
   }
 }

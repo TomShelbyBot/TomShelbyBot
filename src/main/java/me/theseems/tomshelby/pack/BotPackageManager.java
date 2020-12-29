@@ -9,7 +9,7 @@ public interface BotPackageManager {
    *
    * @return packages
    */
-  Collection<JavaBotPackage> getPackages();
+  Collection<BotPackage> getPackages();
 
   /**
    * Get package by it's name
@@ -17,7 +17,7 @@ public interface BotPackageManager {
    * @param name to get by
    * @return optional found package
    */
-  Optional<JavaBotPackage> getPackageByName(String name);
+  Optional<BotPackage> getPackageByName(String name);
 
   /**
    * Disable package by name

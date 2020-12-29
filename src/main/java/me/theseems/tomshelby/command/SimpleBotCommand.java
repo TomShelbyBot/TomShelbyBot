@@ -3,6 +3,8 @@ package me.theseems.tomshelby.command;
 import me.theseems.tomshelby.ThomasBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Objects;
+
 public abstract class SimpleBotCommand implements BotCommand {
   private final CommandMeta meta;
 
@@ -27,5 +29,18 @@ public abstract class SimpleBotCommand implements BotCommand {
   @Override
   public CommandMeta getMeta() {
     return meta;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    SimpleBotCommand that = (SimpleBotCommand) o;
+    return Objects.equals(meta, that.meta);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(meta);
   }
 }

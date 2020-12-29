@@ -1,15 +1,12 @@
-package me.theseems.tomshelby.update.handlers;
+package me.theseems.tomshelby.handlers;
 
 import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class CallbackQueryHandler extends SimpleUpdateHandler {
+public class PunishmentHandler extends SimpleUpdateHandler {
   @Override
   public boolean handleUpdate(ThomasBot bot, Update update) {
-    if (!update.hasCallbackQuery()) return true;
-
-    bot.getCallbackManager().call(bot, update);
-    return false;
+    return bot.getPunishmentHandler().handle(update);
   }
 }

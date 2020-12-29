@@ -87,8 +87,12 @@ public class JarBotPackageManager implements BotPackageManager {
       setConfig.setAccessible(true);
       setConfig.invoke(object, config);
 
-      //noinspection unchecked
-      clazz.getDeclaredMethod("onLoad").invoke(object);
+      try {
+        //noinspection unchecked
+        clazz.getDeclaredMethod("onLoad").invoke(object);
+      } catch (Exception e) {
+        throw new IllegalArgumentException("Package failed to load", e);
+      }
 
       return (JavaBotPackage) object;
     } catch (ClassNotFoundException e) {
@@ -166,12 +170,12 @@ public class JarBotPackageManager implements BotPackageManager {
   }
 
   @Override
-  public Collection<JavaBotPackage> getPackages() {
-    return botPackageMap.values();
+  public Collection<BotPackage> getPackages() {
+    return new ArrayList<>(botPackageMap.values());
   }
 
   @Override
-  public Optional<JavaBotPackage> getPackageByName(String name) {
+  public Optional<BotPackage> getPackageByName(String name) {
     return Optional.ofNullable(botPackageMap.get(name));
   }
 
@@ -180,8 +184,8 @@ public class JarBotPackageManager implements BotPackageManager {
     if (enabledPackages.contains(name)) return;
     try {
       enablePack(bot, botPackageMap.get(name));
-    } catch (Exception e) {
-      throw new IllegalStateException("Cannot enable plugin '" + name + "': " + e.getMessage(), e);
+    } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+      throw new IllegalStateException("Cannot disable pack '" + name + "': " + e.getMessage(), e);
     }
     enabledPackages.add(name);
   }

@@ -1,4 +1,4 @@
-package me.theseems.tomshelby.update.handlers;
+package me.theseems.tomshelby.handlers;
 
 import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.command.BotCommand;

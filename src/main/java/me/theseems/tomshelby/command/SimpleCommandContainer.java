@@ -33,7 +33,10 @@ public class SimpleCommandContainer implements CommandContainer {
    */
   @Override
   public void detach(String mainLabel) {
+    if (!commandMap.containsKey(mainLabel)) return;
+
     BotCommand botCommand = commandMap.get(mainLabel);
+    commandMap.remove(mainLabel);
     botCommandSet.remove(botCommand);
     for (String alias : botCommand.getMeta().getAliases()) {
       commandMap.remove(alias);

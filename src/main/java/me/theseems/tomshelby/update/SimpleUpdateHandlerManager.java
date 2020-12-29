@@ -5,13 +5,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class SimpleUpdateHandlerManager implements UpdateHandlerManager {
-  private final PriorityQueue<UpdateHandler> updateHandlers;
+  private final ConcurrentSkipListSet<UpdateHandler> updateHandlers;
 
   public SimpleUpdateHandlerManager() {
-    updateHandlers = new PriorityQueue<>(Comparator.comparingInt(UpdateHandler::getPriority));
+    updateHandlers =
+        new ConcurrentSkipListSet<>(Comparator.comparingInt(UpdateHandler::getPriority));
   }
 
   @Override
