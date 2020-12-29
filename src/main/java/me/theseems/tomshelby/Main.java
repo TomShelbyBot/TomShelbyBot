@@ -24,7 +24,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.*;
 
 public class Main {
-  public static final String TOM_BOT_VERSION = "0.4D";
+  public static final String TOM_BOT_VERSION = "0.5D (Package experimental)";
 
   private static ThomasBot bot;
   private static JarBotPackageManager packageManager;

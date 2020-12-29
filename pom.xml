@@ -6,7 +6,7 @@
 
     <groupId>me.theseems</groupId>
     <artifactId>tomshelby</artifactId>
-    <version>0.4D</version>
+    <version>0.5D</version>
 
     <build>
         <plugins>

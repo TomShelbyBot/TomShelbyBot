@@ -18,6 +18,6 @@ public class InfoBotCommand extends SimpleBotCommand {
         update,
         "Бот Томас.\nВерсия: "
             + Main.TOM_BOT_VERSION
-            + "\n\nАвтор: @theseems\nРепозиторий: https://github.com/TheSeems/TomShelBot");
+            + "\n\nАвтор: @theseems\nРепозиторий: https://github.com/TomShelbyBot/TomShelbyBot");
   }
 }
