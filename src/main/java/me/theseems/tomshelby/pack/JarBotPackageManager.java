@@ -90,6 +90,7 @@ public class JarBotPackageManager implements BotPackageManager {
       try {
         //noinspection unchecked
         clazz.getDeclaredMethod("onLoad").invoke(object);
+      } catch (NoSuchMethodException ignored) {
       } catch (Exception e) {
         throw new IllegalArgumentException("Package failed to load", e);
       }

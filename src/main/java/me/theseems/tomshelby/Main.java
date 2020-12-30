@@ -1,11 +1,6 @@
 package me.theseems.tomshelby;
 
 import com.google.gson.Gson;
-import me.theseems.tomshelby.botcommands.dev.meta.*;
-import me.theseems.tomshelby.botcommands.dev.misc.FatherExportBotCommand;
-import me.theseems.tomshelby.botcommands.dev.pack.DisablePackBotCommand;
-import me.theseems.tomshelby.botcommands.dev.pack.EnablePackBotCommand;
-import me.theseems.tomshelby.botcommands.dev.pack.ListPackBotCommand;
 import me.theseems.tomshelby.callback.SimpleCallbackManager;
 import me.theseems.tomshelby.command.SimpleCommandContainer;
 import me.theseems.tomshelby.config.BotConfig;
@@ -129,18 +124,6 @@ public class Main {
   public static void initialize() {
     ApiContextInitializer.init();
     loadBot();
-
-    // Development pack
-    bot.getCommandContainer()
-        .attach(new MetaGetBotCommand())
-        .attach(new MetaPutBotCommand())
-        .attach(new MetaDelBotCommand())
-        .attach(new MetaMapBotCommand())
-        .attach(new SaveAllBotCommand())
-        .attach(new FatherExportBotCommand())
-        .attach(new EnablePackBotCommand())
-        .attach(new DisablePackBotCommand())
-        .attach(new ListPackBotCommand());
 
     SimpleUpdateHandler.putConsecutively(bot, new InlineQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
 
