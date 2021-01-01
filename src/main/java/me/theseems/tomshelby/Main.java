@@ -3,11 +3,10 @@ package me.theseems.tomshelby;
 import com.google.gson.Gson;
 import me.theseems.tomshelby.callback.SimpleCallbackManager;
 import me.theseems.tomshelby.command.SimpleCommandContainer;
+import me.theseems.tomshelby.command.builtin.HelpBotCommand;
+import me.theseems.tomshelby.command.builtin.IdBotCommand;
+import me.theseems.tomshelby.command.builtin.InfoBotCommand;
 import me.theseems.tomshelby.config.BotConfig;
-import me.theseems.tomshelby.handlers.CallbackQueryHandler;
-import me.theseems.tomshelby.handlers.CommandHandler;
-import me.theseems.tomshelby.handlers.InlineQueryHandler;
-import me.theseems.tomshelby.handlers.PunishmentHandler;
 import me.theseems.tomshelby.pack.BotPackage;
 import me.theseems.tomshelby.pack.JarBotPackageManager;
 import me.theseems.tomshelby.punishment.SimplePunishmentHandler;
@@ -19,6 +18,7 @@ import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import me.theseems.tomshelby.update.handlers.*;
 
 import java.io.*;
 
@@ -59,10 +59,7 @@ public class Main {
   private static ChatStorage loadChats() {
     if (!chatsFile.exists()) {
       try {
-        boolean isCreated = chatsFile.createNewFile();
-        if (!isCreated) {
-          System.err.println("Cannot init chats.json, using getting through without it.");
-        }
+        chatsFile.createNewFile();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -86,20 +83,14 @@ public class Main {
     return chatStorage;
   }
 
-  private static JarBotPackageManager loadPackages() {
+  private static JarBotPackageManager loadPackages() throws IOException {
     packageManager = new JarBotPackageManager();
     File packageDir = new File(baseDir, "packs");
     if (!packageDir.exists()) {
       packageDir.mkdir();
     }
 
-    try {
-      packageManager.loadPackages(packageDir);
-    } catch (IOException e) {
-      System.err.println("Error loading plugins: " + e.getMessage());
-      e.printStackTrace();
-    }
-
+    packageManager.loadPackages(packageDir);
     return packageManager;
   }
 
@@ -109,32 +100,57 @@ public class Main {
       throw new IllegalStateException("Cannot boot without config.json with bot credentials!");
     }
 
+    JarBotPackageManager jarBotPackageManager = new JarBotPackageManager();
+    try {
+      System.out.println("Loading packages...");
+      jarBotPackageManager = loadPackages();
+    } catch (IOException e) {
+      System.err.println("Error occurred loading packages: " + e.getMessage());
+      e.printStackTrace();
+    }
+
+    System.out.println("Loading chats...");
+    ChatStorage chatStorage = loadChats();
     bot =
         new ThomasBot(
             new SimpleCommandContainer(),
             new SimplePunishmentStorage(),
-            loadChats(),
+            chatStorage,
             new SimplePunishmentHandler(),
             new SimpleCallbackManager(),
             new SimpleUpdateHandlerManager(),
-            loadPackages(),
+            jarBotPackageManager,
             config);
+
+    // Builtin handlers
+    SimpleUpdateHandler.putConsecutively(
+        bot, new CallbackQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
+    CommandHandler handler = new CommandHandler();
+    handler.setPriority(1000);
+    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
+
+    // Builtin commands
+    getBot()
+        .getCommandContainer()
+        .attach(new HelpBotCommand())
+        .attach(new IdBotCommand())
+        .attach(new InfoBotCommand());
+  }
+
+  private static void loadPacks() {
+    for (BotPackage pack : bot.getPackageManager().getPackages()) {
+      System.out.println(
+          "Enabling pack '" + pack.getInfo().getName() + "' by " + pack.getInfo().getAuthor());
+      packageManager.enablePackage(bot, pack.getInfo().getName());
+    }
   }
 
   public static void initialize() {
     ApiContextInitializer.init();
+    System.out.println("Loading bot...");
     loadBot();
-
-    SimpleUpdateHandler.putConsecutively(bot, new InlineQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
-
-    for (BotPackage pack : bot.getPackageManager().getPackages()) {
-      System.out.println("Enabling pack '" + pack.getInfo().getName() + "'");
-      packageManager.enablePackage(bot, pack.getInfo().getName());
-    }
-
-    CommandHandler handler = new CommandHandler();
-    handler.setPriority(1000);
-    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
+    System.out.println("Enabling packages...");
+    loadPacks();
 
     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
     try {

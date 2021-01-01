@@ -70,10 +70,6 @@ public class ThomasBot extends TelegramLongPollingBot {
     return packageManager;
   }
 
-  public BotConfig getBotConfig() {
-    return botConfig;
-  }
-
   public void sendBack(Update update, SendMessage message) {
     message.setChatId(
         update.hasMessage()
