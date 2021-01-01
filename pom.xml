@@ -48,6 +48,15 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>TomShelbyBot</id>
+            <name>GitHub TomShelbyBot Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/TomShelbyBot/TomShelbyBot</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.telegram</groupId>
@@ -60,12 +69,6 @@
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
             <scope>compile</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
