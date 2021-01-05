@@ -8,6 +8,10 @@
     <artifactId>tomshelby</artifactId>
     <version>0.5D</version>
 
+    <properties>
+        <slf4j.version>2.0.0-alpha1</slf4j.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -75,6 +79,16 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.7.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 

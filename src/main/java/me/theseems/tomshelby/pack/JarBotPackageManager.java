@@ -123,6 +123,26 @@ public class JarBotPackageManager implements BotPackageManager {
       // Parsing bot package config
       BotPackageConfig config = new Gson().fromJson(botPackageRaw, BotPackageConfig.class);
 
+      // Check for required fields
+      if (config.getMain() == null)
+        throw new IllegalArgumentException("Main class is not specified in botpackage.json");
+      if (config.getName() == null)
+        throw new IllegalArgumentException("Name of package is not specified in botpackage.json");
+      if (config.getVersion() == null)
+        throw new IllegalArgumentException("Version is not specified in botpackage.json");
+
+      // Check for name conflicts with existing packages
+      if (botPackageMap.containsKey(config.getName())) {
+        BotPackageInfo present = botPackageMap.get(config.getName()).getInfo();
+        throw new IllegalArgumentException(
+            "Package with that name already exists: '"
+                + present.getName()
+                + "' v"
+                + present.getVersion()
+                + " by "
+                + present.getAuthor());
+      }
+
       // Check if 'main' matches the java package regexp
       if (!config.getMain().matches("^(?:\\w+|\\w+\\.\\w+)+$"))
         throw new IllegalArgumentException("Invalid main class specified in botpackage.json");
@@ -166,7 +186,16 @@ public class JarBotPackageManager implements BotPackageManager {
             JavaBotPackage.class.getClassLoader());
 
     for (File file : files) {
-      loadSinglePackage(child, file);
+      try {
+        loadSinglePackage(child, file);
+      } catch (IllegalArgumentException e) {
+        // Catching incorrect package exception
+        System.err.println("Cannot load package '" + file.getName() + "': " + e.getMessage());
+      } catch (Exception e) {
+        // Catching general exception as we don't want bot to fail because of it
+        System.err.println("Error loading package '" + file.getName() + "': " + e.getMessage());
+        e.printStackTrace();
+      }
     }
   }
 

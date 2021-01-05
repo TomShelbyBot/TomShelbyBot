@@ -14,6 +14,12 @@ public interface BotPackageInfo {
   String getAuthor();
 
   /**
+   * Get package's version
+   * @return version
+   */
+  String getVersion();
+
+  /**
    * Get package description
    * @return package description
    */

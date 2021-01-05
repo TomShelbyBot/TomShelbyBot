@@ -5,12 +5,15 @@ public class BotPackageConfig implements BotPackageInfo {
   private String author;
   private String description;
   private String main;
+  private String version;
 
-  public BotPackageConfig(String name, String author, String description, String main) {
+  public BotPackageConfig(
+      String name, String author, String description, String main, String version) {
     this.name = name;
     this.author = author;
     this.description = description;
     this.main = main;
+    this.version = version;
   }
 
   @Override
@@ -49,12 +52,32 @@ public class BotPackageConfig implements BotPackageInfo {
   }
 
   @Override
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  @Override
   public String toString() {
-    return "BotPackageConfig{" +
-        "name='" + name + '\'' +
-        ", author='" + author + '\'' +
-        ", description='" + description + '\'' +
-        ", main='" + main + '\'' +
-        '}';
+    return "BotPackageConfig{"
+        + "name='"
+        + name
+        + '\''
+        + ", author='"
+        + author
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", main='"
+        + main
+        + '\''
+        + ", version='"
+        + version
+        + '\''
+        + '}';
   }
 }

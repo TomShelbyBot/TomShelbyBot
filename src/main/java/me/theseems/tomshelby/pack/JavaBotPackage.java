@@ -35,6 +35,11 @@ public abstract class JavaBotPackage implements BotPackage {
       }
 
       @Override
+      public String getVersion() {
+        return config.getVersion();
+      }
+
+      @Override
       public String getDescription() {
         return config.getDescription();
       }

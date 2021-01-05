@@ -146,9 +146,12 @@ public class Main {
   }
 
   public static void initialize() {
+    System.out.println("Initializing Telegram API communication...");
     ApiContextInitializer.init();
+
     System.out.println("Loading bot...");
     loadBot();
+
     System.out.println("Enabling packages...");
     loadPacks();
 
