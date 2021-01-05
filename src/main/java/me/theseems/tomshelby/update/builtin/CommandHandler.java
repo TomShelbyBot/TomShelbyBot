@@ -1,4 +1,4 @@
-package me.theseems.tomshelby.update.handlers;
+package me.theseems.tomshelby.update.builtin;
 
 import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.command.BotCommand;
@@ -11,6 +11,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Optional;
 
 public class CommandHandler extends SimpleUpdateHandler {
+
+  public CommandHandler() {
+    // We assume command handler to be the latest (applying to core, not packages) to run
+    setPriority(1000);
+  }
 
   @Override
   public boolean handleUpdate(ThomasBot bot, Update update) {
@@ -44,7 +49,8 @@ public class CommandHandler extends SimpleUpdateHandler {
     } catch (CommandUtils.BotCommandException e) {
       bot.sendBack(update, new SendMessage().setText(e.getMessage()));
     } catch (Exception e) {
-      System.err.println("Error occurred while handling command '" + label + "' from update " + update.toString());
+      System.err.println(
+          "Error occurred while handling command '" + label + "' from update " + update.toString());
       e.printStackTrace();
     }
 

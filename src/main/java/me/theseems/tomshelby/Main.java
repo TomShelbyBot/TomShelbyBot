@@ -18,7 +18,7 @@ import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import me.theseems.tomshelby.update.handlers.*;
+import me.theseems.tomshelby.update.builtin.*;
 
 import java.io.*;
 
@@ -124,10 +124,11 @@ public class Main {
 
     // Builtin handlers
     SimpleUpdateHandler.putConsecutively(
-        bot, new CallbackQueryHandler(), new CallbackQueryHandler(), new PunishmentHandler());
-    CommandHandler handler = new CommandHandler();
-    handler.setPriority(1000);
-    getBot().getUpdateHandlerManager().addUpdateHandler(handler);
+        bot,
+        new CallbackQueryHandler(),
+        new CallbackQueryHandler(),
+        new PunishmentHandler(),
+        new CommandHandler());
 
     // Builtin commands
     getBot()
