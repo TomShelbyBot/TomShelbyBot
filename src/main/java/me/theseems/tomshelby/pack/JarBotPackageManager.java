@@ -3,6 +3,10 @@ package me.theseems.tomshelby.pack;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import me.theseems.tomshelby.ThomasBot;
+import me.theseems.tomshelby.pack.order.BotPackageConflict;
+import me.theseems.tomshelby.pack.order.BotPackageOrderManager;
+import me.theseems.tomshelby.pack.order.BotPackageOrderResult;
+import me.theseems.tomshelby.pack.order.GraphPackageOrderManager;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -21,10 +25,12 @@ import java.util.zip.ZipEntry;
 public class JarBotPackageManager implements BotPackageManager {
   private final Map<String, JavaBotPackage> botPackageMap;
   private final Set<String> enabledPackages;
+  private final BotPackageOrderManager packageOrderManager;
 
   public JarBotPackageManager() {
     this.botPackageMap = new HashMap<>();
     this.enabledPackages = new HashSet<>();
+    this.packageOrderManager = new GraphPackageOrderManager();
   }
 
   private File[] dragJars(File directory) {
@@ -50,8 +56,7 @@ public class JarBotPackageManager implements BotPackageManager {
   }
 
   // Some black magic :(
-  private JavaBotPackage injectJarAndInvokeLoad(
-      URLClassLoader classLoader, File file, BotPackageConfig config)
+  private JavaBotPackage injectJar(URLClassLoader classLoader, File file, BotPackageConfig config)
       throws IllegalArgumentException {
     URL url;
     try {
@@ -87,14 +92,6 @@ public class JarBotPackageManager implements BotPackageManager {
       setConfig.setAccessible(true);
       setConfig.invoke(object, config);
 
-      try {
-        //noinspection unchecked
-        clazz.getDeclaredMethod("onLoad").invoke(object);
-      } catch (NoSuchMethodException ignored) {
-      } catch (Exception e) {
-        throw new IllegalArgumentException("Package failed to load", e);
-      }
-
       return (JavaBotPackage) object;
     } catch (ClassNotFoundException e) {
       throw new IllegalArgumentException("Main class was not found", e);
@@ -108,7 +105,7 @@ public class JarBotPackageManager implements BotPackageManager {
     }
   }
 
-  private void loadSinglePackage(URLClassLoader classLoader, File file)
+  private JavaBotPackage loadSinglePackage(URLClassLoader classLoader, File file)
       throws IOException, IllegalArgumentException, JsonSyntaxException {
     try (JarFile jarFile = new JarFile(file)) {
       ZipEntry configEntry = jarFile.getEntry("botpackage.json");
@@ -152,13 +149,14 @@ public class JarBotPackageManager implements BotPackageManager {
         throw new IllegalArgumentException("Main class '" + config.getMain() + "' was not found");
 
       try {
-        JavaBotPackage javaBotPackage = injectJarAndInvokeLoad(classLoader, file, config);
-        botPackageMap.put(config.getName(), javaBotPackage);
+        return injectJar(classLoader, file, config);
       } catch (Exception e) {
         System.err.println("Error loading plugin '" + config.getName() + "': " + e.getMessage());
         e.printStackTrace();
       }
     }
+
+    return null;
   }
 
   public void loadPackages(File directory) throws IOException {
@@ -187,7 +185,12 @@ public class JarBotPackageManager implements BotPackageManager {
 
     for (File file : files) {
       try {
-        loadSinglePackage(child, file);
+
+        JavaBotPackage botPackage = loadSinglePackage(child, file);
+        if (botPackage == null) continue;
+
+        botPackageMap.put(botPackage.getInfo().getName(), botPackage);
+
       } catch (IllegalArgumentException e) {
         // Catching incorrect package exception
         System.err.println("Cannot load package '" + file.getName() + "': " + e.getMessage());
@@ -197,6 +200,43 @@ public class JarBotPackageManager implements BotPackageManager {
         e.printStackTrace();
       }
     }
+
+    System.out.println("Discovered packages count of " + botPackageMap.size());
+    System.out.println("Calculating dependencies...");
+    BotPackageOrderResult result =
+        packageOrderManager.order(
+            botPackageMap.values().stream()
+                .map(JavaBotPackage::getInfo)
+                .collect(Collectors.toList()));
+
+    if (!result.getConflicts().isEmpty()) {
+      System.err.println("Found conflicts in bot packages: ");
+      for (BotPackageConflict conflict : result.getConflicts()) {
+        System.err.println(conflict.getMessage());
+      }
+    }
+
+    for (BotPackageInfo orderedPackage : result.getOrderedPackages()) {
+      try {
+        JavaBotPackage.class
+            .getDeclaredMethod("onLoad")
+            .invoke(botPackageMap.get(orderedPackage.getName()));
+      } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        System.err.println(
+            "Error loading package '"
+                + orderedPackage.getName()
+                + "' v"
+                + orderedPackage.getVersion()
+                + ": "
+                + e.getMessage());
+        e.printStackTrace();
+      }
+    }
+  }
+
+  @Override
+  public BotPackageOrderManager getOrderManager() {
+    return packageOrderManager;
   }
 
   @Override

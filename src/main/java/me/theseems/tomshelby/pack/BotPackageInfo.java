@@ -1,5 +1,8 @@
 package me.theseems.tomshelby.pack;
 
+import java.util.Collections;
+import java.util.List;
+
 public interface BotPackageInfo {
   /**
    * Package name
@@ -24,4 +27,12 @@ public interface BotPackageInfo {
    * @return package description
    */
   String getDescription();
+
+  /**
+   * Get package's dependencies
+   * @return list of dependencies
+   */
+  default List<String> getDependencies() {
+    return Collections.emptyList();
+  }
 }

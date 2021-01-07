@@ -6,7 +6,7 @@
 
     <groupId>me.theseems</groupId>
     <artifactId>tomshelby</artifactId>
-    <version>0.6D</version>
+    <version>0.7D</version>
 
     <properties>
         <slf4j.version>2.0.0-alpha1</slf4j.version>

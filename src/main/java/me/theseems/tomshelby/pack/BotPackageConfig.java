@@ -1,11 +1,16 @@
 package me.theseems.tomshelby.pack;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class BotPackageConfig implements BotPackageInfo {
   private String name;
   private String author;
   private String description;
   private String main;
   private String version;
+  private List<String> dependencies = new ArrayList<>();
 
   public BotPackageConfig(
       String name, String author, String description, String main, String version) {
@@ -14,6 +19,21 @@ public class BotPackageConfig implements BotPackageInfo {
     this.description = description;
     this.main = main;
     this.version = version;
+  }
+
+  public BotPackageConfig(
+      String name,
+      String author,
+      String description,
+      String main,
+      String version,
+      List<String> dependencies) {
+    this.name = name;
+    this.author = author;
+    this.description = description;
+    this.main = main;
+    this.version = version;
+    this.dependencies = dependencies;
   }
 
   @Override
@@ -60,6 +80,28 @@ public class BotPackageConfig implements BotPackageInfo {
     this.version = version;
   }
 
+  public List<String> getDependencies() {
+    return dependencies;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BotPackageConfig config = (BotPackageConfig) o;
+    return name.equals(config.name)
+        && author.equals(config.author)
+        && Objects.equals(description, config.description)
+        && main.equals(config.main)
+        && version.equals(config.version)
+        && Objects.equals(dependencies, config.dependencies);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, author, description, main, version, dependencies);
+  }
+
   @Override
   public String toString() {
     return "BotPackageConfig{"
@@ -78,6 +120,8 @@ public class BotPackageConfig implements BotPackageInfo {
         + ", version='"
         + version
         + '\''
+        + ", dependencies="
+        + dependencies
         + '}';
   }
 }

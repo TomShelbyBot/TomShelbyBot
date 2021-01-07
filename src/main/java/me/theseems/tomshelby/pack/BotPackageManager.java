@@ -1,9 +1,18 @@
 package me.theseems.tomshelby.pack;
 
+import me.theseems.tomshelby.pack.order.BotPackageOrderManager;
+
 import java.util.Collection;
 import java.util.Optional;
 
 public interface BotPackageManager {
+  /**
+   * Get order manager (puts packages in the right - as their dependencies say - order)
+   *
+   * @return order manager
+   */
+  BotPackageOrderManager getOrderManager();
+
   /**
    * Get all packages there are
    *

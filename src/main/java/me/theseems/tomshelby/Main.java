@@ -23,7 +23,7 @@ import me.theseems.tomshelby.update.builtin.*;
 import java.io.*;
 
 public class Main {
-  public static final String TOM_BOT_VERSION = "0.6D (Meta extend)";
+  public static final String TOM_BOT_VERSION = "0.7D (Package extend)";
 
   private static ThomasBot bot;
   private static JarBotPackageManager packageManager;
@@ -67,7 +67,6 @@ public class Main {
     ChatStorage chatStorage = new SimpleChatStorage();
     try {
       chatStorage = new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
-
       if (chatStorage == null) {
         System.err.println("Error loading storage! There's no one there.");
         chatStorage = new SimpleChatStorage();
