@@ -15,8 +15,7 @@ public class SimpleTomMeta implements TomMeta {
     try {
       if (object instanceof SimpleTomMeta) {
         element = ((SimpleTomMeta) object).jsonObject;
-      }
-      else {
+      } else {
         element = new Gson().toJsonTree(object);
       }
     } catch (Exception e) {
@@ -53,7 +52,7 @@ public class SimpleTomMeta implements TomMeta {
       builder.setPrettyPrinting();
     }
 
-    return builder.create().toJson(simpleChatMeta.jsonObject, Map.class);
+    return builder.create().toJson(simpleChatMeta.jsonObject);
   }
 
   public SimpleTomMeta() {
@@ -136,6 +135,7 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public Optional<TomMeta> getContainer(String key) {
+    if (!jsonObject.has(key) || !jsonObject.get(key).isJsonObject()) return Optional.empty();
     return Optional.ofNullable(jsonObject.get(key))
         .flatMap(object -> Optional.of(new SimpleTomMeta(object.getAsJsonObject())));
   }
