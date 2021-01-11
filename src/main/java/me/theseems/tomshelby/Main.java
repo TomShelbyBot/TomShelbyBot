@@ -124,7 +124,7 @@ public class Main {
     SimpleUpdateHandler.putConsecutively(
         bot,
         new CallbackQueryHandler(),
-        new CallbackQueryHandler(),
+        new InlineQueryHandler(),
         new PunishmentHandler(),
         new CommandHandler());
 
