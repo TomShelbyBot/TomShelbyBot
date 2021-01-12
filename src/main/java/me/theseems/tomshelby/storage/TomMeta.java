@@ -25,8 +25,4 @@ public interface TomMeta {
   Collection<String> getKeys();
 
   void remove(String key);
-
-  TomMeta merge(TomMeta other);
-  void mergeInto(TomMeta other);
-  void replaceWith(TomMeta other);
 }

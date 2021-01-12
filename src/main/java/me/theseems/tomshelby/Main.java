@@ -12,6 +12,8 @@ import me.theseems.tomshelby.pack.JarBotPackageManager;
 import me.theseems.tomshelby.punishment.SimplePunishmentHandler;
 import me.theseems.tomshelby.storage.ChatStorage;
 import me.theseems.tomshelby.storage.SimplePunishmentStorage;
+import me.theseems.tomshelby.storage.SimpleTomMeta;
+import me.theseems.tomshelby.storage.adapters.SimpleTomMetaAdapter;
 import me.theseems.tomshelby.storage.simple.SimpleChatStorage;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
@@ -41,7 +43,12 @@ public class Main {
     System.out.println("Saving to disk...");
     try {
       FileWriter writer = new FileWriter(chatsFile);
-      new Gson().newBuilder().setPrettyPrinting().create().toJson(bot.getChatStorage(), writer);
+      new Gson()
+          .newBuilder()
+          .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
+          .setPrettyPrinting()
+          .create()
+          .toJson(bot.getChatStorage(), writer);
       writer.flush();
     } catch (IOException e) {
       e.printStackTrace();
@@ -69,7 +76,12 @@ public class Main {
 
     ChatStorage chatStorage = new SimpleChatStorage();
     try {
-      chatStorage = new Gson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
+      chatStorage =
+          new Gson()
+              .newBuilder()
+              .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
+              .create()
+              .fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
       if (chatStorage == null) {
         System.err.println("Error loading storage! There's no one there.");
         chatStorage = new SimpleChatStorage();

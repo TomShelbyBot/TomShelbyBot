@@ -1,6 +1,8 @@
 package me.theseems.tomshelby;
 
+import com.google.gson.Gson;
 import me.theseems.tomshelby.storage.SimpleTomMeta;
+import me.theseems.tomshelby.storage.adapters.SimpleTomMetaAdapter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +32,7 @@ public class MetaTest {
     meta.set("key1", "value1");
 
     SimpleTomMeta copy = new SimpleTomMeta(meta);
-    meta.set("key2", meta);
+    meta.set("key2", new SimpleTomMeta(meta));
     SimpleTomMeta anotherCopy = new SimpleTomMeta(meta);
 
     Assertions.assertEquals("value1", meta.getString("key1").orElse(null));
@@ -67,5 +69,26 @@ public class MetaTest {
     local.set("key2", "value2");
 
     Assertions.assertEquals("{\"key\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", SimpleTomMeta.jsonify(global, true));
+  }
+
+  @Test
+  public void simpleTomMeta_serialize() {
+    SimpleTomMeta meta = new SimpleTomMeta();
+    meta.set("key1", "value1");
+    meta.set("key2", "value2");
+
+    String json = SimpleTomMeta.jsonify(meta);
+    Gson gson = new Gson()
+        .newBuilder()
+        .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
+        .setPrettyPrinting()
+        .create();
+
+    Assertions.assertEquals(meta, gson.fromJson(json, SimpleTomMeta.class));
+
+    meta.set("key3", new SimpleTomMeta(meta));
+    json = SimpleTomMeta.jsonify(meta);
+
+    Assertions.assertEquals(meta, gson.fromJson(json, SimpleTomMeta.class));
   }
 }

@@ -30,7 +30,7 @@ public class SimpleTomMeta implements TomMeta {
     return element.getAsJsonPrimitive();
   }
 
-  private static JsonElement wrapJson(TomMeta meta, boolean pretty) {
+  public static JsonElement wrapJson(TomMeta meta, boolean pretty) {
     SimpleTomMeta simpleChatMeta;
     if (meta instanceof SimpleTomMeta) {
       simpleChatMeta = (SimpleTomMeta) meta;
@@ -65,20 +65,33 @@ public class SimpleTomMeta implements TomMeta {
     return wrapJson(meta, pretty).toString();
   }
 
+  public static SimpleTomMeta fromJson(String json) {
+    return new SimpleTomMeta(new Gson().toJsonTree(json).getAsJsonObject());
+  }
+
   public SimpleTomMeta() {
     jsonObject = new JsonObject();
     metaMap = new HashMap<>();
   }
 
   public SimpleTomMeta(JsonObject object) {
-    jsonObject = object.deepCopy();
     metaMap = new HashMap<>();
+    jsonObject = new JsonObject();
+    for (String s : object.keySet()) {
+      if (object.get(s).isJsonObject()) {
+        metaMap.put(s, new SimpleTomMeta(object.getAsJsonObject(s)));
+      } else {
+        jsonObject.add(s, object.get(s));
+      }
+    }
   }
 
   public SimpleTomMeta(TomMeta other) {
     this();
     for (String key : other.getKeys()) {
-      other.get(key).ifPresent(value -> jsonObject.add(key, fromJavaObject(value)));
+      if (other.getContainer(key).isPresent()) {
+        metaMap.put(key, other.getContainer(key).get());
+      } else other.get(key).ifPresent(value -> jsonObject.add(key, fromJavaObject(value)));
     }
   }
 
@@ -89,6 +102,8 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public void set(String key, TomMeta value) {
+    if (value == this)
+      throw new IllegalStateException("Cannot put self as a container inside self");
     metaMap.put(key, value);
   }
 
@@ -230,7 +245,8 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public void remove(String key) {
-    jsonObject.remove(key);
+    if (metaMap.containsKey(key)) metaMap.remove(key);
+    else jsonObject.remove(key);
   }
 
   @Override
@@ -238,22 +254,6 @@ public class SimpleTomMeta implements TomMeta {
     Set<String> strings = new HashSet<>(jsonObject.keySet());
     strings.addAll(metaMap.keySet());
     return strings;
-  }
-
-  @Override
-  public TomMeta merge(TomMeta other) {
-    TomMeta meta = new SimpleTomMeta(this);
-    meta.mergeInto(other);
-    return meta;
-  }
-
-  @Override
-  public void mergeInto(TomMeta other) {
-    for (String key : other.getKeys()) {
-      if (!jsonObject.has(key)) {
-        other.get(key).ifPresent(value -> set(key, value));
-      }
-    }
   }
 
   @Override
@@ -267,19 +267,11 @@ public class SimpleTomMeta implements TomMeta {
   }
 
   @Override
-  public void replaceWith(TomMeta other) {
-    clear();
-    for (String key : other.getKeys()) {
-      other.get(key).ifPresent(value -> jsonObject.add(key, fromJavaObject(value)));
-    }
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     SimpleTomMeta meta = (SimpleTomMeta) o;
-    return jsonObject.equals(meta.jsonObject);
+    return jsonObject.equals(meta.jsonObject) && metaMap.equals(meta.metaMap);
   }
 
   private void clear() {
