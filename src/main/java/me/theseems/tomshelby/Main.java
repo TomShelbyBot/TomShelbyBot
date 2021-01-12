@@ -19,6 +19,7 @@ import me.theseems.tomshelby.update.builtin.CallbackQueryHandler;
 import me.theseems.tomshelby.update.builtin.CommandHandler;
 import me.theseems.tomshelby.update.builtin.InlineQueryHandler;
 import me.theseems.tomshelby.update.builtin.PunishmentHandler;
+import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -148,6 +149,7 @@ public class Main {
 
   public static void initialize() {
     System.out.println("Initializing Telegram API communication...");
+    ApiContextInitializer.init();
 
     System.out.println("Loading bot...");
     loadBot();
