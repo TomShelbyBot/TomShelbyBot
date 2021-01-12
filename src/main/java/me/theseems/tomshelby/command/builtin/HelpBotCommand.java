@@ -3,7 +3,6 @@ package me.theseems.tomshelby.command.builtin;
 import com.google.common.base.Joiner;
 import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.command.*;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.ArrayList;
@@ -67,6 +66,6 @@ public class HelpBotCommand extends SimpleBotCommand {
       response.append("- ").append(meta.getDescription()).append("\n\n");
     }
 
-    bot.sendBack(update, new SendMessage().setText(response.toString()));
+    bot.replyBackText(update, response.toString());
   }
 }

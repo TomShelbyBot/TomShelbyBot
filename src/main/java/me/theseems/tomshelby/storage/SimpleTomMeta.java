@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class SimpleTomMeta implements TomMeta {
   private final JsonObject jsonObject;
+  private final Map<String, TomMeta> metaMap;
 
   private JsonElement fromJavaObject(Object object) {
     JsonElement element;
@@ -29,17 +30,7 @@ public class SimpleTomMeta implements TomMeta {
     return element.getAsJsonPrimitive();
   }
 
-  private void clear() {
-    for (String s : jsonObject.keySet()) {
-      jsonObject.remove(s);
-    }
-  }
-
-  public JsonObject toJsonObject() {
-    return jsonObject;
-  }
-
-  public static String jsonify(TomMeta meta, boolean pretty) {
+  private static JsonElement wrapJson(TomMeta meta, boolean pretty) {
     SimpleTomMeta simpleChatMeta;
     if (meta instanceof SimpleTomMeta) {
       simpleChatMeta = (SimpleTomMeta) meta;
@@ -52,15 +43,36 @@ public class SimpleTomMeta implements TomMeta {
       builder.setPrettyPrinting();
     }
 
-    return builder.create().toJson(simpleChatMeta.jsonObject);
+    JsonObject object = new JsonObject();
+    for (String s : simpleChatMeta.getKeys()) {
+      if (simpleChatMeta.jsonObject.has(s)) {
+        object.add(s, simpleChatMeta.jsonObject.get(s));
+      } else if (simpleChatMeta.metaMap.containsKey(s)) {
+        object.add(s, wrapJson(simpleChatMeta.metaMap.get(s), pretty));
+      } else {
+        object.add(s, JsonNull.INSTANCE);
+      }
+    }
+
+    return object;
+  }
+
+  public static String jsonify(TomMeta meta) {
+    return jsonify(meta, false);
+  }
+
+  public static String jsonify(TomMeta meta, boolean pretty) {
+    return wrapJson(meta, pretty).toString();
   }
 
   public SimpleTomMeta() {
     jsonObject = new JsonObject();
+    metaMap = new HashMap<>();
   }
 
   public SimpleTomMeta(JsonObject object) {
     jsonObject = object.deepCopy();
+    metaMap = new HashMap<>();
   }
 
   public SimpleTomMeta(TomMeta other) {
@@ -77,7 +89,7 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public void set(String key, TomMeta value) {
-    jsonObject.add(key, new SimpleTomMeta(value).toJsonObject());
+    metaMap.put(key, value);
   }
 
   @Override
@@ -92,6 +104,7 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public Optional<Object> get(String key) {
+    if (!jsonObject.has(key)) return Optional.ofNullable(metaMap.get(key));
     return Optional.ofNullable(jsonObject.get(key));
   }
 
@@ -135,9 +148,7 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public Optional<TomMeta> getContainer(String key) {
-    if (!jsonObject.has(key) || !jsonObject.get(key).isJsonObject()) return Optional.empty();
-    return Optional.ofNullable(jsonObject.get(key))
-        .flatMap(object -> Optional.of(new SimpleTomMeta(object.getAsJsonObject())));
+    return Optional.ofNullable(metaMap.get(key));
   }
 
   public Optional<JsonArray> getJsonArray(String key) {
@@ -224,7 +235,9 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public Collection<String> getKeys() {
-    return jsonObject.keySet();
+    Set<String> strings = new HashSet<>(jsonObject.keySet());
+    strings.addAll(metaMap.keySet());
+    return strings;
   }
 
   @Override
@@ -269,6 +282,16 @@ public class SimpleTomMeta implements TomMeta {
     return jsonObject.equals(meta.jsonObject);
   }
 
+  private void clear() {
+    for (String s : jsonObject.keySet()) {
+      jsonObject.remove(s);
+    }
+  }
+
+  public JsonObject toJsonObject() {
+    return jsonObject;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(jsonObject);
@@ -276,6 +299,6 @@ public class SimpleTomMeta implements TomMeta {
 
   @Override
   public String toString() {
-    return "SimpleTomMeta{" + "jsonObject=" + jsonObject + '}';
+    return "SimpleTomMeta{" + "jsonObject=" + jsonObject + ", metaMap=" + metaMap + '}';
   }
 }

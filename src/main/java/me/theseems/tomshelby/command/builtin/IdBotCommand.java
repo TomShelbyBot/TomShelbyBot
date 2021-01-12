@@ -13,11 +13,10 @@ public class IdBotCommand extends SimpleBotCommand {
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    bot.sendBack(
+    bot.replyBack(
         update,
         new SendMessage()
             .setText("Айди чата: `" + update.getMessage().getChatId() + "`")
-            .enableMarkdown(true)
-            .setReplyToMessageId(update.getMessage().getMessageId()));
+            .enableMarkdown(true));
   }
 }

@@ -4,7 +4,6 @@ import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.command.BotCommand;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.util.CommandUtils;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -47,7 +46,7 @@ public class CommandHandler extends SimpleUpdateHandler {
     try {
       botCommand.handle(bot, args, update);
     } catch (CommandUtils.BotCommandException e) {
-      bot.sendBack(update, new SendMessage().setText(e.getMessage()));
+      bot.replyBackText(update, e.getMessage());
     } catch (Exception e) {
       System.err.println(
           "Error occurred while handling command '" + label + "' from update " + update.toString());

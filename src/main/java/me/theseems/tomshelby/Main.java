@@ -15,15 +15,17 @@ import me.theseems.tomshelby.storage.SimplePunishmentStorage;
 import me.theseems.tomshelby.storage.simple.SimpleChatStorage;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
-import org.telegram.telegrambots.ApiContextInitializer;
+import me.theseems.tomshelby.update.builtin.CallbackQueryHandler;
+import me.theseems.tomshelby.update.builtin.CommandHandler;
+import me.theseems.tomshelby.update.builtin.InlineQueryHandler;
+import me.theseems.tomshelby.update.builtin.PunishmentHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import me.theseems.tomshelby.update.builtin.*;
 
 import java.io.*;
 
 public class Main {
-  public static final String TOM_BOT_VERSION = "0.7D (Package extend)";
+  public static final String TOM_BOT_VERSION = "0.8D (Mutable meta containers)";
 
   private static ThomasBot bot;
   private static JarBotPackageManager packageManager;
@@ -146,7 +148,6 @@ public class Main {
 
   public static void initialize() {
     System.out.println("Initializing Telegram API communication...");
-    ApiContextInitializer.init();
 
     System.out.println("Loading bot...");
     loadBot();
