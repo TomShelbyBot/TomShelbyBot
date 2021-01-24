@@ -4,6 +4,8 @@ import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class JavaBotPackage implements BotPackage {
   private BotPackageConfig config;
@@ -43,12 +45,19 @@ public abstract class JavaBotPackage implements BotPackage {
       public String getDescription() {
         return config.getDescription();
       }
+
+      @Override
+      public List<String> getDependencies() {
+        List<String> dependencies = config.getDependencies();
+        return dependencies == null ? Collections.emptyList() : dependencies;
+      }
     };
   }
 
   public File getPackageFolder() {
-    File baseDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-        .getParentFile();
+    File baseDir =
+        new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+            .getParentFile();
     File packsDir = new File(baseDir, "packs");
     return new File(packsDir, getInfo().getName());
   }

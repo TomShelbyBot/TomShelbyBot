@@ -15,24 +15,28 @@ public class InlineQueryHandler extends SimpleUpdateHandler {
 
     String query = update.getInlineQuery().getQuery();
     StringBuilder builder = new StringBuilder();
-
     for (int i = 0; i < query.length(); i++) {
-      if (i % 2 == 0) builder.append(Character.toUpperCase(query.charAt(i)));
-      else builder.append(Character.toLowerCase(query.charAt(i)));
+      char originalChar = query.charAt(i);
+      char morphedChar =
+          i % 2 == 0 ? Character.toUpperCase(originalChar) : Character.toLowerCase(originalChar);
+
+      builder.append(morphedChar);
     }
 
     if (builder.length() == 0) return true;
-
     try {
+      InputTextMessageContent content =
+          new InputTextMessageContent().setMessageText(builder.toString());
+      InlineQueryResultArticle article =
+          new InlineQueryResultArticle()
+              .setId("1")
+              .setTitle("ДаУнКеЙс")
+              .setDescription(builder.toString())
+              .setInputMessageContent(content);
+
       bot.execute(
           new AnswerInlineQuery()
-              .setResults(
-                  new InlineQueryResultArticle()
-                      .setId("1")
-                      .setTitle("ДаУнКеЙс")
-                      .setDescription(builder.toString())
-                      .setInputMessageContent(
-                          new InputTextMessageContent().setMessageText(builder.toString())))
+              .setResults(article)
               .setInlineQueryId(update.getInlineQuery().getId()));
     } catch (TelegramApiException e) {
       e.printStackTrace();

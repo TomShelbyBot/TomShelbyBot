@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 public class GraphPackageOrderManager implements BotPackageOrderManager {
 
-  private class Node {
+  private static class Node {
     public BotPackageInfo botPackageInfo;
     public List<Node> dependency;
 
