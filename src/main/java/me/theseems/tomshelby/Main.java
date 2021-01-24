@@ -1,48 +1,35 @@
 package me.theseems.tomshelby;
 
 import com.google.gson.Gson;
-import me.theseems.tomshelby.callback.SimpleCallbackManager;
-import me.theseems.tomshelby.command.SimpleCommandContainer;
-import me.theseems.tomshelby.command.builtin.HelpBotCommand;
-import me.theseems.tomshelby.command.builtin.IdBotCommand;
-import me.theseems.tomshelby.command.builtin.InfoBotCommand;
-import me.theseems.tomshelby.config.AccessConfig;
+import me.theseems.tomshelby.bootstrap.BootstrapManager;
+import me.theseems.tomshelby.bootstrap.builtin.*;
+import me.theseems.tomshelby.callback.CallbackManager;
+import me.theseems.tomshelby.command.CommandContainer;
 import me.theseems.tomshelby.config.BotConfig;
-import me.theseems.tomshelby.pack.BotPackage;
-import me.theseems.tomshelby.pack.BotPackageInfo;
-import me.theseems.tomshelby.pack.JarBotPackageManager;
-import me.theseems.tomshelby.poll.MetaPollContainer;
-import me.theseems.tomshelby.poll.MetaPollManager;
-import me.theseems.tomshelby.punishment.SimplePunishmentHandler;
+import me.theseems.tomshelby.pack.BotPackageManager;
+import me.theseems.tomshelby.poll.PollManager;
+import me.theseems.tomshelby.punishment.PunishmentHandler;
 import me.theseems.tomshelby.storage.ChatStorage;
-import me.theseems.tomshelby.storage.SimplePunishmentStorage;
+import me.theseems.tomshelby.storage.PunishmentStorage;
 import me.theseems.tomshelby.storage.SimpleTomMeta;
 import me.theseems.tomshelby.storage.adapters.SimpleTomMetaAdapter;
-import me.theseems.tomshelby.storage.impl.SimpleChatStorage;
-import me.theseems.tomshelby.update.SimpleUpdateHandler;
-import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
-import me.theseems.tomshelby.update.builtin.*;
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import me.theseems.tomshelby.update.UpdateHandlerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
   // Hardcoded version
   public static final String TOM_BOT_VERSION = "0.9D (Polls, API improvements)";
 
-  // Files
-  private static final File baseDir =
-      new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-          .getParentFile();
-  private static final File chatsFile = new File(baseDir, "chats.json");
-  private static final File configFile = new File(baseDir, "config.json");
-
-  // Main objects
+  // Bootstrap manager (helps to mess with stuff on init)
+  private static BootstrapManager bootstrapManager;
   private static ThomasBot bot;
-  private static JarBotPackageManager packageManager;
+
+  // Gson to support simple meta serialization
   private static final Gson gson =
       new Gson()
           .newBuilder()
@@ -50,168 +37,144 @@ public class Main {
           .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
           .create();
 
+  // Components
+  private static BotPackageManager botPackageManager;
+  private static CommandContainer commandContainer;
+  private static ChatStorage chatStorage;
+  private static PunishmentStorage punishmentStorage;
+  private static CallbackManager callbackManager;
+  private static UpdateHandlerManager updateHandlerManager;
+  private static PollManager pollManager;
+  private static BotConfig botConfig;
+  private static PunishmentHandler punishmentHandler;
+
   public static void save() {
-    System.out.println("Saving data to disk...");
     try {
-      FileWriter writer = new FileWriter(chatsFile);
-      gson.toJson(bot.getChatStorage(), writer);
+      FileWriter writer = new FileWriter(new File(getBaseDir(), "chats.json"));
+      new Gson()
+          .newBuilder()
+          .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
+          .setPrettyPrinting()
+          .create()
+          .toJson(bot.getChatStorage(), writer);
       writer.flush();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  private static BotConfig loadConfig() {
-    try {
-      return new Gson().fromJson(new FileReader(configFile), BotConfig.class);
-    } catch (FileNotFoundException ignored) {}
-    return null;
-  }
-
-  private static ChatStorage loadChats() {
-    if (!chatsFile.exists()) {
-      try {
-        chatsFile.createNewFile();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-
-    ChatStorage chatStorage = new SimpleChatStorage();
-    try {
-      chatStorage = gson.fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
-      if (chatStorage == null) {
-        System.err.println("Error loading storage! There's no one there.");
-        System.out.println("Creating empty storage");
-        chatStorage = new SimpleChatStorage();
-      } else {
-        System.out.println("Loaded storage with chat count: " + chatStorage.getChatIds().size());
-      }
-    } catch (FileNotFoundException e) {
-      System.err.println("Booting without loading chats from disk");
-      e.printStackTrace();
-    }
-
-    return chatStorage;
-  }
-
-  private static JarBotPackageManager loadPackages() throws IOException {
-    packageManager = new JarBotPackageManager();
-    File packageDir = new File(baseDir, "packs");
-    if (!packageDir.exists()) {
-      packageDir.mkdir();
-    }
-
-    packageManager.loadPackages(packageDir);
-    return packageManager;
-  }
-
-  private static void loadBot() {
-    BotConfig config = loadConfig();
-    if (config == null) {
-      BotConfig empty = new BotConfig(new AccessConfig("YOUR_BOT_USERNAME", "YOUR_BOT_TOKEN_FROM_BOTFATHER"));
-      try {
-        FileWriter writer = new FileWriter(configFile);
-        gson.toJson(empty, writer);
-        writer.flush();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      System.err.println("Please, fill in the config.json in your bot's root dir");
-      System.err.println("Bot can't start without it onboard");
-      System.exit(1);
-    }
-
-    JarBotPackageManager jarBotPackageManager = new JarBotPackageManager();
-    try {
-      System.out.println("Loading packages...");
-      jarBotPackageManager = loadPackages();
-    } catch (IOException e) {
-      System.err.println("Error occurred loading packages: " + e.getMessage());
-      e.printStackTrace();
-    }
-
-    System.out.println("Loading chats...");
-    ChatStorage chatStorage = loadChats();
-    MetaPollContainer metaPollContainer = new MetaPollContainer();
-    bot =
-        new ThomasBot(
-            new SimpleCommandContainer(),
-            new SimplePunishmentStorage(),
-            chatStorage,
-            new SimplePunishmentHandler(),
-            new SimpleCallbackManager(),
-            new SimpleUpdateHandlerManager(),
-            jarBotPackageManager,
-            new MetaPollManager(metaPollContainer),
-            config);
-
-    metaPollContainer.setThomasBot(bot);
-    try {
-      metaPollContainer.setSelfChatId(bot.getMe().getId());
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
-    }
-
-    // Builtin handlers
-    SimpleUpdateHandler.putConsecutively(
-        bot,
-        new CallbackQueryHandler(),
-        new InlineQueryHandler(),
-        new PunishmentHandler(),
-        new PollHandler(),
-        new CommandHandler());
-
-    // Builtin commands
-    getBot()
-        .getCommandContainer()
-        .attach(new HelpBotCommand())
-        .attach(new IdBotCommand())
-        .attach(new InfoBotCommand());
-  }
-
-  private static void loadPacks() {
-    for (BotPackageInfo pack :
-        bot.getPackageManager()
-            .getOrderManager()
-            .order(
-                bot.getPackageManager().getPackages().stream()
-                    .map(BotPackage::getInfo)
-                    .collect(Collectors.toList()))
-            .getOrderedPackages()) {
-      System.out.println("Enabling pack '" + pack.getName() + "' v" + pack.getVersion() + " by " + pack.getAuthor());
-      packageManager.enablePackage(bot, pack.getName());
-    }
-  }
-
-  public static void initialize() {
-    System.out.println("Initializing Telegram API communication...");
-    ApiContextInitializer.init();
-
-    System.out.println("Loading bot...");
-    loadBot();
-
-    System.out.println("Enabling packages...");
-    loadPacks();
-
-    TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-    try {
-      telegramBotsApi.registerBot(bot);
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static JarBotPackageManager getPackageManager() {
-    return packageManager;
-  }
-
   public static void main(String[] args) {
-    initialize();
+    PollTargetBootstrap pollTargetBootstrap = new PollTargetBootstrap();
+    bootstrapManager =
+        new BootstrapManager()
+            .init(new TelegramSdkBootstrap())
+            .init(new ConfigBootstrap())
+            .init(new LoadPackagesBootstrap())
+            .init(new ChatBootstrap())
+            .init(pollTargetBootstrap)
+            .init(new DefaultManagersBootstrap())
+            .init(new InitBotBootstrap())
+            .target(new AttachHandlersBootstrap())
+            .target(new AttachCommandsBootstrap())
+            .target(new EnablePackagesBootstrap())
+            .target(pollTargetBootstrap)
+            .target(new TelegramListenBootstrap());
+
+    Logger logger = LoggerFactory.getLogger(Main.class);
+    bootstrapManager.invokeInit(logger);
+    bootstrapManager.invokeTarget(logger, bot);
   }
 
   public static ThomasBot getBot() {
     return bot;
+  }
+
+  public static File getBaseDir() {
+    return new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+        .getParentFile();
+  }
+
+  public static Gson getGson() {
+    return gson;
+  }
+
+  public static void setBotPackageManager(BotPackageManager botPackageManager) {
+    Main.botPackageManager = botPackageManager;
+  }
+
+  public static void setCommandContainer(CommandContainer commandContainer) {
+    Main.commandContainer = commandContainer;
+  }
+
+  public static void setChatStorage(ChatStorage chatStorage) {
+    Main.chatStorage = chatStorage;
+  }
+
+  public static void setPunishmentStorage(PunishmentStorage punishmentStorage) {
+    Main.punishmentStorage = punishmentStorage;
+  }
+
+  public static void setCallbackManager(CallbackManager callbackManager) {
+    Main.callbackManager = callbackManager;
+  }
+
+  public static void setUpdateHandlerManager(UpdateHandlerManager updateHandlerManager) {
+    Main.updateHandlerManager = updateHandlerManager;
+  }
+
+  public static void setPollManager(PollManager pollManager) {
+    Main.pollManager = pollManager;
+  }
+
+  public static void setBotConfig(BotConfig botConfig) {
+    Main.botConfig = botConfig;
+  }
+
+  public static void setPunishmentHandler(PunishmentHandler punishmentHandler) {
+    Main.punishmentHandler = punishmentHandler;
+  }
+
+  public static BootstrapManager getBootstrapManager() {
+    return bootstrapManager;
+  }
+
+  public static BotPackageManager getBotPackageManager() {
+    return botPackageManager;
+  }
+
+  public static CommandContainer getCommandContainer() {
+    return commandContainer;
+  }
+
+  public static ChatStorage getChatStorage() {
+    return chatStorage;
+  }
+
+  public static PunishmentStorage getPunishmentStorage() {
+    return punishmentStorage;
+  }
+
+  public static CallbackManager getCallbackManager() {
+    return callbackManager;
+  }
+
+  public static UpdateHandlerManager getUpdateHandlerManager() {
+    return updateHandlerManager;
+  }
+
+  public static PollManager getPollManager() {
+    return pollManager;
+  }
+
+  public static BotConfig getBotConfig() {
+    return botConfig;
+  }
+
+  public static PunishmentHandler getPunishmentHandler() {
+    return punishmentHandler;
+  }
+
+  public static void setBot(ThomasBot bot) {
+    Main.bot = bot;
   }
 }
