@@ -4,7 +4,7 @@ import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.bootstrap.InitBootstrap;
 import me.theseems.tomshelby.config.AccessConfig;
 import me.theseems.tomshelby.config.BotConfig;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
@@ -38,11 +38,16 @@ public class ConfigBootstrap implements InitBootstrap {
         e.printStackTrace();
       }
 
-      logger.error("Please, fill in the config.json in your bot's root dir");
-      logger.error("Bot can't start without it onboard");
+      logger.fatal("Please, fill in the config.json");
+      logger.fatal("Bot can't start without it on board");
       System.exit(1);
     }
 
     Main.setBotConfig(config);
+  }
+
+  @Override
+  public String getInitName() {
+    return "Loading config";
   }
 }

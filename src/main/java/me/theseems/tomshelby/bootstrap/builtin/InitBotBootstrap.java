@@ -3,7 +3,9 @@ package me.theseems.tomshelby.bootstrap.builtin;
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.bootstrap.InitBootstrap;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class InitBotBootstrap implements InitBootstrap {
@@ -20,5 +22,18 @@ public class InitBotBootstrap implements InitBootstrap {
             Main.getBotPackageManager(),
             Main.getPollManager(),
             Main.getBotConfig()));
+
+    try {
+      User me = Main.getBot().getMe();
+      logger.info("Initialized bot @" + me.getUserName());
+    } catch (TelegramApiException e) {
+      logger.fatal("Error initializing bot. Please, check your access configuration (config.json)");
+      System.exit(1);
+    }
+  }
+
+  @Override
+  public String getInitName() {
+    return "Initializing bot";
   }
 }

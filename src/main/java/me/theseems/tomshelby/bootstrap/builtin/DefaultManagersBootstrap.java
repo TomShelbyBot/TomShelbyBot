@@ -7,7 +7,7 @@ import me.theseems.tomshelby.command.SimpleCommandContainer;
 import me.theseems.tomshelby.punishment.SimplePunishmentHandler;
 import me.theseems.tomshelby.storage.SimplePunishmentStorage;
 import me.theseems.tomshelby.update.SimpleUpdateHandlerManager;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 
 public class DefaultManagersBootstrap implements InitBootstrap {
@@ -18,5 +18,10 @@ public class DefaultManagersBootstrap implements InitBootstrap {
     Main.setPunishmentHandler(new SimplePunishmentHandler());
     Main.setCallbackManager(new SimpleCallbackManager());
     Main.setUpdateHandlerManager(new SimpleUpdateHandlerManager());
+  }
+
+  @Override
+  public String getInitName() {
+    return "Loading core components";
   }
 }

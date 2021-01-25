@@ -4,7 +4,7 @@ import me.theseems.tomshelby.ThomasBot;
 import me.theseems.tomshelby.bootstrap.TargetBootstrap;
 import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.update.builtin.*;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 
 public class AttachHandlersBootstrap implements TargetBootstrap {
@@ -18,5 +18,10 @@ public class AttachHandlersBootstrap implements TargetBootstrap {
         new PunishmentHandler(),
         new PollHandler(),
         new CommandHandler());
+  }
+
+  @Override
+  public String getTargetName() {
+    return "Attaching builtin handlers";
   }
 }

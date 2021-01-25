@@ -14,8 +14,8 @@ import me.theseems.tomshelby.storage.PunishmentStorage;
 import me.theseems.tomshelby.storage.SimpleTomMeta;
 import me.theseems.tomshelby.storage.adapters.SimpleTomMetaAdapter;
 import me.theseems.tomshelby.update.UpdateHandlerManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,8 +25,7 @@ public class Main {
   // Hardcoded version
   public static final String TOM_BOT_VERSION = "0.9D (Polls, API improvements)";
 
-  // Bootstrap manager (helps to mess with stuff on init)
-  private static BootstrapManager bootstrapManager;
+  // Bot object itself
   private static ThomasBot bot;
 
   // Gson to support simple meta serialization
@@ -65,24 +64,32 @@ public class Main {
 
   public static void main(String[] args) {
     PollTargetBootstrap pollTargetBootstrap = new PollTargetBootstrap();
-    bootstrapManager =
-        new BootstrapManager()
-            .init(new TelegramSdkBootstrap())
-            .init(new ConfigBootstrap())
-            .init(new LoadPackagesBootstrap())
-            .init(new ChatBootstrap())
-            .init(pollTargetBootstrap)
-            .init(new DefaultManagersBootstrap())
-            .init(new InitBotBootstrap())
-            .target(new AttachHandlersBootstrap())
-            .target(new AttachCommandsBootstrap())
-            .target(new EnablePackagesBootstrap())
-            .target(pollTargetBootstrap)
-            .target(new TelegramListenBootstrap());
+    // Bootstrap manager (helps to mess with stuff on init)
+    BootstrapManager bootstrapManager = new BootstrapManager();
 
-    Logger logger = LoggerFactory.getLogger(Main.class);
-    bootstrapManager.invokeInit(logger);
-    bootstrapManager.invokeTarget(logger, bot);
+    // Logger for bootstrap
+    Logger logger = LogManager.getLogger("Bootstrap");
+
+    // Init bootstraps
+    bootstrapManager
+        .init(new ConsoleInformationBootstrap())
+        .init(new TelegramSdkBootstrap())
+        .init(new ConfigBootstrap())
+        .init(new LoadPackagesBootstrap())
+        .init(new ChatBootstrap())
+        .init(pollTargetBootstrap)
+        .init(new DefaultManagersBootstrap())
+        .init(new InitBotBootstrap())
+        .invokeInit(logger);
+
+    // Target bootstraps (when bot is initialized)
+    bootstrapManager
+        .target(new AttachHandlersBootstrap())
+        .target(new AttachCommandsBootstrap())
+        .target(new EnablePackagesBootstrap())
+        .target(pollTargetBootstrap)
+        .target(new TelegramListenBootstrap())
+        .invokeTarget(logger, bot);
   }
 
   public static ThomasBot getBot() {
@@ -132,10 +139,6 @@ public class Main {
 
   public static void setPunishmentHandler(PunishmentHandler punishmentHandler) {
     Main.punishmentHandler = punishmentHandler;
-  }
-
-  public static BootstrapManager getBootstrapManager() {
-    return bootstrapManager;
   }
 
   public static BotPackageManager getBotPackageManager() {

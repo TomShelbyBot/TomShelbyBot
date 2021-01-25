@@ -5,7 +5,7 @@ import me.theseems.tomshelby.bootstrap.TargetBootstrap;
 import me.theseems.tomshelby.pack.BotPackage;
 import me.theseems.tomshelby.pack.BotPackageInfo;
 import me.theseems.tomshelby.pack.order.BotPackageOrderResult;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.stream.Collectors;
 
@@ -30,5 +30,10 @@ public class EnablePackagesBootstrap implements TargetBootstrap {
               + pack.getAuthor());
       LoadPackagesBootstrap.getJarBotPackageManager().enablePackage(bot, pack.getName());
     }
+  }
+
+  @Override
+  public String getTargetName() {
+    return "Enabling packages";
   }
 }

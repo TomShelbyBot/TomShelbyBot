@@ -4,7 +4,7 @@ import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.bootstrap.InitBootstrap;
 import me.theseems.tomshelby.storage.ChatStorage;
 import me.theseems.tomshelby.storage.impl.SimpleChatStorage;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,6 +22,7 @@ public class ChatBootstrap implements InitBootstrap {
   public void apply(Logger logger) {
     if (!chatsFile.exists()) {
       try {
+        //noinspection ResultOfMethodCallIgnored
         chatsFile.createNewFile();
       } catch (IOException e) {
         e.printStackTrace();
@@ -32,8 +33,8 @@ public class ChatBootstrap implements InitBootstrap {
     try {
       chatStorage = Main.getGson().fromJson(new FileReader(chatsFile), SimpleChatStorage.class);
       if (chatStorage == null) {
-        logger.warn("Error loading storage! There's no one there.");
-        logger.info("Creating empty storage");
+        logger.warn("Error loading storage! Please, check the format of the file or it's presence");
+        logger.info("Creating empty chat storage");
         chatStorage = new SimpleChatStorage();
       } else {
         logger.info("Loaded storage with chat count: " + chatStorage.getChatIds().size());
@@ -44,5 +45,10 @@ public class ChatBootstrap implements InitBootstrap {
     }
 
     Main.setChatStorage(chatStorage);
+  }
+
+  @Override
+  public String getInitName() {
+    return "Loading chats";
   }
 }

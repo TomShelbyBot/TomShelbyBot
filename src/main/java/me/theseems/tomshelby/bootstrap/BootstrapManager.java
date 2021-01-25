@@ -1,7 +1,8 @@
 package me.theseems.tomshelby.bootstrap;
 
 import me.theseems.tomshelby.ThomasBot;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +28,17 @@ public class BootstrapManager {
 
   public void invokeInit(Logger logger) {
     for (InitBootstrap initBootstrap : initBootstrapSet) {
-      logger.info("Loading '" + initBootstrap.getClass().getSimpleName() + "'");
-      initBootstrap.apply(logger);
+      logger.debug("Init stage> " + initBootstrap.getInitName());
+      initBootstrap.apply(LogManager.getLogger(initBootstrap.getInitName()));
     }
+    logger.debug("Init finished");
   }
 
-  public void invokeTarget(Logger logger, ThomasBot bot) {
+  public void invokeTarget(org.apache.logging.log4j.Logger logger, ThomasBot bot) {
     for (TargetBootstrap initBootstrap : targetBootstrapSet) {
-      logger.info("Targeting '" + initBootstrap.getClass().getSimpleName() + "'");
-      initBootstrap.apply(logger, bot);
+      logger.debug("Target stage> " + initBootstrap.getTargetName());
+      initBootstrap.apply(LogManager.getLogger(initBootstrap.getTargetName()), bot);
     }
+    logger.debug("Target finished");
   }
 }

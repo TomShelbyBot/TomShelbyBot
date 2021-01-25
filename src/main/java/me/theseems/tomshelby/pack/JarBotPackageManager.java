@@ -8,6 +8,8 @@ import me.theseems.tomshelby.pack.order.BotPackageOrderManager;
 import me.theseems.tomshelby.pack.order.BotPackageOrderResult;
 import me.theseems.tomshelby.pack.order.GraphPackageOrderManager;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,11 +28,20 @@ public class JarBotPackageManager implements BotPackageManager {
   private final Map<String, JavaBotPackage> botPackageMap;
   private final Set<String> enabledPackages;
   private final BotPackageOrderManager packageOrderManager;
+  private final Logger logger;
 
   public JarBotPackageManager() {
     this.botPackageMap = new HashMap<>();
     this.enabledPackages = new HashSet<>();
     this.packageOrderManager = new GraphPackageOrderManager();
+    this.logger = LoggerFactory.getLogger(getClass());
+  }
+
+  public JarBotPackageManager(Logger logger) {
+    this.botPackageMap = new HashMap<>();
+    this.enabledPackages = new HashSet<>();
+    this.packageOrderManager = new GraphPackageOrderManager();
+    this.logger = logger;
   }
 
   private File[] dragJars(File directory) {
@@ -151,8 +162,7 @@ public class JarBotPackageManager implements BotPackageManager {
       try {
         return injectJar(classLoader, file, config);
       } catch (Exception e) {
-        System.err.println("Error loading plugin '" + config.getName() + "': " + e.getMessage());
-        e.printStackTrace();
+        logger.error("Error loading plugin '" + config.getName() + "': " + e.getMessage(), e);
       }
     }
 
@@ -193,16 +203,21 @@ public class JarBotPackageManager implements BotPackageManager {
 
       } catch (IllegalArgumentException e) {
         // Catching incorrect package exception
-        System.err.println("Cannot load package '" + file.getName() + "': " + e.getMessage());
+        logger.error("Cannot load package '" + file.getName() + "': " + e.getMessage(), e);
       } catch (Exception e) {
         // Catching general exception as we don't want bot to fail because of it
-        System.err.println("Error loading package '" + file.getName() + "': " + e.getMessage());
-        e.printStackTrace();
+        logger.error("Error loading package '" + file.getName() + "': " + e.getMessage(), e);
       }
     }
 
-    System.out.println("Discovered packages count of " + botPackageMap.size());
-    System.out.println("Calculating dependencies...");
+    if (botPackageMap.isEmpty()) {
+      logger.info("No packages found");
+      return;
+    }
+
+    logger.info("Discovered packages count of " + botPackageMap.size());
+    logger.info("Calculating dependencies...");
+
     BotPackageOrderResult result =
         packageOrderManager.order(
             botPackageMap.values().stream()
@@ -210,9 +225,9 @@ public class JarBotPackageManager implements BotPackageManager {
                 .collect(Collectors.toList()));
 
     if (!result.getConflicts().isEmpty()) {
-      System.err.println("Found conflicts in bot packages: ");
+      logger.warn("Found conflicts in bot packages: ");
       for (BotPackageConflict conflict : result.getConflicts()) {
-        System.err.println(conflict.getMessage());
+        logger.warn(conflict.getMessage());
       }
     }
 
@@ -222,14 +237,14 @@ public class JarBotPackageManager implements BotPackageManager {
             .getDeclaredMethod("onLoad")
             .invoke(botPackageMap.get(orderedPackage.getName()));
       } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        System.err.println(
+        logger.error(
             "Error loading package '"
                 + orderedPackage.getName()
                 + "' v"
                 + orderedPackage.getVersion()
                 + ": "
-                + e.getMessage());
-        e.printStackTrace();
+                + e.getMessage(),
+            e);
       }
     }
   }
@@ -255,7 +270,7 @@ public class JarBotPackageManager implements BotPackageManager {
     try {
       enablePack(bot, botPackageMap.get(name));
     } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-      throw new IllegalStateException("Cannot disable pack '" + name + "': " + e.getMessage(), e);
+      throw new IllegalStateException("Cannot enable pack '" + name + "': " + e.getMessage(), e);
     }
     enabledPackages.add(name);
   }
