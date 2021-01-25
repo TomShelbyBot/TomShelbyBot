@@ -6,7 +6,6 @@ import me.theseems.tomshelby.update.SimpleUpdateHandler;
 import me.theseems.tomshelby.update.builtin.*;
 import org.apache.logging.log4j.Logger;
 
-
 public class AttachHandlersBootstrap implements TargetBootstrap {
   @Override
   public void apply(Logger logger, ThomasBot bot) {
@@ -16,6 +15,7 @@ public class AttachHandlersBootstrap implements TargetBootstrap {
         new CallbackQueryHandler(),
         new InlineQueryHandler(),
         new PunishmentHandler(),
+        new ChatUserSaveHandler(),
         new PollHandler(),
         new CommandHandler());
   }

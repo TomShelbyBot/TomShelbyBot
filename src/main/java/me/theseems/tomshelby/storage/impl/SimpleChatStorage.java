@@ -26,9 +26,9 @@ public class SimpleChatStorage implements ChatStorage {
 
   @Override
   public Optional<ChatMember> lookupMember(Long chatId, String username) {
-    Optional<Integer> userIdOptional = chatMap.get(chatId).getUserId(username);
-
     if (!chatMap.containsKey(chatId)) return Optional.empty();
+
+    Optional<Integer> userIdOptional = chatMap.get(chatId).getUserId(username);
     if (!userIdOptional.isPresent()) return Optional.empty();
 
     int userId = userIdOptional.get();

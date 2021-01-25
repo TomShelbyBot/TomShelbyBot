@@ -40,6 +40,9 @@ public class ConfigBootstrap implements InitBootstrap {
 
       logger.fatal("Please, fill in the config.json");
       logger.fatal("Bot can't start without it on board");
+
+      // Freezing before exiting
+      new java.util.Scanner(System.in).nextLine();
       System.exit(1);
     }
 

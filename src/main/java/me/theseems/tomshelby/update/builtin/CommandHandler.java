@@ -33,7 +33,10 @@ public class CommandHandler extends SimpleUpdateHandler {
 
     // When user, for example, calls /help command (many other bots use that command too)
     // If it's marked explicitly accessed and we have just /help we don't react
-    if (commandOptional.get().getMeta().isAccessExplicit() && !explicit) return false;
+    // The only exception is private chats (first expression in if statement)
+    if (!update.getMessage().getChatId().equals(Long.valueOf(update.getMessage().getFrom().getId()))
+        && commandOptional.get().getMeta().isAccessExplicit()
+        && !explicit) return false;
 
     BotCommand botCommand = commandOptional.get();
     // Checking permissions to use command

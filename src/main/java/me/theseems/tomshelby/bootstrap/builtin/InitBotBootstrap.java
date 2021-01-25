@@ -28,6 +28,9 @@ public class InitBotBootstrap implements InitBootstrap {
       logger.info("Initialized bot @" + me.getUserName());
     } catch (TelegramApiException e) {
       logger.fatal("Error initializing bot. Please, check your access configuration (config.json)");
+
+      // Freezing before exiting
+      new java.util.Scanner(System.in).nextLine();
       System.exit(1);
     }
   }
