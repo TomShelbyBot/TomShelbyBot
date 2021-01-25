@@ -12,6 +12,17 @@ public abstract class SimpleBotCommand implements BotCommand {
     this.meta = meta;
   }
 
+  public SimpleBotCommand() {
+    // Process annotation
+    Class<? extends SimpleBotCommand> clazz = getClass();
+    BotCommandInfo info = clazz.getAnnotation(BotCommandInfo.class);
+    this.meta =
+        SimpleCommandMeta.onLabel(info.label())
+            .description(info.description())
+            .aliases(info.aliases())
+            .explicitAccess(info.explicitAccess());
+  }
+
   /**
    * Handle update for that command
    *
@@ -19,7 +30,7 @@ public abstract class SimpleBotCommand implements BotCommand {
    * @param update to handle
    */
   @Override
-  abstract public void handle(ThomasBot bot, String[] args, Update update);
+  public abstract void handle(ThomasBot bot, String[] args, Update update);
 
   /**
    * Get meta of the command

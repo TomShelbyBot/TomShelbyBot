@@ -152,6 +152,16 @@ public class SimpleTomMeta implements TomMeta {
   }
 
   @Override
+  public Optional<Long> getLong(String key) {
+    if (!jsonObject.has(key)) return Optional.empty();
+    try {
+      return Optional.of(jsonObject.get(key).getAsLong());
+    } catch (Exception e) {
+      return Optional.empty();
+    }
+  }
+
+  @Override
   public Optional<Boolean> getBoolean(String key) {
     if (!jsonObject.has(key)) return Optional.empty();
     try {

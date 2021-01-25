@@ -11,14 +11,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@BotCommandInfo(
+    label = "help",
+    aliases = "start",
+    description = "Помощь по коммандам",
+    explicitAccess = true)
 public class HelpBotCommand extends SimpleBotCommand {
-  public HelpBotCommand() {
-    super(
-        SimpleCommandMeta.onLabel("help")
-            .alias("start")
-            .explicitAccess()
-            .description("Помощь по коммандам бота"));
-  }
 
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
@@ -33,7 +31,12 @@ public class HelpBotCommand extends SimpleBotCommand {
                 botCommand ->
                     botCommand != null
                         && botCommand.getMeta().getLabel() != null
-                        && botCommand.getMeta().getDescription() != null)
+                        && botCommand.getMeta().getDescription() != null
+                        && bot.getCommandContainer()
+                            .isAccessible(
+                                botCommand.getMeta().getLabel(),
+                                update.getMessage().getChatId(),
+                                update.getMessage().getFrom().getId()))
             .sorted(Comparator.comparing(o -> o.getMeta().getLabel()))
             .collect(Collectors.toList());
 

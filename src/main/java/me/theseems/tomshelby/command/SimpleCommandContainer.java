@@ -20,6 +20,7 @@ public class SimpleCommandContainer implements CommandContainer {
   public CommandContainer attach(BotCommand botCommand) {
     commandMap.put(botCommand.getMeta().getLabel(), botCommand);
     botCommandSet.add(botCommand);
+
     for (String alias : botCommand.getMeta().getAliases()) {
       commandMap.put(alias, botCommand);
     }
@@ -57,7 +58,7 @@ public class SimpleCommandContainer implements CommandContainer {
   /**
    * Is command accessible
    *
-   * @param label  of command
+   * @param label of command
    * @param userId executor
    * @return accessible
    */

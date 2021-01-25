@@ -6,18 +6,21 @@ import java.util.Optional;
 public interface CommandContainer {
   /**
    * Attach command to bot container
+   *
    * @param botCommand to attach
    */
   CommandContainer attach(BotCommand botCommand);
 
   /**
    * Detach command from container
+   *
    * @param mainLabel of the command to remove
    */
   void detach(String mainLabel);
 
   /**
    * Get command by it's label
+   *
    * @param label to get
    * @return command if is found
    */
@@ -25,6 +28,7 @@ public interface CommandContainer {
 
   /**
    * Is command accessible
+   *
    * @param label of command
    * @param userId executor
    * @return accessible
@@ -33,6 +37,7 @@ public interface CommandContainer {
 
   /**
    * Get all commands there are
+   *
    * @return commands
    */
   Collection<BotCommand> getCommands();

@@ -1,4 +1,4 @@
-package me.theseems.tomshelby.storage.simple;
+package me.theseems.tomshelby.storage.impl;
 
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.storage.TomMeta;

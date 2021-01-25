@@ -11,6 +11,7 @@ public interface TomMeta {
   Optional<Object> get(String key);
 
   Optional<Integer> getInteger(String key);
+  Optional<Long> getLong(String key);
   Optional<Double> getDouble(String key);
   Optional<String> getString(String key);
   Optional<Boolean> getBoolean(String key);
@@ -25,4 +26,17 @@ public interface TomMeta {
   Collection<String> getKeys();
 
   void remove(String key);
+
+  default TomMeta getOrCreateContainer(String key) {
+    Optional<TomMeta> tomMeta = getContainer(key);
+
+    // Get if present
+    if (tomMeta.isPresent())
+      return tomMeta.get();
+
+    // Create if not
+    TomMeta container = new SimpleTomMeta();
+    set(key, container);
+    return container;
+  }
 }

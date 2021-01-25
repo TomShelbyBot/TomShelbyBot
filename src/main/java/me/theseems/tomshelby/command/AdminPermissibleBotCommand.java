@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public interface AdminPermissibleBotCommand extends PermissibleBotCommand {
   /**
    * Can a user use that command
+   *
    * @param userId to check
    * @return verdict
    */

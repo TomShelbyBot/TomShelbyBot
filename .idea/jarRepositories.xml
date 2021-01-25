@@ -62,6 +62,11 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="TomShelbyBot Economy Package" />
+      <option name="name" value="GitHub TomShelbyBot Economy Package Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/TomShelbyBot/EconomyPack" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="CommandAPI" />
       <option name="name" value="GitHub CommandAPI Apache Maven Packages" />
       <option name="url" value="https://maven.pkg.github.com/HSE-Minecraft/CommandAPI" />

@@ -9,6 +9,13 @@ import org.junit.jupiter.api.Test;
 import java.util.Objects;
 
 public class MetaTest {
+  private static final Gson gson =
+      new Gson()
+          .newBuilder()
+          .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
+          .setPrettyPrinting()
+          .create();
+
   @Test
   public void simpleTomMeta_simplePut() {
     SimpleTomMeta meta = new SimpleTomMeta();
@@ -22,8 +29,6 @@ public class MetaTest {
 
     Assertions.assertEquals("value1", meta.getString("key1").orElse(null));
     Assertions.assertArrayEquals(strings, meta.getStringArray("key2").orElse(null));
-
-    System.out.println(meta.toString());
   }
 
   @Test
@@ -68,7 +73,8 @@ public class MetaTest {
 
     local.set("key2", "value2");
 
-    Assertions.assertEquals("{\"key\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", SimpleTomMeta.jsonify(global, true));
+    Assertions.assertEquals(
+        "{\"key\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", SimpleTomMeta.jsonify(global, true));
   }
 
   @Test
@@ -77,17 +83,11 @@ public class MetaTest {
     meta.set("key1", "value1");
     meta.set("key2", "value2");
 
-    String json = SimpleTomMeta.jsonify(meta);
-    Gson gson = new Gson()
-        .newBuilder()
-        .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
-        .setPrettyPrinting()
-        .create();
-
+    String json = gson.toJson(meta);
     Assertions.assertEquals(meta, gson.fromJson(json, SimpleTomMeta.class));
 
     meta.set("key3", new SimpleTomMeta(meta));
-    json = SimpleTomMeta.jsonify(meta);
+    json = gson.toJson(meta);
 
     Assertions.assertEquals(meta, gson.fromJson(json, SimpleTomMeta.class));
   }

@@ -4,6 +4,7 @@ import me.theseems.tomshelby.callback.CallbackManager;
 import me.theseems.tomshelby.command.CommandContainer;
 import me.theseems.tomshelby.config.BotConfig;
 import me.theseems.tomshelby.pack.BotPackageManager;
+import me.theseems.tomshelby.poll.PollManager;
 import me.theseems.tomshelby.punishment.PunishmentHandler;
 import me.theseems.tomshelby.storage.ChatStorage;
 import me.theseems.tomshelby.storage.PunishmentStorage;
@@ -22,6 +23,7 @@ public class ThomasBot extends TelegramLongPollingBot {
   private final UpdateHandlerManager updateHandlerManager;
   private final BotConfig botConfig;
   private final BotPackageManager packageManager;
+  private final PollManager pollManager;
 
   public ThomasBot(
       CommandContainer commandContainer,
@@ -31,6 +33,7 @@ public class ThomasBot extends TelegramLongPollingBot {
       CallbackManager callbackManager,
       UpdateHandlerManager updateHandlerManager,
       BotPackageManager botPackageManager,
+      PollManager pollManager,
       BotConfig botConfig) {
     this.commandContainer = commandContainer;
     this.punishmentStorage = punishmentStorage;
@@ -39,6 +42,7 @@ public class ThomasBot extends TelegramLongPollingBot {
     this.callbackManager = callbackManager;
     this.updateHandlerManager = updateHandlerManager;
     this.packageManager = botPackageManager;
+    this.pollManager = pollManager;
     this.botConfig = botConfig;
   }
 
@@ -68,6 +72,31 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public BotPackageManager getPackageManager() {
     return packageManager;
+  }
+
+  public PollManager getPollManager() {
+    return pollManager;
+  }
+
+  public String getBotUsername() {
+    return botConfig.getAccessConfig().getName();
+  }
+
+  public String getBotToken() {
+    return botConfig.getAccessConfig().getToken();
+  }
+
+  public void onUpdateReceived(Update update) {
+    try {
+      // Prevent handling own messages
+      if (update.hasMessage()
+          && update.getMessage().getFrom().getUserName() != null
+          && update.getMessage().getFrom().getUserName().equals(getBotUsername())) return;
+
+      getUpdateHandlerManager().handleUpdate(this, update);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void sendBack(Update update, SendMessage message) {
@@ -103,45 +132,23 @@ public class ThomasBot extends TelegramLongPollingBot {
     replyBack(update, new SendMessage().setText(message));
   }
 
-  public void onUpdateReceived(Update update) {
-    try {
-      // Prevent handling own messages
-      if (update.hasMessage()
-          && update.getMessage().getFrom().getUserName() != null
-          && update.getMessage().getFrom().getUserName().equals(getBotUsername())) return;
-
-      getUpdateHandlerManager().handleUpdate(this, update);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   @Override
   public void onClosing() {
     Main.save();
   }
 
-  public String getBotUsername() {
-    return botConfig.getAccessConfig().getName();
-  }
-
-  public String getBotToken() {
-    return botConfig.getAccessConfig().getToken();
-  }
-
   @Override
   public String toString() {
-    return "ThomasBot{"
-        + "commandContainer="
-        + commandContainer
-        + ", punishmentStorage="
-        + punishmentStorage
-        + ", chatStorage="
-        + chatStorage
-        + ", punishmentHandler="
-        + punishmentHandler
-        + ", callbackManager="
-        + callbackManager
-        + '}';
+    return "ThomasBot{" +
+        "commandContainer=" + commandContainer +
+        ", punishmentStorage=" + punishmentStorage +
+        ", chatStorage=" + chatStorage +
+        ", punishmentHandler=" + punishmentHandler +
+        ", callbackManager=" + callbackManager +
+        ", updateHandlerManager=" + updateHandlerManager +
+        ", botConfig=" + botConfig +
+        ", packageManager=" + packageManager +
+        ", pollManager=" + pollManager +
+        '}';
   }
 }

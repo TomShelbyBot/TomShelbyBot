@@ -2,8 +2,12 @@ package me.theseems.tomshelby.pack;
 
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class JavaBotPackage implements BotPackage {
   private BotPackageConfig config;
@@ -43,22 +47,30 @@ public abstract class JavaBotPackage implements BotPackage {
       public String getDescription() {
         return config.getDescription();
       }
+
+      @Override
+      public List<String> getDependencies() {
+        List<String> dependencies = config.getDependencies();
+        return dependencies == null ? Collections.emptyList() : dependencies;
+      }
     };
   }
 
   public File getPackageFolder() {
-    File baseDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-        .getParentFile();
-    File packsDir = new File(baseDir, "packs");
+    File packsDir = new File(Main.getBaseDir(), "packs");
     return new File(packsDir, getInfo().getName());
+  }
+
+  public Logger getLogger() {
+    return LoggerFactory.getLogger("Pack '" + getInfo().getName() + "'");
   }
 
   /** On plugin load */
   public void onLoad() {}
 
   /** On plugin enable */
-  public abstract void onEnable();
+  public void onEnable() {}
 
   /** On plugin disable */
-  public abstract void onDisable();
+  public void onDisable() {}
 }

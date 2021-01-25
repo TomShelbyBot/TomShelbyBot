@@ -37,12 +37,17 @@ public class SimpleCommandMeta implements CommandMeta {
   }
 
   public SimpleCommandMeta aliases(String... aliases) {
-    this.aliases.addAll(Arrays.asList(aliases));
+    if (aliases.length != 0) this.aliases.addAll(Arrays.asList(aliases));
     return this;
   }
 
   public SimpleCommandMeta explicitAccess() {
     this.accessExplicit = true;
+    return this;
+  }
+
+  public SimpleCommandMeta explicitAccess(boolean accessExplicit) {
+    this.accessExplicit = accessExplicit;
     return this;
   }
 
@@ -90,7 +95,10 @@ public class SimpleCommandMeta implements CommandMeta {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     SimpleCommandMeta that = (SimpleCommandMeta) o;
-    return accessExplicit == that.accessExplicit && Objects.equals(aliases, that.aliases) && label.equals(that.label) && Objects.equals(description, that.description);
+    return accessExplicit == that.accessExplicit
+        && Objects.equals(aliases, that.aliases)
+        && label.equals(that.label)
+        && Objects.equals(description, that.description);
   }
 
   @Override
