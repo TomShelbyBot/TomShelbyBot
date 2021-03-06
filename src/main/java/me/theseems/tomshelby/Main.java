@@ -1,6 +1,7 @@
 package me.theseems.tomshelby;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.theseems.tomshelby.bootstrap.BootstrapManager;
 import me.theseems.tomshelby.bootstrap.builtin.*;
 import me.theseems.tomshelby.callback.CallbackManager;
@@ -30,8 +31,7 @@ public class Main {
 
   // Gson to support simple meta serialization
   private static final Gson gson =
-      new Gson()
-          .newBuilder()
+      new GsonBuilder()
           .setPrettyPrinting()
           .registerTypeAdapter(SimpleTomMeta.class, new SimpleTomMetaAdapter())
           .create();
