@@ -11,13 +11,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@BotCommandInfo(
+@Command(
     label = "help",
     aliases = "start",
     description = "Помощь по коммандам",
     explicitAccess = true)
 public class HelpBotCommand extends SimpleBotCommand {
-
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
     CommandContainer container = bot.getCommandContainer();

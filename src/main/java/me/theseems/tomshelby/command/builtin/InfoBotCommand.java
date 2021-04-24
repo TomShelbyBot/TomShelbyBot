@@ -2,11 +2,11 @@ package me.theseems.tomshelby.command.builtin;
 
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
-import me.theseems.tomshelby.command.BotCommandInfo;
+import me.theseems.tomshelby.command.Command;
 import me.theseems.tomshelby.command.SimpleBotCommand;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@BotCommandInfo(label = "info", description = "Информация о боте")
+@Command(label = "info", description = "Информация о боте")
 public class InfoBotCommand extends SimpleBotCommand {
   private static final String INFO_TEMPLATE =
       "Томас v"
