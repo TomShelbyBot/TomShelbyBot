@@ -15,7 +15,7 @@ public abstract class SimpleBotCommand implements BotCommand {
   public SimpleBotCommand() {
     // Process annotation
     Class<? extends SimpleBotCommand> clazz = getClass();
-    BotCommandInfo info = clazz.getAnnotation(BotCommandInfo.class);
+    Command info = clazz.getAnnotation(Command.class);
     this.meta =
         SimpleCommandMeta.onLabel(info.label())
             .description(info.description())

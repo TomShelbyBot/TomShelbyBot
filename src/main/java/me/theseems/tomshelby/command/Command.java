@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface BotCommandInfo {
+public @interface Command {
   String label();
 
   String[] aliases() default {};
