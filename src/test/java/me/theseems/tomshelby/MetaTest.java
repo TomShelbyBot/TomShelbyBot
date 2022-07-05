@@ -74,7 +74,7 @@ public class MetaTest {
     local.set("key2", "value2");
 
     Assertions.assertEquals(
-        "{\"key\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", SimpleTomMeta.jsonify(global, true));
+        "{\"key\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", SimpleTomMeta.jsonify(global));
   }
 
   @Test
