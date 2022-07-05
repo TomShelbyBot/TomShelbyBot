@@ -3,8 +3,8 @@ package me.theseems.tomshelby.bootstrap.builtin;
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.bootstrap.InitBootstrap;
 import me.theseems.tomshelby.pack.JarBotPackageManager;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class LoadPackagesBootstrap implements InitBootstrap {
     disableReflectionWarning();
 
     try {
-      jarBotPackageManager = new JarBotPackageManager(LoggerFactory.getLogger("Package Manager"));
+      jarBotPackageManager = new JarBotPackageManager(LogManager.getLogger("Bootstrap"));
       File packageDir = new File(Main.getBaseDir(), "packs");
       if (!packageDir.exists()) {
         //noinspection ResultOfMethodCallIgnored

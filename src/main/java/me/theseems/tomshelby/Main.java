@@ -73,7 +73,6 @@ public class Main {
     // Init bootstraps
     bootstrapManager
         .init(new ConsoleInformationBootstrap())
-        .init(new TelegramSdkBootstrap())
         .init(new ConfigBootstrap())
         .init(new LoadPackagesBootstrap())
         .init(new ChatBootstrap())

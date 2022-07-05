@@ -2,8 +2,8 @@ package me.theseems.tomshelby.pack;
 
 import me.theseems.tomshelby.Main;
 import me.theseems.tomshelby.ThomasBot;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Collections;
@@ -62,7 +62,7 @@ public abstract class JavaBotPackage implements BotPackage {
   }
 
   public Logger getLogger() {
-    return LoggerFactory.getLogger("Pack '" + getInfo().getName() + "'");
+    return LogManager.getLogger("Pack '" + getInfo().getName() + "'");
   }
 
   /** On plugin load */
