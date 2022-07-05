@@ -33,7 +33,7 @@ public interface CommandContainer {
    * @param userId executor
    * @return accessible
    */
-  boolean isAccessible(String label, Long chatId, Integer userId);
+  boolean isAccessible(String label, String chatId, Long userId);
 
   /**
    * Get all commands there are

@@ -41,7 +41,7 @@ public class CommandHandler extends SimpleUpdateHandler {
     BotCommand botCommand = commandOptional.get();
     // Checking permissions to use command
     if (!bot.getCommandContainer()
-        .isAccessible(label, message.getChatId(), message.getFrom().getId())) {
+        .isAccessible(label, String.valueOf(message.getChatId()), message.getFrom().getId())) {
       bot.replyBackText(update, "Недостаточные права.");
       return false;
     }

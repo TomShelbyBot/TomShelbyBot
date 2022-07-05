@@ -14,7 +14,7 @@ public interface PunishmentStorage {
    * @param type to get by
    * @return active punishment
    */
-  Optional<Punishment> getActivePunishment(Integer userId, PunishmentType type);
+  Optional<Punishment> getActivePunishment(Long userId, PunishmentType type);
 
   /**
    * Get active punishment by type
@@ -23,7 +23,7 @@ public interface PunishmentStorage {
    * @param types to get by
    * @return active punishment
    */
-  Optional<Punishment> getAnyActivePunishment(Integer userId, PunishmentType... types);
+  Optional<Punishment> getAnyActivePunishment(Long userId, PunishmentType... types);
 
   /**
    * Get active punishment for user
@@ -31,7 +31,7 @@ public interface PunishmentStorage {
    * @param userId to get for
    * @return punishment
    */
-  boolean hasActivePunishment(Integer userId);
+  boolean hasActivePunishment(Long userId);
 
   /**
    * Add punishment to user
@@ -39,7 +39,7 @@ public interface PunishmentStorage {
    * @param userId id of user
    * @param punishment to add
    */
-  void addPunishment(Integer userId, Punishment punishment);
+  void addPunishment(Long userId, Punishment punishment);
 
   /**
    * Get all punishments there are for user
@@ -47,7 +47,7 @@ public interface PunishmentStorage {
    * @param userId to get for
    * @return punishments
    */
-  Collection<Punishment> getPunishments(Integer userId);
+  Collection<Punishment> getPunishments(Long userId);
 
   /**
    * Remove punishment from user
@@ -55,5 +55,5 @@ public interface PunishmentStorage {
    * @param userId to remove from
    * @param punishment to remove
    */
-  void removePunishment(Integer userId, Punishment punishment);
+  void removePunishment(Long userId, Punishment punishment);
 }

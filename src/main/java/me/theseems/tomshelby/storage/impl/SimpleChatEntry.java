@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SimpleChatEntry {
-  private final Map<String, Integer> users;
+  private final Map<String, Long> users;
   private final SimpleTomMeta meta;
 
   public SimpleChatEntry() {
-    users = new HashMap<>();
+    users = new HashMap<String, Long>();
     meta = new SimpleTomMeta();
   }
 
@@ -20,7 +20,7 @@ public class SimpleChatEntry {
     return users.containsKey(username);
   }
 
-  public Optional<Integer> getUserId(String username) {
+  public Optional<Long> getUserId(String username) {
     return Optional.ofNullable(users.get(username));
   }
 
@@ -28,11 +28,11 @@ public class SimpleChatEntry {
     return users.keySet();
   }
 
-  public Collection<Integer> getUserIds() {
+  public Collection<Long> getUserIds() {
     return users.values();
   }
 
-  public void putUser(String username, Integer userId) {
+  public void putUser(String username, Long userId) {
     users.put(username, userId);
   }
 

@@ -8,17 +8,17 @@ import java.util.Optional;
 public class MetaPollContainer implements PollStorage {
   private static final String META_POLL_NAME = "polls";
 
-  private long selfChatId;
+  private String selfChatId;
   private ThomasBot thomasBot;
 
-  public MetaPollContainer(ThomasBot thomasBot, long selfChatId) {
+  public MetaPollContainer(ThomasBot thomasBot, String selfChatId) {
     this.thomasBot = thomasBot;
     this.selfChatId = selfChatId;
   }
 
   public MetaPollContainer() {}
 
-  public void setSelfChatId(long selfChatId) {
+  public void setSelfChatId(String selfChatId) {
     this.selfChatId = selfChatId;
   }
 

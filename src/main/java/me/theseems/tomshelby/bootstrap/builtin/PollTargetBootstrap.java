@@ -24,7 +24,7 @@ public class PollTargetBootstrap implements InitBootstrap, TargetBootstrap {
   public void apply(Logger logger, ThomasBot bot) {
     metaPollContainer.setThomasBot(bot);
     try {
-      metaPollContainer.setSelfChatId(bot.getMe().getId());
+      metaPollContainer.setSelfChatId(String.valueOf(bot.getMe().getId()));
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }

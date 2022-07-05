@@ -7,5 +7,5 @@ public interface PermissibleBotCommand extends BotCommand {
    * @param userId to check
    * @return verdict
    */
-  boolean canUse(Long chatId, Integer userId);
+  boolean canUse(String chatId, Long userId);
 }

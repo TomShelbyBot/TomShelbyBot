@@ -6,7 +6,7 @@
 
     <groupId>me.theseems</groupId>
     <artifactId>tomshelby</artifactId>
-    <version>0.9D</version>
+    <version>0.10D</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.9.2</version>
+            <version>6.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

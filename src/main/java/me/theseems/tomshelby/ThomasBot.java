@@ -101,9 +101,9 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public void sendBack(Update update, SendMessage message) {
     message.setChatId(
-        update.hasMessage()
-            ? update.getMessage().getChatId()
-            : update.getCallbackQuery().getMessage().getChatId());
+            String.valueOf(update.hasMessage()
+                ? update.getMessage().getChatId()
+                : update.getCallbackQuery().getMessage().getChatId()));
     try {
       execute(message);
     } catch (TelegramApiException e) {
@@ -113,12 +113,12 @@ public class ThomasBot extends TelegramLongPollingBot {
 
   public void replyBack(Update update, SendMessage message) {
     if (update.hasMessage()) {
-      message.setChatId(update.getMessage().getChatId());
+      message.setChatId(String.valueOf(update.getMessage().getChatId()));
       if (update.getMessage().hasText()) {
         message.setReplyToMessageId(update.getMessage().getMessageId());
       }
     } else {
-      message.setChatId(update.getCallbackQuery().getMessage().getChatId());
+      message.setChatId(String.valueOf(update.getCallbackQuery().getMessage().getChatId()));
     }
 
     try {
@@ -129,7 +129,9 @@ public class ThomasBot extends TelegramLongPollingBot {
   }
 
   public void replyBackText(Update update, String message) {
-    replyBack(update, new SendMessage().setText(message));
+    SendMessage sendMessage = new SendMessage();
+    sendMessage.setText(message);
+    replyBack(update, sendMessage);
   }
 
   @Override

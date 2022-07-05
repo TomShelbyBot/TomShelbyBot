@@ -37,7 +37,7 @@ public class SimplePunishmentHandler implements PunishmentHandler {
 
   @Override
   public boolean handle(Update update) {
-    Integer fromId = null;
+    Long fromId = null;
 
     if (!update.hasMessage()) {
       if (update.hasPollAnswer() && update.getPollAnswer().getUser() != null) {
