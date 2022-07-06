@@ -34,7 +34,7 @@ public class BootstrapManager {
     logger.debug("Init finished");
   }
 
-  public void invokeTarget(org.apache.logging.log4j.Logger logger, ThomasBot bot) {
+  public void invokeTarget(org.apache.logging.log4j.Logger logger, ThomasBot bot) throws Exception {
     for (TargetBootstrap initBootstrap : targetBootstrapSet) {
       logger.debug("Target stage> " + initBootstrap.getTargetName());
       initBootstrap.apply(LogManager.getLogger(initBootstrap.getTargetName()), bot);

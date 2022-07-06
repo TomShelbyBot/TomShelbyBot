@@ -18,6 +18,7 @@ public interface TomMeta {
   Optional<TomMeta> getContainer(String key);
 
   Optional<Integer[]> getIntegerArray(String key);
+  Optional<Long[]> getLongArray(String key);
   Optional<Double[]> getDoubleArray(String key);
   Optional<String[]> getStringArray(String key);
   Optional<Boolean[]> getBooleanArray(String key);

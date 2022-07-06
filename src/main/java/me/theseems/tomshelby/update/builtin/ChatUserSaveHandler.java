@@ -12,10 +12,10 @@ public class ChatUserSaveHandler extends SimpleUpdateHandler {
 
     Message message = update.getMessage();
     if (!bot.getChatStorage()
-        .lookup(message.getChatId(), message.getFrom().getUserName())
+        .lookup(String.valueOf(message.getChatId()), message.getFrom().getUserName())
         .isPresent()) {
       bot.getChatStorage()
-          .put(message.getChatId(), message.getFrom().getUserName(), message.getFrom().getId());
+          .put(String.valueOf(message.getChatId()), message.getFrom().getUserName(), message.getFrom().getId());
     }
 
     return true;

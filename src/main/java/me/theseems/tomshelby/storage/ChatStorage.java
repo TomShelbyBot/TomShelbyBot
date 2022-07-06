@@ -1,6 +1,6 @@
 package me.theseems.tomshelby.storage;
 
-import org.telegram.telegrambots.meta.api.objects.ChatMember;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface ChatStorage {
    * @param username to lookup for
    * @return user id
    */
-  Optional<Integer> lookup(Long chatId, String username);
+  Optional<Long> lookup(String chatId, String username);
 
   /**
    * Lookup for user id
@@ -22,7 +22,7 @@ public interface ChatStorage {
    * @param username to lookup for
    * @return user id
    */
-  Optional<ChatMember> lookupMember(Long chatId, String username);
+  Optional<ChatMember> lookupMember(String chatId, String username);
 
   /**
    * Save nickname for user in specific chat
@@ -31,7 +31,7 @@ public interface ChatStorage {
    * @param username to put for
    * @param userId to put
    */
-  void put(Long chatId, String username, Integer userId);
+  void put(String chatId, String username, Long userId);
 
   /**
    * Get chat meta
@@ -39,7 +39,7 @@ public interface ChatStorage {
    * @param chatId to get for
    * @return meta
    */
-  TomMeta getChatMeta(Long chatId);
+  TomMeta getChatMeta(String chatId);
 
   /**
    * Get resolvable nicknames for chat
@@ -47,12 +47,12 @@ public interface ChatStorage {
    * @param chatId to get nicknames for
    * @return nicknames
    */
-  Collection<String> getResolvableUsernames(Long chatId);
+  Collection<String> getResolvableUsernames(String chatId);
 
   /**
    * Get chat ids there are
    *
    * @return chat ids
    */
-  Collection<Long> getChatIds();
+  Collection<String> getChatIds();
 }

@@ -34,7 +34,7 @@ public class HelpBotCommand extends SimpleBotCommand {
                         && bot.getCommandContainer()
                             .isAccessible(
                                 botCommand.getMeta().getLabel(),
-                                update.getMessage().getChatId(),
+                                    String.valueOf(update.getMessage().getChatId()),
                                 update.getMessage().getFrom().getId()))
             .sorted(Comparator.comparing(o -> o.getMeta().getLabel()))
             .collect(Collectors.toList());

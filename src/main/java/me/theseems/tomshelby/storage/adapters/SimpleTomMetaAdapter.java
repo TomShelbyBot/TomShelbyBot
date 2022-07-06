@@ -10,7 +10,7 @@ public class SimpleTomMetaAdapter
   @Override
   public JsonElement serialize(
       SimpleTomMeta src, Type typeOfSrc, JsonSerializationContext context) {
-    return SimpleTomMeta.wrapJson(src, false);
+    return SimpleTomMeta.wrapJson(src);
   }
 
   @Override

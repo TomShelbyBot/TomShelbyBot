@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class IdBotCommand extends SimpleBotCommand {
   @Override
   public void handle(ThomasBot bot, String[] args, Update update) {
-    bot.replyBack(
-        update,
-        new SendMessage()
-            .setText("Айди чата: `" + update.getMessage().getChatId() + "`")
-            .enableMarkdown(true));
+    SendMessage sendMessage = new SendMessage();
+    sendMessage.setText("Айди чата: `" + update.getMessage().getChatId() + "`");
+    sendMessage.enableMarkdown(true);
+
+    bot.replyBack(update, sendMessage);
   }
 }

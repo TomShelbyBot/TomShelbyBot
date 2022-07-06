@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class Main {
   // Hardcoded version
-  public static final String TOM_BOT_VERSION = "0.9D (Polls, API improvements)";
+  public static final String TOM_BOT_VERSION = "0.10D (Support for new ids)";
 
   // Bot object itself
   private static ThomasBot bot;
@@ -62,7 +62,7 @@ public class Main {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     PollTargetBootstrap pollTargetBootstrap = new PollTargetBootstrap();
     // Bootstrap manager (helps to mess with stuff on init)
     BootstrapManager bootstrapManager = new BootstrapManager();
@@ -73,7 +73,6 @@ public class Main {
     // Init bootstraps
     bootstrapManager
         .init(new ConsoleInformationBootstrap())
-        .init(new TelegramSdkBootstrap())
         .init(new ConfigBootstrap())
         .init(new LoadPackagesBootstrap())
         .init(new ChatBootstrap())

@@ -63,7 +63,7 @@ public class SimpleCommandContainer implements CommandContainer {
    * @return accessible
    */
   @Override
-  public boolean isAccessible(String label, Long chatId, Integer userId) {
+  public boolean isAccessible(String label, String chatId, Long userId) {
     if (!commandMap.containsKey(label)) return true;
     BotCommand botCommand = commandMap.get(label);
     if (botCommand instanceof PermissibleBotCommand) {

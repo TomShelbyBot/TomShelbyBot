@@ -11,9 +11,12 @@ public interface AdminPermissibleBotCommand extends PermissibleBotCommand {
    * @param userId to check
    * @return verdict
    */
-  default boolean canUse(Long chatId, Integer userId) {
+  default boolean canUse(String chatId, Long userId) {
     try {
-      return Main.getBot().execute(new GetChatAdministrators().setChatId(chatId)).stream()
+      GetChatAdministrators getChatAdministrators = new GetChatAdministrators();
+      getChatAdministrators.setChatId(chatId);
+
+      return Main.getBot().execute(getChatAdministrators).stream()
           .anyMatch(chatMember -> chatMember.getUser().getId().equals(userId));
     } catch (TelegramApiException e) {
       return false;

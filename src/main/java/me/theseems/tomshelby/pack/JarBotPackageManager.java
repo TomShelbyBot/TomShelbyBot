@@ -8,8 +8,8 @@ import me.theseems.tomshelby.pack.order.BotPackageOrderManager;
 import me.theseems.tomshelby.pack.order.BotPackageOrderResult;
 import me.theseems.tomshelby.pack.order.GraphPackageOrderManager;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class JarBotPackageManager implements BotPackageManager {
     this.botPackageMap = new HashMap<>();
     this.enabledPackages = new HashSet<>();
     this.packageOrderManager = new GraphPackageOrderManager();
-    this.logger = LoggerFactory.getLogger(getClass());
+    this.logger = LogManager.getLogger(getClass());
   }
 
   public JarBotPackageManager(Logger logger) {
